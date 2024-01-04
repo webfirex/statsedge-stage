@@ -25,8 +25,9 @@ export function GameListComp() {
             GAME_LIST.map((game) => (
               <Image
                 src={game}
-                mah={45}
+                mah={50}
                 alt="game"
+                fit="contain"
                 style={{
                   filter: "grayscale(100%)",
                 }}

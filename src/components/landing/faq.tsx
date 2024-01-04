@@ -42,7 +42,7 @@ export function LandingFAQComp() {
       <Container w="100%">
         <Grid columns={10} w="100%" gutter="xl">
           <Grid.Col span={{ base: 10, md: 3 }}>
-            <Title ta={BiggerThan431 ? "left" : "center"}>
+            <Title ta={BiggerThan431 ? "left" : "center"} order={3}>
               Frequently asked questions
             </Title>
           </Grid.Col>

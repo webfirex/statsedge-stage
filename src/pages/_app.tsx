@@ -7,7 +7,7 @@ import "~/styles/globals.css";
 
 import { type Session } from "next-auth";
 import { type AppType } from "next/app";
-import { createTheme } from "@mantine/core";
+import { createTheme, rem } from "@mantine/core";
 import { type NextComponentType, type NextPageContext } from "next";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
@@ -51,6 +51,32 @@ const theme = createTheme({
 
   headings: {
     fontFamily: "blenderHea",
+    sizes: {
+      h1: {
+        fontSize: rem(60),
+        lineHeight: rem(50),
+      },
+      h2: {
+        fontSize: rem(50),
+        lineHeight: rem(40),
+      },
+      h3: {
+        fontSize: rem(40),
+        lineHeight: rem(30),
+      },
+      h4: {
+        fontSize: rem(30),
+        lineHeight: rem(20),
+      },
+      h5: {
+        fontSize: rem(20),
+        lineHeight: rem(10),
+      },
+      h6: {
+        fontSize: rem(10),
+        lineHeight: rem(5),
+      },
+    },
   },
 
   defaultRadius: "sm",

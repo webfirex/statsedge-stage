@@ -3,6 +3,7 @@ import {
   Container,
   Image,
   SimpleGrid,
+  Space,
   Stack,
   Text,
   Title,
@@ -31,7 +32,9 @@ function FeatureCard(props: FeatureCardProps) {
           <Image src={props.image} alt={props.title} fit="contain" />
         </AspectRatio>
 
-        <Title order={3} ta={BiggerThan431 ? "left" : "center"}>
+        <Space h="md" />
+
+        <Title order={5} ta={BiggerThan431 ? "left" : "center"}>
           {props.title}
         </Title>
 
@@ -67,8 +70,8 @@ const FeatureList = [
 export function LandingFeaturesComp() {
   return (
     <Container>
-      <Stack>
-        <Title ta="center" maw={600} mx="auto">
+      <Stack gap="xl">
+        <Title ta="center" mx="auto" order={1}>
           <Text span inherit c="blue">
             Win more!
           </Text>{" "}

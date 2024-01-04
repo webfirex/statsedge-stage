@@ -1,13 +1,15 @@
+import { BREAKPOINTS } from "~/styles/globals";
+
 module.exports = {
   plugins: {
     "postcss-preset-mantine": {},
     "postcss-simple-vars": {
       variables: {
-        "mantine-breakpoint-xs": "36em",
-        "mantine-breakpoint-sm": "48em",
-        "mantine-breakpoint-md": "62em",
-        "mantine-breakpoint-lg": "75em",
-        "mantine-breakpoint-xl": "88em",
+        "mantine-breakpoint-xs": BREAKPOINTS.XS,
+        "mantine-breakpoint-sm": BREAKPOINTS.SM,
+        "mantine-breakpoint-md": BREAKPOINTS.MD,
+        "mantine-breakpoint-lg": BREAKPOINTS.LG,
+        "mantine-breakpoint-xl": BREAKPOINTS.XL,
       },
     },
   },
