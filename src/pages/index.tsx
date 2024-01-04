@@ -6,12 +6,17 @@ import { LandingFeaturesComp } from "~/components/landing/features";
 import { GameListComp } from "~/components/landing/games-list";
 import { LandingHeroComp } from "~/components/landing/hero";
 import { LayoutComp } from "~/components/layout";
+import { SigninModal } from "~/components/signin-modal";
+import { SignupModal } from "~/components/signup-modal";
 
 export default function Home() {
   const BiggerThan431 = useMediaQuery("(min-width: 431px)");
 
   return (
     <>
+      <SigninModal />
+      <SignupModal />
+
       <LayoutComp>
         <Stack gap={0}>
           <LandingHeroComp />

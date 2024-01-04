@@ -13,7 +13,7 @@ export function LandingCOACard() {
 
   return (
     <>
-      <Card mx="xl" radius="lg">
+      <Card mx="xl" radius="lg" p="xl">
         <Container>
           <Grid columns={10}>
             <Grid.Col span={7}>

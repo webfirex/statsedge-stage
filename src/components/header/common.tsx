@@ -13,10 +13,14 @@ import { LogoIcon, LogoIconSm } from "../logo/icon";
 import { IconSearch } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { BREAKPOINTS } from "~/styles/globals";
+import { useSetAtom } from "jotai";
+import { AuthModalAtom } from "~/lib/jotai";
 
 export function CommonHeader() {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
+
+  const setAuthModal = useSetAtom(AuthModalAtom);
 
   return (
     <>
@@ -109,6 +113,7 @@ export function CommonHeader() {
                   boxShadow: "0px 4px 150px 0px #1864AB",
                 },
               }}
+              onClick={() => setAuthModal("signin")}
             >
               <Text size={BigThenMd ? "sm" : "xs"} c="white">
                 Login
