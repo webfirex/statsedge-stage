@@ -44,10 +44,10 @@ export function LandingHeroComp() {
               md: 2,
             }}
           >
-            <Stack maw={400} gap="xl" m="auto">
+            <Stack maw={650} gap="xl" m="auto">
               <Title
-                size={rem(45)}
-                lh={rem(40)}
+                size={BiggerThan431 ? rem(70) : rem(50)}
+                lh={rem(55)}
                 ta={BiggerThan431 ? "left" : "center"}
               >
                 Your{" "}
@@ -57,24 +57,39 @@ export function LandingHeroComp() {
                 for pro esports stats
               </Title>
 
-              <Text c="dimmed" ta={BiggerThan431 ? "left" : "center"}>
+              <Text
+                c="dimmed"
+                ta={BiggerThan431 ? "left" : "center"}
+                size={BiggerThan431 ? "xl" : "md"}
+              >
                 We provide you with the most comprehensive and up-to-date stats
                 for professional esports players in popular games like CSGO,
                 Dota 2, and League of Legends.
               </Text>
 
               <Group gap="xl" justify={BiggerThan431 ? "left" : "center"}>
-                <Button radius="xl" tt="uppercase">
+                <Button
+                  radius="xl"
+                  tt="uppercase"
+                  size={BiggerThan431 ? "lg" : "md"}
+                >
                   Try it for free!
                 </Button>
 
                 <Stack gap={0}>
-                  <Title ta={BiggerThan431 ? "left" : "center"}>+200,000</Title>
+                  <Title
+                    size={rem(50)}
+                    lh={rem(55)}
+                    ta={BiggerThan431 ? "left" : "center"}
+                  >
+                    +200,000
+                  </Title>
 
                   <Text
                     tt="capitalize"
                     c="dimmed"
                     ta={BiggerThan431 ? "left" : "right"}
+                    size={BiggerThan431 ? "xl" : "md"}
                   >
                     matches analyzed in 5 days
                   </Text>

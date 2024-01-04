@@ -1,4 +1,4 @@
-import { Center, Group, Image } from "@mantine/core";
+import { Center, Image, SimpleGrid, rem } from "@mantine/core";
 import { Children } from "react";
 
 const GAME_LIST = [
@@ -14,12 +14,18 @@ export function GameListComp() {
   return (
     <>
       <Center>
-        <Group gap="xl" grow>
+        <SimpleGrid
+          spacing={{ base: rem(50), md: rem(100) }}
+          cols={{
+            base: 3,
+            md: 6,
+          }}
+        >
           {Children.toArray(
             GAME_LIST.map((game) => (
               <Image
                 src={game}
-                mah={35}
+                mah={45}
                 alt="game"
                 style={{
                   filter: "grayscale(100%)",
@@ -27,7 +33,7 @@ export function GameListComp() {
               />
             ))
           )}
-        </Group>
+        </SimpleGrid>
       </Center>
     </>
   );

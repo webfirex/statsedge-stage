@@ -14,6 +14,7 @@ interface FeatureCardProps {
   image: string;
   title: string;
   description: string;
+  index: number;
 }
 
 function FeatureCard(props: FeatureCardProps) {
@@ -21,7 +22,11 @@ function FeatureCard(props: FeatureCardProps) {
 
   return (
     <>
-      <Stack gap="xs">
+      <Stack
+        gap="xs"
+        mb={!BiggerThan431 ? 0 : props.index === 1 ? "xl" : 0}
+        mt={!BiggerThan431 ? 0 : props.index === 1 ? 0 : "xl"}
+      >
         <AspectRatio ratio={15 / 8}>
           <Image src={props.image} alt={props.title} fit="contain" />
         </AspectRatio>
@@ -77,7 +82,9 @@ export function LandingFeaturesComp() {
           }}
         >
           {Children.toArray(
-            FeatureList.map((feature) => <FeatureCard {...feature} />)
+            FeatureList.map((feature, findex) => (
+              <FeatureCard {...feature} index={findex} />
+            ))
           )}
         </SimpleGrid>
       </Stack>
