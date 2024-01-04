@@ -5,21 +5,14 @@ import "@mantine/notifications/styles.css";
 
 import "~/styles/globals.css";
 
-import { type Session } from "next-auth";
-import { type AppType } from "next/app";
+import { type AppProps } from "next/app";
 import { createTheme, rem } from "@mantine/core";
-import { type NextComponentType, type NextPageContext } from "next";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { useShallowEffect } from "@mantine/hooks";
-
-const SessionProvider = dynamic(
-  () => import("next-auth/react").then((mod) => mod.SessionProvider),
-  {
-    ssr: false,
-  }
-);
+import { ClerkProvider } from "@clerk/nextjs";
+import { env } from "~/env";
 
 const MantineProvider = dynamic(
   () => import("@mantine/core").then((mod) => mod.MantineProvider),
@@ -97,15 +90,7 @@ const theme = createTheme({
   },
 });
 
-const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}: {
-  Component: NextComponentType<NextPageContext, unknown, unknown>;
-  pageProps: {
-    session: Session | null;
-  };
-}) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
 
   useShallowEffect(() => {
@@ -139,7 +124,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="icon" href="/favicon.png" />
       </Head>
 
-      <SessionProvider session={session}>
+      <ClerkProvider
+        {...pageProps}
+        publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      >
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <ModalsProvider>
             <Notifications zIndex={15000} />
@@ -147,7 +135,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             <Component {...pageProps} />
           </ModalsProvider>
         </MantineProvider>
-      </SessionProvider>
+      </ClerkProvider>
     </>
   );
 };

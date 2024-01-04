@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.6",
+    "@clerk/nextjs": "^4.29.1",
     "@mantine/core": "^7.4.0",
     "@mantine/form": "^7.4.0",
     "@mantine/hooks": "^7.4.0",
@@ -30,7 +31,6 @@
     "drizzle-orm": "^0.29.3",
     "jotai": "^2.6.1",
     "next": "^14.0.4",
-    "next-auth": "^4.24.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "superjson": "^2.2.1",

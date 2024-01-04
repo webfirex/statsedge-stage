@@ -13,14 +13,14 @@ import { LogoIcon, LogoIconSm } from "../logo/icon";
 import { IconSearch } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { BREAKPOINTS } from "~/styles/globals";
-import { useSetAtom } from "jotai";
-import { AuthModalAtom } from "~/lib/jotai";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export function CommonHeader() {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
-  const setAuthModal = useSetAtom(AuthModalAtom);
+  const router = useRouter();
 
   return (
     <>
@@ -30,7 +30,12 @@ export function CommonHeader() {
       >
         <Group justify="space-between" py="auto" h="100%">
           <Group gap={BigThenMd ? rem(40) : rem(10)}>
-            <Group>
+            <Group
+              onClick={() => router.push("/")}
+              style={{
+                cursor: "pointer",
+              }}
+            >
               {BigThenXs ? <LogoIcon /> : <LogoIconSm />}
 
               {BigThenMd && (
@@ -113,7 +118,8 @@ export function CommonHeader() {
                   boxShadow: "0px 4px 150px 0px #1864AB",
                 },
               }}
-              onClick={() => setAuthModal("signin")}
+              component={Link}
+              href="/signin"
             >
               <Text size={BigThenMd ? "sm" : "xs"} c="white">
                 Login

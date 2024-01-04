@@ -7,13 +7,16 @@
  * need to use are documented accordingly near the end.
  */
 
+import {
+  getAuth,
+  type SignedInAuthObject,
+  type SignedOutAuthObject,
+} from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type Session } from "next-auth";
+import { type AuthObjectWithDeprecatedResources } from "node_modules/@clerk/nextjs/dist/types/server/types";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
-import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
 
 /**
@@ -25,7 +28,9 @@ import { db } from "~/server/db";
  */
 
 interface CreateContextOptions {
-  session: Session | null;
+  session:
+    | AuthObjectWithDeprecatedResources<SignedInAuthObject>
+    | AuthObjectWithDeprecatedResources<SignedOutAuthObject>;
 }
 
 /**
@@ -52,10 +57,10 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts;
+  const { req } = opts;
 
   // Get the session from the server using the getServerSession wrapper function
-  const session = await getServerAuthSession({ req, res });
+  const session = getAuth(req);
 
   return createInnerTRPCContext({
     session,
