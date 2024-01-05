@@ -144,7 +144,7 @@ export function SignupCard() {
   return (
     <>
       <Card shadow="xl" className="triang">
-        <Stack align="center" mx="xl" my="md" maw={400}>
+        <Stack align="center" mx="md" my="md" maw={400}>
           <Group>
             <LogoIconSm />
 
