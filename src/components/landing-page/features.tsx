@@ -71,7 +71,7 @@ export function LandingFeaturesComp() {
   return (
     <Container size="xl">
       <Stack gap="xl">
-        <Title ta="center" mx="auto" order={1} maw={900}>
+        <Title ta="center" mx="auto" order={1} maw={900} tt="uppercase">
           <Text span inherit c="blue">
             Win more!
           </Text>{" "}

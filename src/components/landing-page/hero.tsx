@@ -48,7 +48,7 @@ export function LandingHeroComp() {
               }}
             >
               <Stack maw={650} gap="xl" m="auto">
-                <Title ta={BigThenMd ? "left" : "center"}>
+                <Title ta={BigThenMd ? "left" : "center"} tt="uppercase">
                   Your{" "}
                   <Text span inherit c="blue">
                     ultimate destination

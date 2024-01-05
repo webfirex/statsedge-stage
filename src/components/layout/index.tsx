@@ -21,7 +21,15 @@ export function LayoutComp(props: LayoutProps) {
       >
         <CommonHeader />
 
-        <AppShell.Main>{props.children}</AppShell.Main>
+        <AppShell.Main
+          style={{
+            backgroundImage: "url(/noise.png)",
+            pointerEvents: "none",
+            backgroundRepeat: "repeat",
+          }}
+        >
+          {props.children}
+        </AppShell.Main>
       </AppShell>
       <CommonFooter />
     </>

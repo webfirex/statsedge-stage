@@ -112,20 +112,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
       >
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <div
-            style={{
-              backgroundImage: "url(/noise.png)",
-              pointerEvents: "none",
-              backgroundRepeat: "repeat",
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 50,
-            }}
-          />
-
           <Notifications zIndex={15000} />
 
           <Component {...pageProps} />

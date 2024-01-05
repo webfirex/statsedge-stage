@@ -10,7 +10,7 @@ export function LandingCOACard() {
         <Container size="xl">
           <Grid columns={10}>
             <Grid.Col span={{ base: 10, md: 7 }}>
-              <Title order={2} ta={BiggerThan431 ? "left" : "center"}>
+              <Title order={2} ta={BiggerThan431 ? "left" : "center"} tt="uppercase">
                 Sign up today and unlock the power of esports data!
               </Title>
             </Grid.Col>
