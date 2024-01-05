@@ -9,16 +9,20 @@ export function AppGameSelector() {
 
   return (
     <>
-      <Card shadow="xl" radius="lg" p="xl">
+      <Card shadow="xl" radius="lg" px="xl" py="lg">
         <SimpleGrid cols={2}>
-          <Text c="yellow" tt="uppercase" my="auto">
-            {SelectedGame.game}
-          </Text>
+          <Group gap="xs">
+            <Text>Currently Selected:</Text>
+
+            <Text c="yellow" tt="uppercase">
+              {SelectedGame.game}
+            </Text>
+          </Group>
 
           <Group gap="xl" justify="end">
             <Image
               src="/box.svg"
-              mah={40}
+              mah={35}
               alt="box"
               fit="contain"
               style={{
@@ -32,14 +36,14 @@ export function AppGameSelector() {
                   <Image
                     onClick={() => setSelectedGame(game)}
                     src={game.icon}
-                    mah={40}
+                    mah={35}
                     alt={game.game}
                     fit="contain"
                     style={{
                       cursor: "pointer",
                       filter:
                         game.game === SelectedGame.game
-                          ? "grayscale(0)"
+                          ? "drop-shadow(0px 0px 30px var(--mantine-color-yellow-9))"
                           : "grayscale(1)",
                     }}
                   />

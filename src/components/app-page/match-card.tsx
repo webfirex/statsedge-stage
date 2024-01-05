@@ -30,9 +30,17 @@ export function AppMatchCard(props: {
 }) {
   return (
     <>
-      <Card>
+      <Card withBorder bg="transparent">
         <Group justify="space-around">
-          <Image src={props.game.icon} mah={30} alt="game icon" fit="contain" />
+          <Image
+            src={props.game.icon}
+            mah={30}
+            alt="game icon"
+            fit="contain"
+            style={{
+              filter: "grayscale(1)",
+            }}
+          />
 
           <Box
             p="xs"

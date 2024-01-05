@@ -303,6 +303,12 @@ export default function App() {
                     size="xs"
                     color="blue"
                     radius="xl"
+                    styles={{
+                      root: {
+                        background: "transparent",
+                        border: "1px solid var(--mantine-color-dimmed)",
+                      },
+                    }}
                     data={[
                       {
                         value: "Upcoming",

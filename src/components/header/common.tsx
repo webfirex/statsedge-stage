@@ -61,7 +61,13 @@ export function CommonHeader() {
             </Group>
 
             <Group gap={BigThenMd ? rem(40) : rem(10)}>
-              <Anchor c="white" td="none" size={BigThenMd ? "md" : "sm"}>
+              <Anchor
+                c="white"
+                td="none"
+                size={BigThenMd ? "md" : "sm"}
+                component={Link}
+                href="/app"
+              >
                 Matches
               </Anchor>
 
