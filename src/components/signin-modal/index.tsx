@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Center,
   Divider,
   Group,
@@ -94,93 +95,95 @@ export function SigninCard() {
 
   return (
     <>
-      <Stack align="center" mx="xl" my="md" maw={400}>
-        <Group>
-          <LogoIconSm />
+      <Card shadow="xl" className="triang">
+        <Stack align="center" mx="xl" my="md" maw={400}>
+          <Group>
+            <LogoIconSm />
 
-          <Text tt="uppercase" size={rem(25)}>
-            stats
-            <Text span c="blue" inherit>
-              edge
+            <Text tt="uppercase" size={rem(25)}>
+              stats
+              <Text span c="blue" inherit>
+                edge
+              </Text>
             </Text>
+          </Group>
+
+          <Title order={4}>Welcome to Stats Edge</Title>
+
+          <Text c="dimmed" ta="center" size="sm">
+            Join Millions of other e-sports fans and stay up to date with the
+            latest news, results and discussions
           </Text>
-        </Group>
 
-        <Title order={4}>Welcome to Stats Edge</Title>
+          <Divider size="sm" w="100%" />
 
-        <Text c="dimmed" ta="center" size="sm">
-          Join Millions of other e-sports fans and stay up to date with the
-          latest news, results and discussions
-        </Text>
+          <form
+            onSubmit={SigninForm.onSubmit((values) => {
+              void HandleSignin(values);
+            })}
+            style={{
+              width: "100%",
+            }}
+          >
+            <Stack>
+              <TextInput
+                w="100%"
+                variant="default"
+                label="Email"
+                placeholder="Enter Email Address"
+                {...SigninForm.getInputProps("email")}
+              />
 
-        <Divider size="sm" w="100%" />
+              <PasswordInput
+                w="100%"
+                variant="default"
+                label="Password"
+                placeholder="Enter Password"
+                {...SigninForm.getInputProps("password")}
+              />
 
-        <form
-          onSubmit={SigninForm.onSubmit((values) => {
-            void HandleSignin(values);
-          })}
-          style={{
-            width: "100%",
-          }}
-        >
-          <Stack>
-            <TextInput
-              w="100%"
-              variant="default"
-              label="Email"
-              placeholder="Enter Email Address"
-              {...SigninForm.getInputProps("email")}
-            />
+              <Group justify="end" w="100%">
+                <Text size="sm" fw="bold" c="blue" component={Link} href="#">
+                  Forgot Password ?
+                </Text>
+              </Group>
 
-            <PasswordInput
-              w="100%"
-              variant="default"
-              label="Password"
-              placeholder="Enter Password"
-              {...SigninForm.getInputProps("password")}
-            />
+              <Button variant="outline" fullWidth color="dark" type="submit">
+                <Text size="sm" fw="bold" c="dimmed">
+                  Log In
+                </Text>
+              </Button>
+            </Stack>
+          </form>
 
-            <Group justify="end" w="100%">
-              <Text size="sm" fw="bold" c="blue" component={Link} href="#">
-                Forgot Password ?
-              </Text>
-            </Group>
+          <Divider label="OR" size="sm" w="100%" />
 
-            <Button variant="outline" fullWidth color="dark" type="submit">
-              <Text size="sm" fw="bold" c="dimmed">
-                Log In
-              </Text>
-            </Button>
-          </Stack>
-        </form>
+          <Button
+            fullWidth
+            leftSection={<IconBrandGoogleFilled size={20} />}
+            variant="white"
+            onClick={() => {
+              void signIn.authenticateWithRedirect({
+                strategy: "oauth_google",
+                redirectUrl: `/sso-callback`,
+                redirectUrlComplete: `/profile`,
+              });
+            }}
+          >
+            <Text size="sm" fw="bold" c="dark.9">
+              Continue with Google
+            </Text>
+          </Button>
 
-        <Divider label="OR" size="sm" w="100%" />
+          <Divider label="Don't have an account ?" size="sm" w="100%" />
 
-        <Button
-          fullWidth
-          leftSection={<IconBrandGoogleFilled size={20} />}
-          variant="white"
-          onClick={() => {
-            void signIn.authenticateWithRedirect({
-              strategy: "oauth_google",
-              redirectUrl: `/sso-callback`,
-              redirectUrlComplete: `/profile`,
-            });
-          }}
-        >
-          <Text size="sm" fw="bold" c="dark.9">
-            Continue with Google
-          </Text>
-        </Button>
-
-        <Divider label="Don't have an account ?" size="sm" w="100%" />
-
-        <Button fullWidth color="blue" component={Link} href="/signup">
-          <Text size="sm" fw="bold" c="white">
-            Sign up
-          </Text>
-        </Button>
-      </Stack>
+          <Button fullWidth color="blue" component={Link} href="/signup">
+            <Text size="sm" fw="bold" c="white">
+              Sign up
+            </Text>
+          </Button>
+        </Stack>
+      </Card>
     </>
   );
 }

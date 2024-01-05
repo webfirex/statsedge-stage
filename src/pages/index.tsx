@@ -1,10 +1,10 @@
 import { Divider, Space, Stack, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { LandingCOACard } from "~/components/landing/call-of-action-card";
-import { LandingFAQComp } from "~/components/landing/faq";
-import { LandingFeaturesComp } from "~/components/landing/features";
-import { GameListComp } from "~/components/landing/games-list";
-import { LandingHeroComp } from "~/components/landing/hero";
+import { LandingCOACard } from "~/components/landing-page/call-of-action-card";
+import { LandingFAQComp } from "~/components/landing-page/faq";
+import { LandingFeaturesComp } from "~/components/landing-page/features";
+import { GameListComp } from "~/components/landing-page/games-list";
+import { LandingHeroComp } from "~/components/landing-page/hero";
 import { LayoutComp } from "~/components/layout";
 import { SigninModal } from "~/components/signin-modal";
 import { SignupModal } from "~/components/signup-modal";

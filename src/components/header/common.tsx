@@ -2,8 +2,10 @@ import {
   ActionIcon,
   Anchor,
   AppShellHeader,
+  Avatar,
   Button,
   Group,
+  Loader,
   Menu,
   Text,
   TextInput,
@@ -15,12 +17,15 @@ import { useMediaQuery } from "@mantine/hooks";
 import { BREAKPOINTS } from "~/styles/globals";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 
 export function CommonHeader() {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
   const router = useRouter();
+
+  const { isSignedIn, isLoaded: UserIsLoaded, user } = useUser();
 
   return (
     <>
@@ -109,22 +114,78 @@ export function CommonHeader() {
               </ActionIcon>
             )}
 
-            <Button
-              size={BigThenMd ? "md" : "xs"}
-              variant="outline"
-              px={BigThenMd ? "xl" : "xs"}
-              styles={{
-                root: {
-                  boxShadow: "0px 4px 150px 0px #1864AB",
-                },
-              }}
-              component={Link}
-              href="/signin"
-            >
-              <Text size={BigThenMd ? "sm" : "xs"} c="white">
-                Login
-              </Text>
-            </Button>
+            {(() => {
+              if (!UserIsLoaded) {
+                return (
+                  <>
+                    <Loader />
+                  </>
+                );
+              }
+
+              if (!isSignedIn || !user) {
+                return (
+                  <>
+                    <Button
+                      size={BigThenMd ? "md" : "xs"}
+                      variant="outline"
+                      px={BigThenMd ? "xl" : "xs"}
+                      styles={{
+                        root: {
+                          boxShadow: "0px 4px 150px 0px #1864AB",
+                        },
+                      }}
+                      component={Link}
+                      href="/signin"
+                    >
+                      <Text size={BigThenMd ? "sm" : "xs"} c="white">
+                        Login
+                      </Text>
+                    </Button>
+                  </>
+                );
+              }
+
+              return (
+                <>
+                  <Menu
+                    shadow="md"
+                    width={200}
+                    position="bottom-end"
+                    styles={{
+                      dropdown: {
+                        border: "none",
+                      },
+
+                      arrow: {
+                        border: "none",
+                      },
+                    }}
+                  >
+                    <Menu.Target>
+                      <Avatar src={user.imageUrl} radius="sm" />
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                      <Menu.Label>Application</Menu.Label>
+                      <Menu.Item component={Link} href="/app">
+                        Home
+                      </Menu.Item>
+
+                      <Menu.Item component={Link} href="/profile">
+                        Profile
+                      </Menu.Item>
+
+                      <Menu.Label>Danger</Menu.Label>
+
+                      <SignOutButton>
+                        <Menu.Item c="red">Logout</Menu.Item>
+                      </SignOutButton>
+                    </Menu.Dropdown>
+                  </Menu>
+                </>
+              );
+            })()}
           </Group>
         </Group>
       </AppShellHeader>

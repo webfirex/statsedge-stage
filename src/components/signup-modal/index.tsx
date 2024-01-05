@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Center,
   Divider,
   Group,
@@ -142,127 +143,129 @@ export function SignupCard() {
 
   return (
     <>
-      <Stack align="center" mx="xl" my="md" maw={400}>
-        <Group>
-          <LogoIconSm />
+      <Card shadow="xl" className="triang">
+        <Stack align="center" mx="xl" my="md" maw={400}>
+          <Group>
+            <LogoIconSm />
 
-          <Text tt="uppercase" size={rem(25)}>
-            stats
-            <Text span c="blue" inherit>
-              edge
+            <Text tt="uppercase" size={rem(25)}>
+              stats
+              <Text span c="blue" inherit>
+                edge
+              </Text>
             </Text>
+          </Group>
+
+          <Title order={4}>Welcome to Stats Edge</Title>
+
+          <Text c="dimmed" ta="center" size="sm">
+            Join Millions of other e-sports fans and stay up to date with the
+            latest news, results and discussions
           </Text>
-        </Group>
 
-        <Title order={4}>Welcome to Stats Edge</Title>
+          <Divider size="sm" w="100%" />
 
-        <Text c="dimmed" ta="center" size="sm">
-          Join Millions of other e-sports fans and stay up to date with the
-          latest news, results and discussions
-        </Text>
+          {!PendingVerfication && (
+            <form
+              onSubmit={SignupForm.onSubmit((values) => {
+                void HandelSignUp(values);
+              })}
+              style={{
+                width: "100%",
+              }}
+            >
+              <Stack>
+                <TextInput
+                  variant="default"
+                  label="Email"
+                  placeholder="Enter Email Address"
+                  {...SignupForm.getInputProps("email")}
+                />
 
-        <Divider size="sm" w="100%" />
+                <PasswordInput
+                  w="100%"
+                  variant="default"
+                  label="Password"
+                  placeholder="Enter Password"
+                  {...SignupForm.getInputProps("password")}
+                />
 
-        {!PendingVerfication && (
-          <form
-            onSubmit={SignupForm.onSubmit((values) => {
-              void HandelSignUp(values);
-            })}
-            style={{
-              width: "100%",
-            }}
-          >
-            <Stack>
-              <TextInput
-                variant="default"
-                label="Email"
-                placeholder="Enter Email Address"
-                {...SignupForm.getInputProps("email")}
-              />
+                <PasswordInput
+                  w="100%"
+                  variant="default"
+                  label="Confirm Password"
+                  placeholder="Re-Enter Password"
+                  {...SignupForm.getInputProps("passwordConfirmation")}
+                />
 
-              <PasswordInput
-                w="100%"
-                variant="default"
-                label="Password"
-                placeholder="Enter Password"
-                {...SignupForm.getInputProps("password")}
-              />
+                <Group justify="end" w="100%">
+                  <Text
+                    size="sm"
+                    fw="bold"
+                    c="blue"
+                    component={Link}
+                    href="/signin"
+                  >
+                    Already have an account ?
+                  </Text>
+                </Group>
 
-              <PasswordInput
-                w="100%"
-                variant="default"
-                label="Confirm Password"
-                placeholder="Re-Enter Password"
-                {...SignupForm.getInputProps("passwordConfirmation")}
-              />
+                <Button variant="outline" fullWidth color="dark" type="submit">
+                  <Text size="sm" fw="bold" c="dimmed">
+                    Sign up
+                  </Text>
+                </Button>
 
-              <Group justify="end" w="100%">
-                <Text
-                  size="sm"
-                  fw="bold"
-                  c="blue"
-                  component={Link}
-                  href="/signin"
+                <Divider label="OR" size="sm" />
+
+                <Button
+                  fullWidth
+                  leftSection={<IconBrandGoogleFilled size={20} />}
+                  variant="white"
+                  onClick={() => {
+                    void signIn.authenticateWithRedirect({
+                      strategy: "oauth_google",
+                      redirectUrl: `/sso-callback`,
+                      redirectUrlComplete: `/profile`,
+                    });
+                  }}
                 >
-                  Already have an account ?
-                </Text>
-              </Group>
+                  <Text size="sm" fw="bold" c="dark.9">
+                    Continue with Google
+                  </Text>
+                </Button>
+              </Stack>
+            </form>
+          )}
 
-              <Button variant="outline" fullWidth color="dark" type="submit">
-                <Text size="sm" fw="bold" c="dimmed">
-                  Sign up
-                </Text>
-              </Button>
+          {PendingVerfication && (
+            <form
+              onSubmit={VerficationForm.onSubmit((values) => {
+                void HandelVerfication(values);
+              })}
+              style={{
+                width: "100%",
+              }}
+            >
+              <Stack align="center">
+                <PinInput
+                  variant="default"
+                  placeholder="o"
+                  type="number"
+                  length={6}
+                  {...VerficationForm.getInputProps("code")}
+                />
 
-              <Divider label="OR" size="sm" />
-
-              <Button
-                fullWidth
-                leftSection={<IconBrandGoogleFilled size={20} />}
-                variant="white"
-                onClick={() => {
-                  void signIn.authenticateWithRedirect({
-                    strategy: "oauth_google",
-                    redirectUrl: `/sso-callback`,
-                    redirectUrlComplete: `/profile`,
-                  });
-                }}
-              >
-                <Text size="sm" fw="bold" c="dark.9">
-                  Continue with Google
-                </Text>
-              </Button>
-            </Stack>
-          </form>
-        )}
-
-        {PendingVerfication && (
-          <form
-            onSubmit={VerficationForm.onSubmit((values) => {
-              void HandelVerfication(values);
-            })}
-            style={{
-              width: "100%",
-            }}
-          >
-            <Stack align="center">
-              <PinInput
-                variant="default"
-                placeholder="o"
-                type="number"
-                length={6}
-                {...VerficationForm.getInputProps("code")}
-              />
-
-              <Button variant="outline" fullWidth color="dark" type="submit">
-                <Text size="sm" fw="bold" c="dimmed">
-                  Verify
-                </Text>
-              </Button>
-            </Stack>
-          </form>
-        )}
-      </Stack>
+                <Button variant="outline" fullWidth color="dark" type="submit">
+                  <Text size="sm" fw="bold" c="dimmed">
+                    Verify
+                  </Text>
+                </Button>
+              </Stack>
+            </form>
+          )}
+        </Stack>
+      </Card>
     </>
   );
 }

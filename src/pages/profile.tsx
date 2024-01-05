@@ -1,7 +1,17 @@
-import { SignOutButton, useUser } from "@clerk/nextjs";
-import { Center, Loader } from "@mantine/core";
+import { useUser } from "@clerk/nextjs";
+import {
+  Center,
+  Container,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useRouter } from "next/router";
 import { LayoutComp } from "~/components/layout";
+import { ProfileHeroComp } from "~/components/profile-page/hero";
+import { ProfileSettingCard } from "~/components/profile-page/setting-card";
 
 export default function App() {
   const { isSignedIn, isLoaded: UserIsLoaded } = useUser();
@@ -29,7 +39,30 @@ export default function App() {
   return (
     <>
       <LayoutComp>
-        <SignOutButton />
+        <Container size="xl">
+          <Stack>
+            <ProfileHeroComp />
+
+            <Group gap="xs">
+              <Text c="blue" size="xl">
+                /
+              </Text>
+
+              <Text>User Profile</Text>
+            </Group>
+
+            <Group>
+              <Title order={3}>
+                <Text span inherit c="yellow" td="underline">
+                  Account
+                </Text>{" "}
+                Settings
+              </Title>
+            </Group>
+
+            <ProfileSettingCard />
+          </Stack>
+        </Container>
       </LayoutComp>
     </>
   );
