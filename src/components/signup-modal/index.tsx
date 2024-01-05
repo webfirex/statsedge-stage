@@ -86,7 +86,8 @@ export function SignupCard() {
     } catch (error) {
       notifications.show({
         title: "Error",
-        message: "Something went wrong",
+        message: (error as { errors: { longMessage: string }[] })?.errors[0]
+          ?.longMessage,
         color: "red",
       });
 

@@ -11,13 +11,9 @@ export function AppGameSelector() {
     <>
       <Card shadow="xl" radius="lg" p="xl">
         <SimpleGrid cols={2}>
-          <Group gap="xs">
-            <Text>Currently Selected:</Text>
-
-            <Text c="yellow" tt="uppercase">
-              {SelectedGame}
-            </Text>
-          </Group>
+          <Text c="yellow" tt="uppercase" my="auto">
+            {SelectedGame.game}
+          </Text>
 
           <Group gap="xl" justify="end">
             <Image
@@ -34,7 +30,7 @@ export function AppGameSelector() {
               GAME_LIST.map((game) => (
                 <>
                   <Image
-                    onClick={() => setSelectedGame(game.game)}
+                    onClick={() => setSelectedGame(game)}
                     src={game.icon}
                     mah={40}
                     alt={game.game}
@@ -42,7 +38,7 @@ export function AppGameSelector() {
                     style={{
                       cursor: "pointer",
                       filter:
-                        game.game === SelectedGame
+                        game.game === SelectedGame.game
                           ? "grayscale(0)"
                           : "grayscale(1)",
                     }}
