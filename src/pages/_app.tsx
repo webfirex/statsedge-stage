@@ -1,43 +1,17 @@
-import dynamic from "next/dynamic";
-
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
 import "~/styles/globals.css";
 
 import { type AppProps } from "next/app";
-import { createTheme, rem } from "@mantine/core";
+import { MantineProvider, createTheme, rem } from "@mantine/core";
 import { api } from "~/utils/api";
-import { notifications } from "@mantine/notifications";
+import { Notifications, notifications } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { useShallowEffect } from "@mantine/hooks";
 import { ClerkProvider } from "@clerk/nextjs";
 import { env } from "~/env";
-
-const MantineProvider = dynamic(
-  () => import("@mantine/core").then((mod) => mod.MantineProvider),
-  {
-    ssr: false,
-  }
-);
-
-const Notifications = dynamic(
-  () => import("@mantine/notifications").then((mod) => mod.Notifications),
-  {
-    ssr: false,
-  }
-);
-
-const ModalsProvider = dynamic(
-  () => import("@mantine/modals").then((mod) => mod.ModalsProvider),
-  {
-    ssr: false,
-  }
-);
-
-const Head = dynamic(() => import("next/head"), {
-  ssr: false,
-});
+import Head from "next/head";
 
 const theme = createTheme({
   fontFamily: "blenderMed",
@@ -73,8 +47,6 @@ const theme = createTheme({
   },
 
   defaultRadius: "md",
-
-  
 
   colors: {
     dark: [
@@ -131,11 +103,23 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
       >
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <ModalsProvider>
-            <Notifications zIndex={15000} />
+          <div
+            style={{
+              backgroundImage: "url(/noise.png)",
+              pointerEvents: "none",
+              backgroundRepeat: "repeat",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 15550,
+            }}
+          />
 
-            <Component {...pageProps} />
-          </ModalsProvider>
+          <Notifications zIndex={15000} />
+
+          <Component {...pageProps} />
         </MantineProvider>
       </ClerkProvider>
     </>
