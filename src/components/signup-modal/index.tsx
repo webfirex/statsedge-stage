@@ -150,7 +150,14 @@ export function SignupCard() {
 
             <Text tt="uppercase" size={rem(25)}>
               stats
-              <Text span c="blue" inherit>
+              <Text
+                span
+                c="blue"
+                inherit
+                style={{
+                  textShadow: "0px 0px 30px var(--mantine-color-blue-9)",
+                }}
+              >
                 edge
               </Text>
             </Text>

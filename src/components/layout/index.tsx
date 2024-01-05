@@ -24,7 +24,6 @@ export function LayoutComp(props: LayoutProps) {
         <AppShell.Main
           style={{
             backgroundImage: "url(/noise.png)",
-            pointerEvents: "none",
             backgroundRepeat: "repeat",
           }}
         >

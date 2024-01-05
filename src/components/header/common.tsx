@@ -46,7 +46,14 @@ export function CommonHeader() {
               {BigThenMd && (
                 <Text tt="uppercase" size={rem(25)}>
                   stats
-                  <Text span c="blue" inherit>
+                  <Text
+                    span
+                    c="blue"
+                    inherit
+                    style={{
+                      textShadow: "0px 0px 30px var(--mantine-color-blue-9)",
+                    }}
+                  >
                     edge
                   </Text>
                 </Text>
@@ -79,7 +86,7 @@ export function CommonHeader() {
               >
                 <Menu.Target>
                   <Anchor c="white" td="none" size={BigThenMd ? "md" : "sm"}>
-                    Tools
+                    Tools ▾
                   </Anchor>
                 </Menu.Target>
 
@@ -94,7 +101,14 @@ export function CommonHeader() {
                 </Menu.Dropdown>
               </Menu>
 
-              <Anchor c="green" td="underline" size={BigThenMd ? "md" : "sm"}>
+              <Anchor
+                c="green"
+                td="underline"
+                size={BigThenMd ? "md" : "sm"}
+                style={{
+                  textShadow: "0px 0px 25px var(--mantine-color-green-9)",
+                }}
+              >
                 Bonuses
               </Anchor>
             </Group>

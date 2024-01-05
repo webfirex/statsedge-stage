@@ -54,7 +54,15 @@ export default function App() {
 
             <Group>
               <Title order={3}>
-                <Text span inherit c="yellow" td="underline">
+                <Text
+                  span
+                  inherit
+                  c="yellow"
+                  td="underline"
+                  style={{
+                    textShadow: "0px 0px 30px var(--mantine-color-yellow-9)",
+                  }}
+                >
                   Account
                 </Text>{" "}
                 Settings

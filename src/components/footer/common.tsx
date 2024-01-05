@@ -38,7 +38,14 @@ export function CommonFooter() {
 
                   <Text tt="uppercase" size={rem(25)}>
                     stats
-                    <Text span c="blue" inherit>
+                    <Text
+                      span
+                      c="blue"
+                      inherit
+                      style={{
+                        textShadow: "0px 0px 30px var(--mantine-color-blue-9)",
+                      }}
+                    >
                       edge
                     </Text>
                   </Text>
@@ -84,10 +91,7 @@ export function CommonFooter() {
                 </Text>
               </Stack>
 
-              <Stack
-                gap="xs"
-                {...(BigThenSm ? { ml: "auto" } : { })}
-              >
+              <Stack gap="xs" {...(BigThenSm ? { ml: "auto" } : {})}>
                 <Text>Contact us</Text>
 
                 <Text c="dimmed" size="sm">

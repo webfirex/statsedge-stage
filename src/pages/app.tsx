@@ -1,21 +1,15 @@
 import { useUser } from "@clerk/nextjs";
-import {
-  Center,
-  Container,
-  Group,
-  Loader,
-  Space,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Center, Container, Group, Loader, Stack, Text } from "@mantine/core";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
+import { AppGameSelector } from "~/components/app-page/game-selector";
 import { LayoutComp } from "~/components/layout";
-import { ProfileHeroComp } from "~/components/profile-page/hero";
-import { ProfileSettingCard } from "~/components/profile-page/setting-card";
+import { SelectedGameAtom } from "~/lib/jotai";
 
 export default function App() {
   const { isSignedIn, isLoaded: UserIsLoaded } = useUser();
+
+  const SelectedGame = useAtomValue(SelectedGameAtom);
 
   const router = useRouter();
 
@@ -42,28 +36,15 @@ export default function App() {
       <LayoutComp>
         <Container size="xl" mt="xl">
           <Stack>
-            <ProfileHeroComp />
+            <AppGameSelector />
 
             <Group gap="xs">
               <Text c="blue" size="xl">
                 /
               </Text>
 
-              <Text>User Profile</Text>
+              <Text tt="uppercase">{SelectedGame}</Text>
             </Group>
-
-            <Group>
-              <Title order={3}>
-                <Text span inherit c="yellow" td="underline">
-                  Account
-                </Text>{" "}
-                Settings
-              </Title>
-            </Group>
-
-            <Space />
-
-            <ProfileSettingCard />
           </Stack>
         </Container>
       </LayoutComp>

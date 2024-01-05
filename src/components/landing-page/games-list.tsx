@@ -1,15 +1,7 @@
 import { Center, Image, SimpleGrid, rem } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { Children } from "react";
-
-const GAME_LIST = [
-  "/lol.svg",
-  "/csgo.svg",
-  "/valo.svg",
-  "/bull.svg",
-  "/vec.svg",
-  "/cod.svg",
-];
+import { GAME_LIST } from "~/lib/data";
 
 function GameComp({ src }: { src: string }) {
   const { hovered, ref } = useHover<HTMLImageElement>();
@@ -40,7 +32,9 @@ export function GameListComp() {
             md: 6,
           }}
         >
-          {Children.toArray(GAME_LIST.map((game) => <GameComp src={game} />))}
+          {Children.toArray(
+            GAME_LIST.map((game) => <GameComp src={game.icon} />)
+          )}
         </SimpleGrid>
       </Center>
     </>
