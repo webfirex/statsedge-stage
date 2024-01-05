@@ -61,13 +61,11 @@ export function SigninCard() {
 
         console.error(result, "signin err");
       }
-
-      // @ts-expect-error -- clerkjs types are not up to date
-    } catch (error: never) {
+    } catch (error) {
       notifications.show({
         title: "Error",
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        message: error?.errors[0].longMessage as string,
+        message: (error as { errors: { longMessage: string }[] })?.errors[0]
+          ?.longMessage,
         color: "red",
       });
 
