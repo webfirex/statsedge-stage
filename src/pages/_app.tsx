@@ -3,7 +3,6 @@ import "@mantine/notifications/styles.css";
 
 import "~/styles/globals.css";
 
-import { type AppProps } from "next/app";
 import { MantineProvider, createTheme, rem } from "@mantine/core";
 import { api } from "~/utils/api";
 import { Notifications, notifications } from "@mantine/notifications";
@@ -12,21 +11,22 @@ import { useShallowEffect } from "@mantine/hooks";
 import { ClerkProvider } from "@clerk/nextjs";
 import { env } from "~/env";
 import Head from "next/head";
-import { Inter, Archivo_Narrow } from "next/font/google";
+import { Inter } from "next/font/google";
+import { type AppProps } from "next/app";
 
 const inter = Inter({
   subsets: ["latin"],
 });
 
-const archivoNarrow = Archivo_Narrow({
-  subsets: ["latin"],
-});
+// const archivoNarrow = Archivo_Narrow({
+//   subsets: ["latin"],
+// });
 
 const theme = createTheme({
   fontFamily: inter.style.fontFamily,
 
   headings: {
-    fontFamily: archivoNarrow.style.fontFamily,
+    fontFamily: "STNO",
     sizes: {
       h1: {
         fontSize: rem(60),
@@ -34,15 +34,15 @@ const theme = createTheme({
       },
       h2: {
         fontSize: rem(50),
-        lineHeight: rem(40),
+        lineHeight: rem(45),
       },
       h3: {
         fontSize: rem(40),
-        lineHeight: rem(30),
+        lineHeight: rem(35),
       },
       h4: {
         fontSize: rem(30),
-        lineHeight: rem(20),
+        lineHeight: rem(25),
       },
       h5: {
         fontSize: rem(20),

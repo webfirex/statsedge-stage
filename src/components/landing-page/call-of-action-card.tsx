@@ -1,16 +1,21 @@
 import { Button, Card, Container, Grid, Group, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { BREAKPOINTS } from "~/styles/globals";
 
 export function LandingCOACard() {
-  const BiggerThan431 = useMediaQuery("(min-width: 431px)");
+  const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
   return (
     <>
-      <Card mx="xl" radius="lg" p="xl">
+      <Card mx="xl" radius="lg" py="xl" px={BigThenMd ? "xl" : "xs"}>
         <Container size="xl">
           <Grid columns={10}>
             <Grid.Col span={{ base: 10, md: 7 }}>
-              <Title order={2} ta={BiggerThan431 ? "left" : "center"} tt="uppercase">
+              <Title
+                order={BigThenMd ? 2 : 4}
+                ta={BigThenMd ? "left" : "center"}
+                tt="uppercase"
+              >
                 Sign up today and unlock the power of esports data!
               </Title>
             </Grid.Col>

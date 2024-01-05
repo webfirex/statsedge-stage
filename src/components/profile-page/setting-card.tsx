@@ -140,7 +140,7 @@ export function ProfileSettingCard() {
     <>
       <Grid columns={10}>
         <Grid.Col span={{ base: 10, md: 7 }}>
-          <Card p="lg">
+          <Card p="lg" pt="xl" className="partial-border-pro triang-pro">
             <Stack>
               <Stack w="fit-content" gap={4}>
                 <Group gap="xs">
@@ -246,7 +246,7 @@ export function ProfileSettingCard() {
         </Grid.Col>
 
         <Grid.Col span={{ base: 10, md: 3 }}>
-          <Card p="lg">
+          <Card p="lg" pt="xl" className="partial-border-pro triang-pro">
             <Stack>
               <Stack w="fit-content" gap={4}>
                 <Group gap="xs">

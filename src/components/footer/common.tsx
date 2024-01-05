@@ -66,37 +66,37 @@ export function CommonFooter() {
               <Stack gap="xs" {...(BigThenSm ? { mx: "auto" } : {})}>
                 <Text>Analytics</Text>
 
-                <Text c="dimmed" size="sm">
+                <Anchor size="sm" className="link-white">
                   Guides
-                </Text>
+                </Anchor>
 
-                <Text c="dimmed" size="sm">
+                <Anchor className="link-white" size="sm">
                   F.A.Q
-                </Text>
+                </Anchor>
               </Stack>
 
               <Stack gap="xs" {...(BigThenSm ? { mx: "auto" } : {})}>
                 <Text>More</Text>
 
-                <Text c="dimmed" size="sm">
+                <Anchor className="link-white" size="sm">
                   Terms of service
-                </Text>
+                </Anchor>
 
-                <Text c="dimmed" size="sm">
+                <Anchor className="link-white" size="sm">
                   Privacy policy
-                </Text>
+                </Anchor>
 
-                <Text c="dimmed" size="sm">
+                <Anchor className="link-white" size="sm">
                   Feedback
-                </Text>
+                </Anchor>
               </Stack>
 
               <Stack gap="xs" {...(BigThenSm ? { ml: "auto" } : {})}>
                 <Text>Contact us</Text>
 
-                <Text c="dimmed" size="sm">
+                <Anchor className="link-white" size="sm">
                   support@mail.com
-                </Text>
+                </Anchor>
 
                 <Group>
                   <Anchor c="white">

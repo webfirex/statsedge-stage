@@ -14,8 +14,6 @@ import {
   Title,
   rem,
 } from "@mantine/core";
-import { useAtom } from "jotai";
-import { AuthModalAtom } from "~/lib/jotai";
 import { LogoIconSm } from "../logo/icon";
 import { IconBrandGoogleFilled } from "@tabler/icons-react";
 import Link from "next/link";
@@ -144,8 +142,8 @@ export function SignupCard() {
 
   return (
     <>
-      <Card shadow="xl" className="triang">
-        <Stack align="center" mx="md" my="md" maw={400}>
+      <Card shadow="xl" className="triang partial-border">
+        <Stack align="center" mx="md" my="xs" maw={400}>
           <Group>
             <LogoIconSm />
 
@@ -212,7 +210,7 @@ export function SignupCard() {
                     fw="bold"
                     c="blue"
                     component={Link}
-                    href="/signin"
+                    href="/?signin=true"
                   >
                     Already have an account ?
                   </Text>
@@ -279,19 +277,25 @@ export function SignupCard() {
 }
 
 export function SignupModal() {
-  const [AuthModal, setAuthModal] = useAtom(AuthModalAtom);
+  const router = useRouter();
 
   return (
     <>
       <Modal
-        opened={AuthModal === "signup"}
-        onClose={() => setAuthModal(null)}
+        opened={router.query.signup !== undefined}
+        onClose={() => router.replace("/")}
         transitionProps={{ transition: "fade", duration: 200 }}
         centered
         withCloseButton={false}
         overlayProps={{
           backgroundOpacity: 0.7,
           blur: 7,
+        }}
+        size="auto"
+        styles={{
+          body: {
+            padding: 0,
+          },
         }}
       >
         <SignupCard />

@@ -1,26 +1,24 @@
-import { useUser } from "@clerk/nextjs";
 import {
-  Center,
   Container,
   Divider,
   Group,
   Image,
-  Loader,
   SegmentedControl,
   Space,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconCalendar } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
-import { useRouter } from "next/router";
 import { Children, useState } from "react";
 import { FadeUpAni } from "~/components/animation/fade-up";
 import { AppGameSelector } from "~/components/app-page/game-selector";
 import { AppMatchCard } from "~/components/app-page/match-card";
 import { LayoutComp } from "~/components/layout";
 import { SelectedGameAtom } from "~/lib/jotai";
+import { BREAKPOINTS } from "~/styles/globals";
 
 const TAB_LIST = ["All Matches", "Top Tier", "LAN", "Event"];
 
@@ -34,7 +32,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -43,7 +41,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -55,7 +53,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -64,7 +62,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -76,7 +74,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -85,7 +83,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -102,7 +100,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -111,7 +109,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -123,7 +121,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -132,7 +130,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -144,7 +142,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -153,7 +151,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -165,7 +163,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -174,7 +172,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -186,7 +184,7 @@ const MATCH_LIST = [
         startAt: "Tue, 15:00",
         league: {
           name: "ESL Challenger League Season 44 Europe",
-          logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6258193bcca7edacaaeafa2f_RL.svg",
+          logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
         },
         teams: {
           1: {
@@ -195,7 +193,7 @@ const MATCH_LIST = [
             points: "6 (1)",
           },
           2: {
-            name: "Masterminds",
+            name: "Master",
             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
             points: "6 (1)",
           },
@@ -235,29 +233,9 @@ function TabsComp({ value }: { value: string[] }) {
 }
 
 export default function App() {
-  const { isSignedIn, isLoaded: UserIsLoaded } = useUser();
+  const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
   const SelectedGame = useAtomValue(SelectedGameAtom);
-
-  const router = useRouter();
-
-  if (!UserIsLoaded) {
-    return (
-      <Center h="100vh">
-        <Loader />
-      </Center>
-    );
-  }
-
-  if (!isSignedIn) {
-    void router.push("/signin");
-
-    return (
-      <Center h="100vh">
-        <Loader />
-      </Center>
-    );
-  }
 
   return (
     <>
@@ -287,15 +265,21 @@ export default function App() {
             <Space h="xl" />
 
             <FadeUpAni>
-              <Group>
+              <Group
+                {...(!BigThenMd
+                  ? { grow: true, preventGrowOverflow: false, wrap: "nowrap" }
+                  : {})}
+              >
                 <Image
                   src={SelectedGame.icon}
-                  mah={50}
+                  mah={BigThenMd ? 50 : 25}
                   alt="game icon"
                   fit="contain"
                 />
 
-                <Title> Upcoming {SelectedGame.game} Matches</Title>
+                <Title order={BigThenMd ? 1 : 4} lh={1}>
+                  Upcoming {SelectedGame.game} Matches
+                </Title>
               </Group>
             </FadeUpAni>
 
@@ -324,7 +308,12 @@ export default function App() {
                           value: "Upcoming",
                           label: (
                             <>
-                              <Text size="sm" my={3} fw="bold" mx="md">
+                              <Text
+                                size={BigThenMd ? "sm" : "xs"}
+                                my={3}
+                                fw="bold"
+                                mx="md"
+                              >
                                 Upcoming
                               </Text>
                             </>
@@ -334,7 +323,12 @@ export default function App() {
                           value: "Past",
                           label: (
                             <>
-                              <Text size="sm" my={3} fw="bold" mx="md">
+                              <Text
+                                size={BigThenMd ? "sm" : "xs"}
+                                my={3}
+                                fw="bold"
+                                mx="md"
+                              >
                                 Past
                               </Text>
                             </>

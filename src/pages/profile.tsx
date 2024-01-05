@@ -28,7 +28,7 @@ export default function App() {
   }
 
   if (!isSignedIn) {
-    void router.push("/signin");
+    void router.push("/?signin=true");
 
     return (
       <Center h="100vh">

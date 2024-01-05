@@ -18,12 +18,15 @@ import { BREAKPOINTS } from "~/styles/globals";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useState } from "react";
 
 export function CommonHeader() {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
   const router = useRouter();
+
+  const [SearchBar, setSearchBar] = useState(false);
 
   const { isSignedIn, isLoaded: UserIsLoaded, user } = useUser();
 
@@ -41,7 +44,7 @@ export function CommonHeader() {
                 cursor: "pointer",
               }}
             >
-              {BigThenXs ? <LogoIcon /> : <LogoIconSm />}
+              {BigThenMd ? <LogoIcon /> : <LogoIconSm />}
 
               {BigThenMd && (
                 <Text tt="uppercase" size={rem(25)}>
@@ -60,67 +63,105 @@ export function CommonHeader() {
               )}
             </Group>
 
-            <Group gap={BigThenMd ? rem(40) : rem(10)}>
-              <Anchor
-                c="white"
-                td="none"
-                size={BigThenMd ? "md" : "sm"}
-                component={Link}
-                href="/app"
-              >
-                Matches
-              </Anchor>
+            {!SearchBar && (
+              <Group gap={BigThenMd ? rem(40) : rem(10)}>
+                <Anchor
+                  c={router.pathname === "/matches" ? "blue" : "white"}
+                  td={router.pathname === "/matches" ? "underline" : "none"}
+                  size={BigThenMd ? "md" : "xs"}
+                  component={Link}
+                  href="/matches"
+                >
+                  Matches
+                </Anchor>
 
-              <Anchor c="white" td="none" size={BigThenMd ? "md" : "sm"}>
-                Props
-              </Anchor>
+                <Anchor c="white" td="none" size={BigThenMd ? "md" : "xs"}>
+                  Props
+                </Anchor>
 
-              <Menu
-                shadow="md"
-                width={200}
-                position="bottom-start"
-                withArrow
-                styles={{
-                  dropdown: {
-                    border: "none",
-                  },
+                <Menu
+                  shadow="md"
+                  width={200}
+                  position="bottom-start"
+                  withArrow
+                  styles={{
+                    dropdown: {
+                      border: "none",
+                    },
 
-                  arrow: {
-                    border: "none",
-                  },
-                }}
-              >
-                <Menu.Target>
-                  <Anchor c="white" td="none" size={BigThenMd ? "md" : "sm"}>
-                    Tools ▾
+                    arrow: {
+                      border: "none",
+                    },
+                  }}
+                >
+                  <Menu.Target>
+                    <Anchor c="white" td="none" size={BigThenMd ? "md" : "xs"}>
+                      Tools ▾
+                    </Anchor>
+                  </Menu.Target>
+
+                  <Menu.Dropdown>
+                    <Menu.Item>DFS Optimizer</Menu.Item>
+
+                    <Menu.Item>DFS Middling</Menu.Item>
+
+                    <Menu.Item>DFS Correlations</Menu.Item>
+
+                    <Menu.Item>DFS Ownership</Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+
+                <div
+                  style={{
+                    position: "relative",
+                    display: "inline-block",
+                    cursor: "pointer",
+                    width: "fit-content",
+                    height: "fit-content",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "50%",
+                      width: "100%",
+                      height: "1px",
+                      borderRadius: "50%",
+                      transform: "translate(50%, -50%)",
+                      backgroundColor: "var(--mantine-color-teal-9)",
+                      zIndex: 0,
+                      boxShadow:
+                        "0px 0px 45px 20px var(--mantine-color-teal-9)",
+                      opacity: 0.5,
+                    }}
+                  />
+
+                  <Anchor
+                    c="green"
+                    td="underline"
+                    size={BigThenMd ? "md" : "xs"}
+                    style={{
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
+                    Bonuses
                   </Anchor>
-                </Menu.Target>
-
-                <Menu.Dropdown>
-                  <Menu.Item>DFS Optimizer</Menu.Item>
-
-                  <Menu.Item>DFS Middling</Menu.Item>
-
-                  <Menu.Item>DFS Correlations</Menu.Item>
-
-                  <Menu.Item>DFS Ownership</Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-
-              <Anchor
-                c="green"
-                td="underline"
-                size={BigThenMd ? "md" : "sm"}
-                style={{
-                  textShadow: "0px 0px 25px var(--mantine-color-green-9)",
-                }}
-              >
-                Bonuses
-              </Anchor>
-            </Group>
+                </div>
+              </Group>
+            )}
           </Group>
 
-          <Group>
+          <Group justify="end">
+            {SearchBar && !BigThenMd && (
+              <TextInput
+                placeholder="Search player, team..."
+                size="xs"
+                variant="filled"
+              />
+            )}
+
             {BigThenMd ? (
               <TextInput
                 placeholder="Search player, team..."
@@ -129,7 +170,12 @@ export function CommonHeader() {
                 leftSection={<IconSearch size={18} />}
               />
             ) : (
-              <ActionIcon variant="transparent" size="xs" c="gray.7">
+              <ActionIcon
+                variant="transparent"
+                size="xs"
+                c="gray.7"
+                onClick={() => setSearchBar(!SearchBar)}
+              >
                 <IconSearch size={16} />
               </ActionIcon>
             )}
@@ -156,7 +202,7 @@ export function CommonHeader() {
                         },
                       }}
                       component={Link}
-                      href="/signin"
+                      href="/?signin=true"
                     >
                       <Text size={BigThenMd ? "sm" : "xs"} c="white">
                         Login
@@ -183,20 +229,17 @@ export function CommonHeader() {
                     }}
                   >
                     <Menu.Target>
-                      <Avatar src={user.imageUrl} radius="sm" />
+                      <Avatar
+                        src={user.imageUrl}
+                        radius="sm"
+                        size={BigThenMd ? "md" : "sm"}
+                      />
                     </Menu.Target>
 
                     <Menu.Dropdown>
-                      <Menu.Label>Application</Menu.Label>
-                      <Menu.Item component={Link} href="/app">
-                        Home
-                      </Menu.Item>
-
                       <Menu.Item component={Link} href="/profile">
                         Profile
                       </Menu.Item>
-
-                      <Menu.Label>Danger</Menu.Label>
 
                       <SignOutButton>
                         <Menu.Item c="red">Logout</Menu.Item>

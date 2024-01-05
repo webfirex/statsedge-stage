@@ -1,6 +1,7 @@
 import { Accordion, Container, Grid, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Children } from "react";
+import { BREAKPOINTS } from "~/styles/globals";
 
 const FAQ = [
   {
@@ -36,14 +37,18 @@ const FAQ = [
 ];
 
 export function LandingFAQComp() {
-  const BiggerThan431 = useMediaQuery("(min-width: 431px)");
+  const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
   return (
     <>
       <Container w="100%" size="xl">
         <Grid columns={10} w="100%" gutter="xl">
           <Grid.Col span={{ base: 10, md: 3 }}>
-            <Title ta={BiggerThan431 ? "left" : "center"} order={1} tt="uppercase">
+            <Title
+              ta={BigThenMd ? "left" : "center"}
+              order={BigThenMd ? 1 : 2}
+              tt="uppercase"
+            >
               Frequently asked questions
             </Title>
           </Grid.Col>

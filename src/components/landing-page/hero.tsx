@@ -52,7 +52,11 @@ export function LandingHeroComp() {
             >
               <Stack maw={650} gap="xl" m="auto">
                 <FadeRightAni>
-                  <Title ta={BigThenMd ? "left" : "center"} tt="uppercase">
+                  <Title
+                    ta={BigThenMd ? "left" : "center"}
+                    tt="uppercase"
+                    order={BigThenMd ? 1 : 3}
+                  >
                     Your{" "}
                     <Text span inherit c="blue">
                       ultimate destination
@@ -102,7 +106,7 @@ export function LandingHeroComp() {
               </Stack>
 
               <ZoomOutAni>
-                <Image src="/hero-ex.png" mah={400} fit="contain" alt="hero" />
+                <Image src="/hero-ex.webp" mah={400} fit="contain" alt="hero" />
               </ZoomOutAni>
             </SimpleGrid>
           </Container>
