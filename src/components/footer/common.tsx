@@ -25,7 +25,7 @@ export function CommonFooter() {
     <>
       <Box bg="#000" {...(BigThenSm ? { p: "xl" } : { py: "xl" })}>
         <Stack>
-          <Container w="100%">
+          <Container w="100%" size="xl">
             <SimpleGrid
               cols={{
                 base: 1,
@@ -84,7 +84,10 @@ export function CommonFooter() {
                 </Text>
               </Stack>
 
-              <Stack gap="xs" {...(BigThenSm ? { mx: "auto" } : {})}>
+              <Stack
+                gap="xs"
+                {...(BigThenSm ? { ml: "auto" } : { })}
+              >
                 <Text>Contact us</Text>
 
                 <Text c="dimmed" size="sm">

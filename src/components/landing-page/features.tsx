@@ -69,9 +69,9 @@ const FeatureList = [
 
 export function LandingFeaturesComp() {
   return (
-    <Container>
+    <Container size="xl">
       <Stack gap="xl">
-        <Title ta="center" mx="auto" order={1}>
+        <Title ta="center" mx="auto" order={1} maw={900}>
           <Text span inherit c="blue">
             Win more!
           </Text>{" "}

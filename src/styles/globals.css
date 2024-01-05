@@ -52,3 +52,22 @@ body {
   border-width: 0 0 40px 40px;
   border-color: transparent transparent var(--mantine-color-blue-9) transparent;
 }
+
+.blue-dash::after {
+  position: absolute;
+  content: "";
+  z-index: 2;
+  bottom: 0;
+  right: 0;
+  clip-path: polygon(
+    53% 6%,
+    53% 0,
+    100% 0,
+    100% 86%,
+    89% 100%,
+    0 100%,
+    0 0,
+    8% 0,
+    8% 6%
+  );
+}

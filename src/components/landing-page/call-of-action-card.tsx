@@ -14,7 +14,7 @@ export function LandingCOACard() {
   return (
     <>
       <Card mx="xl" radius="lg" p="xl">
-        <Container>
+        <Container size="xl">
           <Grid columns={10}>
             <Grid.Col span={7}>
               <Title order={2} ta={BiggerThan431 ? "left" : "center"}>

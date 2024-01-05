@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Container,
   Group,
   Image,
   SimpleGrid,
@@ -30,7 +31,7 @@ export function LandingHeroComp() {
           w="100%"
           h="100%"
           py={rem(100)}
-          px={BigThenMd ? rem(100) : rem(20)}
+          // px={BigThenMd ? rem(100) : rem(20)}
           style={{
             background: BigThenMd
               ? "linear-gradient( 90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%)"
@@ -39,59 +40,61 @@ export function LandingHeroComp() {
             backdropFilter: "blur(5.5px)",
           }}
         >
-          <SimpleGrid
-            cols={{
-              base: 1,
-              md: 2,
-            }}
-          >
-            <Stack maw={650} gap="xl" m="auto">
-              <Title ta={BigThenMd ? "left" : "center"}>
-                Your{" "}
-                <Text span inherit c="blue">
-                  ultimate destination
-                </Text>{" "}
-                for pro esports stats
-              </Title>
+          <Container size="xl">
+            <SimpleGrid
+              cols={{
+                base: 1,
+                md: 2,
+              }}
+            >
+              <Stack maw={650} gap="xl" m="auto">
+                <Title ta={BigThenMd ? "left" : "center"}>
+                  Your{" "}
+                  <Text span inherit c="blue">
+                    ultimate destination
+                  </Text>{" "}
+                  for pro esports stats
+                </Title>
 
-              <Text
-                c="dimmed"
-                ta={BigThenMd ? "left" : "center"}
-                size={BigThenMd ? "xl" : "md"}
-              >
-                We provide you with the most comprehensive and up-to-date stats
-                for professional esports players in popular games like CSGO,
-                Dota 2, and League of Legends.
-              </Text>
-
-              <Group gap="xl" justify={BigThenMd ? "left" : "center"}>
-                <Button
-                  radius="xl"
-                  tt="uppercase"
-                  size={BigThenMd ? "lg" : "md"}
+                <Text
+                  c="dimmed"
+                  ta={BigThenMd ? "left" : "center"}
+                  size={BigThenMd ? "xl" : "md"}
                 >
-                  Try it for free!
-                </Button>
+                  We provide you with the most comprehensive and up-to-date
+                  stats for professional esports players in popular games like
+                  CSGO, Dota 2, and League of Legends.
+                </Text>
 
-                <Stack gap={0}>
-                  <Title lh={rem(55)} ta={BigThenMd ? "left" : "center"}>
-                    +200,000
-                  </Title>
-
-                  <Text
-                    tt="capitalize"
-                    c="dimmed"
-                    ta={BigThenMd ? "left" : "right"}
-                    size={BigThenMd ? "xl" : "md"}
+                <Group gap="xl" justify={BigThenMd ? "left" : "center"}>
+                  <Button
+                    radius="xl"
+                    tt="uppercase"
+                    size={BigThenMd ? "lg" : "md"}
                   >
-                    matches analyzed in 5 days
-                  </Text>
-                </Stack>
-              </Group>
-            </Stack>
+                    Try it for free!
+                  </Button>
 
-            <Image src="/hero-ex.png" mah={400} fit="contain" alt="hero" />
-          </SimpleGrid>
+                  <Stack gap={0}>
+                    <Title lh={rem(55)} ta={BigThenMd ? "left" : "center"}>
+                      +200,000
+                    </Title>
+
+                    <Text
+                      tt="capitalize"
+                      c="dimmed"
+                      ta={BigThenMd ? "left" : "right"}
+                      size={BigThenMd ? "xl" : "md"}
+                    >
+                      matches analyzed in 5 days
+                    </Text>
+                  </Stack>
+                </Group>
+              </Stack>
+
+              <Image src="/hero-ex.png" mah={400} fit="contain" alt="hero" />
+            </SimpleGrid>
+          </Container>
         </Box>
       </Box>
     </>
