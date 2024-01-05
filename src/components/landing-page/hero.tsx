@@ -14,6 +14,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { BREAKPOINTS } from "~/styles/globals";
 import { FadeRightAni } from "../animation/fade-right";
 import { FadeUpAni } from "../animation/fade-up";
+import { ZoomOutAni } from "../animation/zoom.out";
 
 export function LandingHeroComp() {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
@@ -100,7 +101,9 @@ export function LandingHeroComp() {
                 </FadeUpAni>
               </Stack>
 
-              <Image src="/hero-ex.png" mah={400} fit="contain" alt="hero" />
+              <ZoomOutAni>
+                <Image src="/hero-ex.png" mah={400} fit="contain" alt="hero" />
+              </ZoomOutAni>
             </SimpleGrid>
           </Container>
         </Box>
