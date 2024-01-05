@@ -22,24 +22,6 @@ body {
   user-zoom: "none";
 }
 
-@font-face {
-  font-family: "blenderMed";
-  src: local("Blender Pro Medium"), local("Blender-Pro-Medium"),
-    url("/BlenderPro-Medium.woff2") format("woff2"),
-    url("/BlenderPro-Medium.woff") format("woff"),
-    url("/BlenderPro-Medium.ttf") format("truetype");
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "blenderHea";
-  src: local("Blender Pro Heavy"), local("Blender-Pro-Heavy"),
-    url("/BlenderPro-Heavy.woff2") format("woff2"),
-    url("/BlenderPro-Heavy.woff") format("woff"),
-    url("/BlenderPro-Heavy.ttf") format("truetype");
-  font-style: normal;
-}
-
 .triang::after {
   position: absolute;
   content: "";
@@ -51,23 +33,4 @@ body {
   border-style: solid;
   border-width: 0 0 40px 40px;
   border-color: transparent transparent var(--mantine-color-blue-9) transparent;
-}
-
-.blue-dash::after {
-  position: absolute;
-  content: "";
-  z-index: 2;
-  bottom: 0;
-  right: 0;
-  clip-path: polygon(
-    53% 6%,
-    53% 0,
-    100% 0,
-    100% 86%,
-    89% 100%,
-    0 100%,
-    0 0,
-    8% 0,
-    8% 6%
-  );
 }

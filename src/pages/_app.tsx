@@ -12,12 +12,21 @@ import { useShallowEffect } from "@mantine/hooks";
 import { ClerkProvider } from "@clerk/nextjs";
 import { env } from "~/env";
 import Head from "next/head";
+import { Inter, Archivo_Narrow } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+});
+
+const archivoNarrow = Archivo_Narrow({
+  subsets: ["latin"],
+});
 
 const theme = createTheme({
-  fontFamily: "blenderMed",
+  fontFamily: inter.style.fontFamily,
 
   headings: {
-    fontFamily: "blenderHea",
+    fontFamily: archivoNarrow.style.fontFamily,
     sizes: {
       h1: {
         fontSize: rem(60),
@@ -113,7 +122,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
               left: 0,
               width: "100%",
               height: "100%",
-              zIndex: 15550,
+              zIndex: 50,
             }}
           />
 

@@ -1,5 +1,6 @@
 import { Accordion, Container, Grid, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { Children } from "react";
 
 const FAQ = [
   {
@@ -49,14 +50,16 @@ export function LandingFAQComp() {
 
           <Grid.Col span={{ base: 10, md: 7 }}>
             <Accordion defaultValue={FAQ[0]?.value} w="100%">
-              {FAQ.map((faq) => (
-                <>
-                  <Accordion.Item key={faq.value} value={faq.value}>
-                    <Accordion.Control>{faq.value}</Accordion.Control>
-                    <Accordion.Panel>{faq.description}</Accordion.Panel>
-                  </Accordion.Item>
-                </>
-              ))}
+              {Children.toArray(
+                FAQ.map((faq) => (
+                  <>
+                    <Accordion.Item key={faq.value} value={faq.value}>
+                      <Accordion.Control>{faq.value}</Accordion.Control>
+                      <Accordion.Panel>{faq.description}</Accordion.Panel>
+                    </Accordion.Item>
+                  </>
+                ))
+              )}
             </Accordion>
           </Grid.Col>
         </Grid>
