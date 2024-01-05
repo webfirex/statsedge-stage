@@ -72,7 +72,7 @@ const theme = createTheme({
     },
   },
 
-  defaultRadius: "sm",
+  defaultRadius: "md",
 
   
 

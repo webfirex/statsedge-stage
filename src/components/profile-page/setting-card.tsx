@@ -33,11 +33,19 @@ export function ProfileSettingCard() {
               <form>
                 <Stack>
                   <Group grow>
-                    <TextInput placeholder="First Name" label="First Name" />
-                    <TextInput placeholder="Last Name" label="Last Name" />
+                    <TextInput
+                      radius="xl"
+                      placeholder="First Name"
+                      label="First Name"
+                    />
+                    <TextInput
+                      radius="xl"
+                      placeholder="Last Name"
+                      label="Last Name"
+                    />
                   </Group>
 
-                  <TextInput placeholder="Email" label="Email" />
+                  <TextInput radius="xl" placeholder="Email" label="Email" />
 
                   <Group>
                     <Button size="xs" px="xl">
@@ -61,14 +69,20 @@ export function ProfileSettingCard() {
 
               <form>
                 <Stack>
-                  <PasswordInput placeholder="Password" label="Old Password" />
+                  <PasswordInput
+                    radius="xl"
+                    placeholder="Password"
+                    label="Old Password"
+                  />
 
                   <Group grow>
                     <PasswordInput
+                      radius="xl"
                       placeholder="Password"
                       label="New Password"
                     />
                     <PasswordInput
+                      radius="xl"
                       placeholder="Password"
                       label="Confirm Password"
                     />

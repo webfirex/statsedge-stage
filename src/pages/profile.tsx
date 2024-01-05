@@ -4,6 +4,7 @@ import {
   Container,
   Group,
   Loader,
+  Space,
   Stack,
   Text,
   Title,
@@ -59,6 +60,8 @@ export default function App() {
                 Settings
               </Title>
             </Group>
+
+            <Space />
 
             <ProfileSettingCard />
           </Stack>
