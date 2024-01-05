@@ -1,14 +1,18 @@
 import { Modal, RemoveScroll } from "@mantine/core";
+import { useRouter } from "next/router";
 import { LayoutComp } from "~/components/layout";
 import { SignupCard } from "~/components/signup-modal";
 
 export default function Signup() {
+
+  const router = useRouter();
+
   return (
     <>
       <Modal
         opened
         onClose={() => {
-          return;
+          void router.back();
         }}
         withCloseButton={false}
         p={0}

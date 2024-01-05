@@ -1,14 +1,17 @@
 import { Modal, RemoveScroll } from "@mantine/core";
+import { useRouter } from "next/router";
 import { LayoutComp } from "~/components/layout";
 import { SigninCard } from "~/components/signin-modal";
 
 export default function Signin() {
+  const router = useRouter();
+
   return (
     <>
       <Modal
         opened
         onClose={() => {
-          return;
+          void router.back();
         }}
         withCloseButton={false}
         p={0}
@@ -23,6 +26,7 @@ export default function Signin() {
           backgroundOpacity: 0.7,
           blur: 7,
         }}
+        
       >
         <RemoveScroll>
           <SigninCard />
