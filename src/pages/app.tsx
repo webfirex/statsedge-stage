@@ -16,6 +16,7 @@ import { IconCalendar } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { Children, useState } from "react";
+import { FadeUpAni } from "~/components/animation/fade-up";
 import { AppGameSelector } from "~/components/app-page/game-selector";
 import { AppMatchCard } from "~/components/app-page/match-card";
 import { LayoutComp } from "~/components/layout";
@@ -263,80 +264,90 @@ export default function App() {
       <LayoutComp>
         <Container size="xl" mt="xl">
           <Stack>
-            <AppGameSelector />
+            <FadeUpAni>
+              <AppGameSelector />
+            </FadeUpAni>
 
-            <Group gap="xs">
-              <Text c="blue" size="xl">
-                /
-              </Text>
+            <FadeUpAni>
+              <Group gap="xs">
+                <Text c="blue" size="xl">
+                  /
+                </Text>
 
-              <Text tt="uppercase">{SelectedGame.game}</Text>
-            </Group>
+                <Text tt="uppercase">{SelectedGame.game}</Text>
+              </Group>
+            </FadeUpAni>
 
-            <Group justify="center" gap="xl">
-              <TabsComp value={TAB_LIST} />
-            </Group>
+            <FadeUpAni>
+              <Group justify="center" gap="xl">
+                <TabsComp value={TAB_LIST} />
+              </Group>
+            </FadeUpAni>
 
             <Space h="xl" />
 
-            <Group>
-              <Image
-                src={SelectedGame.icon}
-                mah={50}
-                alt="game icon"
-                fit="contain"
-              />
+            <FadeUpAni>
+              <Group>
+                <Image
+                  src={SelectedGame.icon}
+                  mah={50}
+                  alt="game icon"
+                  fit="contain"
+                />
 
-              <Title> Upcoming {SelectedGame.game} Matches</Title>
-            </Group>
+                <Title> Upcoming {SelectedGame.game} Matches</Title>
+              </Group>
+            </FadeUpAni>
 
             <Space />
 
-            <Group>
-              <Stack gap={5}>
-                <Text c="dimmed" size="sm">
-                  Select a date
-                </Text>
+            <FadeUpAni>
+              <Group>
+                <Stack gap={5}>
+                  <Text c="dimmed" size="sm">
+                    Select a date
+                  </Text>
 
-                <Group gap="xs">
-                  <SegmentedControl
-                    size="xs"
-                    color="blue"
-                    radius="xl"
-                    styles={{
-                      root: {
-                        background: "transparent",
-                        border: "1px solid var(--mantine-color-dimmed)",
-                      },
-                    }}
-                    data={[
-                      {
-                        value: "Upcoming",
-                        label: (
-                          <>
-                            <Text size="sm" my={3} fw="bold" mx="md">
-                              Upcoming
-                            </Text>
-                          </>
-                        ),
-                      },
-                      {
-                        value: "Past",
-                        label: (
-                          <>
-                            <Text size="sm" my={3} fw="bold" mx="md">
-                              Past
-                            </Text>
-                          </>
-                        ),
-                      },
-                    ]}
-                  />
+                  <Group gap="xs">
+                    <SegmentedControl
+                      size="xs"
+                      color="blue"
+                      radius="xl"
+                      styles={{
+                        root: {
+                          background: "transparent",
+                          border: "1px solid var(--mantine-color-dimmed)",
+                        },
+                      }}
+                      data={[
+                        {
+                          value: "Upcoming",
+                          label: (
+                            <>
+                              <Text size="sm" my={3} fw="bold" mx="md">
+                                Upcoming
+                              </Text>
+                            </>
+                          ),
+                        },
+                        {
+                          value: "Past",
+                          label: (
+                            <>
+                              <Text size="sm" my={3} fw="bold" mx="md">
+                                Past
+                              </Text>
+                            </>
+                          ),
+                        },
+                      ]}
+                    />
 
-                  <IconCalendar size={18} />
-                </Group>
-              </Stack>
-            </Group>
+                    <IconCalendar size={18} />
+                  </Group>
+                </Stack>
+              </Group>
+            </FadeUpAni>
 
             <Space h="xl" />
 
@@ -345,17 +356,19 @@ export default function App() {
                 MATCH_LIST.map((match) => (
                   <>
                     <Stack>
-                      <Group>
-                        <Title order={5} tt="uppercase">
-                          {match.date}
-                        </Title>
-                      </Group>
+                      <FadeUpAni>
+                        <Group>
+                          <Title order={5} tt="uppercase">
+                            {match.date}
+                          </Title>
+                        </Group>
+                      </FadeUpAni>
 
                       <Space />
 
                       {Children.toArray(
                         match.matches.map((match) => (
-                          <>
+                          <FadeUpAni>
                             <AppMatchCard
                               match={match}
                               game={{
@@ -363,7 +376,7 @@ export default function App() {
                                 icon: SelectedGame.icon,
                               }}
                             />
-                          </>
+                          </FadeUpAni>
                         ))
                       )}
                     </Stack>

@@ -12,6 +12,8 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { BREAKPOINTS } from "~/styles/globals";
+import { FadeRightAni } from "../animation/fade-right";
+import { FadeUpAni } from "../animation/fade-up";
 
 export function LandingHeroComp() {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
@@ -48,48 +50,54 @@ export function LandingHeroComp() {
               }}
             >
               <Stack maw={650} gap="xl" m="auto">
-                <Title ta={BigThenMd ? "left" : "center"} tt="uppercase">
-                  Your{" "}
-                  <Text span inherit c="blue">
-                    ultimate destination
-                  </Text>{" "}
-                  for pro esports stats
-                </Title>
+                <FadeRightAni>
+                  <Title ta={BigThenMd ? "left" : "center"} tt="uppercase">
+                    Your{" "}
+                    <Text span inherit c="blue">
+                      ultimate destination
+                    </Text>{" "}
+                    for pro esports stats
+                  </Title>
+                </FadeRightAni>
 
-                <Text
-                  c="dimmed"
-                  ta={BigThenMd ? "left" : "center"}
-                  size={BigThenMd ? "xl" : "md"}
-                >
-                  We provide you with the most comprehensive and up-to-date
-                  stats for professional esports players in popular games like
-                  CSGO, Dota 2, and League of Legends.
-                </Text>
-
-                <Group gap="xl" justify={BigThenMd ? "left" : "center"}>
-                  <Button
-                    radius="xl"
-                    tt="uppercase"
-                    size={BigThenMd ? "lg" : "md"}
+                <FadeRightAni>
+                  <Text
+                    c="dimmed"
+                    ta={BigThenMd ? "left" : "center"}
+                    size={BigThenMd ? "xl" : "md"}
                   >
-                    Try it for free!
-                  </Button>
+                    We provide you with the most comprehensive and up-to-date
+                    stats for professional esports players in popular games like
+                    CSGO, Dota 2, and League of Legends.
+                  </Text>
+                </FadeRightAni>
 
-                  <Stack gap={0}>
-                    <Title lh={rem(55)} ta={BigThenMd ? "left" : "center"}>
-                      +200,000
-                    </Title>
-
-                    <Text
-                      tt="capitalize"
-                      c="dimmed"
-                      ta={BigThenMd ? "left" : "right"}
-                      size={BigThenMd ? "xl" : "md"}
+                <FadeUpAni>
+                  <Group gap="xl" justify={BigThenMd ? "left" : "center"}>
+                    <Button
+                      radius="xl"
+                      tt="uppercase"
+                      size={BigThenMd ? "lg" : "md"}
                     >
-                      matches analyzed in 5 days
-                    </Text>
-                  </Stack>
-                </Group>
+                      Try it for free!
+                    </Button>
+
+                    <Stack gap={0}>
+                      <Title lh={rem(55)} ta={BigThenMd ? "left" : "center"}>
+                        +200,000
+                      </Title>
+
+                      <Text
+                        tt="capitalize"
+                        c="dimmed"
+                        ta={BigThenMd ? "left" : "right"}
+                        size={BigThenMd ? "xl" : "md"}
+                      >
+                        matches analyzed in 5 days
+                      </Text>
+                    </Stack>
+                  </Group>
+                </FadeUpAni>
               </Stack>
 
               <Image src="/hero-ex.png" mah={400} fit="contain" alt="hero" />
