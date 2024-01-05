@@ -5,6 +5,7 @@ import {
   Grid,
   Group,
   PasswordInput,
+  SimpleGrid,
   Space,
   Stack,
   Text,
@@ -17,7 +18,7 @@ export function ProfileSettingCard() {
   return (
     <>
       <Grid columns={10}>
-        <Grid.Col span={7}>
+        <Grid.Col span={{ base: 10, md: 7 }}>
           <Card p="lg">
             <Stack>
               <Stack w="fit-content" gap={4}>
@@ -32,7 +33,7 @@ export function ProfileSettingCard() {
 
               <form>
                 <Stack>
-                  <Group grow>
+                  <SimpleGrid cols={{ base: 1, sm: 2 }}>
                     <TextInput
                       radius="xl"
                       placeholder="First Name"
@@ -43,9 +44,9 @@ export function ProfileSettingCard() {
                       placeholder="Last Name"
                       label="Last Name"
                     />
-                  </Group>
 
-                  <TextInput radius="xl" placeholder="Email" label="Email" />
+                    <TextInput radius="xl" placeholder="Email" label="Email" />
+                  </SimpleGrid>
 
                   <Group>
                     <Button size="xs" px="xl">
@@ -69,13 +70,12 @@ export function ProfileSettingCard() {
 
               <form>
                 <Stack>
-                  <PasswordInput
-                    radius="xl"
-                    placeholder="Password"
-                    label="Old Password"
-                  />
-
-                  <Group grow>
+                  <SimpleGrid cols={{ base: 1, sm: 2 }}>
+                    <PasswordInput
+                      radius="xl"
+                      placeholder="Password"
+                      label="Old Password"
+                    />
                     <PasswordInput
                       radius="xl"
                       placeholder="Password"
@@ -86,7 +86,7 @@ export function ProfileSettingCard() {
                       placeholder="Password"
                       label="Confirm Password"
                     />
-                  </Group>
+                  </SimpleGrid>
 
                   <Group>
                     <Button size="xs" px="xl">
@@ -99,7 +99,7 @@ export function ProfileSettingCard() {
           </Card>
         </Grid.Col>
 
-        <Grid.Col span={3}>
+        <Grid.Col span={{ base: 10, md: 3 }}>
           <Card p="lg">
             <Stack>
               <Stack w="fit-content" gap={4}>
