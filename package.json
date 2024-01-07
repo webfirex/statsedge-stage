@@ -30,6 +30,7 @@
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
     "aos": "^3.0.0-beta.6",
+    "dayjs": "^1.11.10",
     "drizzle-orm": "^0.29.3",
     "framer-motion": "^10.17.9",
     "jotai": "^2.6.1",
