@@ -145,6 +145,19 @@ export default function App() {
                     },
                 })
 
+            try {
+                const responseImg = await fetch(
+                    `https://img.gamescorekeeper.com/logo/participant/53577`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    })
+                console.log(responseImg)
+            }catch (e) {
+
+            }
 
             const resData = await response.json()
             const tempState = resData.fixtures.map((item: any) => {
@@ -201,12 +214,12 @@ export default function App() {
                     },
                     teams: {
                         1: {
-                            name: item.participants[0].name,
+                            name: item.participants[0].name?item.participants[0].name:'Unknown',
                             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
                             points: item.participants[0].score,
                         },
                         2: {
-                            name: item.participants[1].name,
+                            name: item.participants[1].name?item.participants[1].name:'Unknown',
                             logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
                             points: item.participants[1].score,
                         },
@@ -240,12 +253,6 @@ export default function App() {
             }
         })()
     }, [SelectedGame, ...valueDateRange])
-
-
-    useEffect(() => {
-        setValueDateRange([(new Date()), (new Date())])
-    }, [SelectedGame]);
-
 
     useEffect(() => {
         if (vState.dateType === 'upcoming') {
@@ -395,22 +402,8 @@ export default function App() {
                         <Space h="xl"/>
 
                         <Stack gap="xl">
-                            {/*{Children.toArray(*/}
-                            {/*  MATCH_LIST.map((match) => (*/}
                             <>
                                 <Stack>
-                                    {/*<FadeUpAni>*/}
-                                    {/*  <Group>*/}
-                                    {/*    <Title order={5} tt="uppercase">*/}
-                                    {/*      {match.date}*/}
-                                    {/*    </Title>*/}
-                                    {/*  </Group>*/}
-                                    {/*</FadeUpAni>*/}
-
-                                    {/*<Space />*/}
-
-
-
                                     {Children.toArray(
                                         vState.displayData.filter((item, idx) => {
                                             return (idx > ((vState.pagination.current - 1) * 10) - 1) && (idx < (vState.pagination.current) * 10)
@@ -435,6 +428,7 @@ export default function App() {
                                                     }
                                                     {
                                                         idx!=0 && match.date!= filterData[(idx-1)]?.date && (<>
+                                                            <Space />
                                                             <FadeUpAni>
                                                                 <Group>
                                                                     <Title order={5} tt="uppercase">
@@ -477,8 +471,6 @@ export default function App() {
                                     }))}
                                 />
                             </>
-                            {/*))*/}
-                            {/*)}*/}
                         </Stack>
                     </Stack>
                 </Container>
