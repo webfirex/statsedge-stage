@@ -6,3 +6,10 @@ export const GAME_LIST = [
   { game: "DOTA2", icon: "/vec.svg", alias: "dota2" },
   { game: "Call Of Duty", icon: "/cod.svg", alias: "codmwii" },
 ];
+
+export const TAB_LIST = [
+  {name:"All Matches", alias:"all"},
+  {name:"Top Tier", alias:"top"},
+  {name:"LAN", alias:"lan"},
+  {name:"Event", alias:"event"},
+];

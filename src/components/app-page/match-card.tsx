@@ -11,6 +11,7 @@ export function AppMatchCard(props: {
     id: string;
     live: boolean;
     startAt: string;
+    formatCount:string;
     league: {
       name: string;
       logo: string;
@@ -159,10 +160,10 @@ export function AppMatchCard(props: {
               border: "2px solid #333",
             }}
           >
-            <Text size="xs">BO3</Text>
+            <Text size="xs">BO{props.match.formatCount}</Text>
           </Box>
 
-          <Stack gap={5}>
+          <Stack gap={5} >
             <Group>
               <Image
                 src={props.match.teams[1].logo}
@@ -170,7 +171,7 @@ export function AppMatchCard(props: {
                 fit="contain"
                 mah={20}
               />
-              <Text size="xs">{props.match.teams[1].name}</Text>
+              <Text size="xs"  w={120}>{props.match.teams[1].name}</Text>
             </Group>
 
             <Group>
@@ -180,7 +181,7 @@ export function AppMatchCard(props: {
                 fit="contain"
                 mah={20}
               />
-              <Text size="xs" w={80}>{props.match.teams[2].name}</Text>
+              <Text size="xs"  w={120}>{props.match.teams[2].name}</Text>
             </Group>
           </Stack>
 

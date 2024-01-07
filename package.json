@@ -16,6 +16,7 @@
     "@auth/drizzle-adapter": "^0.3.6",
     "@clerk/nextjs": "^4.29.1",
     "@mantine/core": "^7.4.0",
+    "@mantine/dates": "^7.4.0",
     "@mantine/form": "^7.4.0",
     "@mantine/hooks": "^7.4.0",
     "@mantine/modals": "^7.4.0",

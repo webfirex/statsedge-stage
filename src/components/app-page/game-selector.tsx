@@ -3,11 +3,13 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { Children, useEffect } from "react";
-import { GAME_LIST } from "~/lib/data";
-import { SelectedGameAtom } from "~/lib/jotai";
+import {GAME_LIST, TAB_LIST} from "~/lib/data";
+import {SelectedCompTabAtom, SelectedGameAtom} from "~/lib/jotai";
 import { BREAKPOINTS } from "~/styles/globals";
 
 export function AppGameSelector() {
+
+    const [SelectedTab, setSelectedTab] = useAtom(SelectedCompTabAtom)
     const [SelectedGame, setSelectedGame] = useAtom(SelectedGameAtom);
 
     const router = useRouter();
@@ -16,21 +18,22 @@ export function AppGameSelector() {
 
 
     useEffect(() => {
-        console.log(router)
-        console.log('path', router.asPath)
-        console.log('game', SelectedGame.game.toLowerCase())
-        if (router.asPath.indexOf(SelectedGame.game.toLowerCase()) < 0) {
+        if (router.asPath.indexOf(SelectedGame.alias.toLowerCase()) < 0) {
             // setSelectedGame(GAME_LIST[2])
+            setSelectedTab(TAB_LIST[0]!)
             GAME_LIST.forEach(gameItem => {
-                if (router.asPath.indexOf(gameItem.game.toLowerCase()) > 0) {
+                if (router.asPath.indexOf(gameItem.alias.toLowerCase()) > 0) {
                     setSelectedGame(gameItem)
                 }
             })
+            if (router.asPath.indexOf(SelectedTab.alias.toLowerCase()) < 0){
+                void router.push(`/matches?game=${SelectedGame.alias.toLowerCase()}&comp=${SelectedTab.alias}`);
+            }
         } else {
-            void router.push(`/matches?game=${SelectedGame.alias.toLowerCase()}`);
+            void router.push(`/matches?game=${SelectedGame.alias.toLowerCase()}&comp=${SelectedTab.alias}`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router.asPath]);
+    }, [router.asPath, SelectedTab]);
 
 
     return (
@@ -66,7 +69,8 @@ export function AppGameSelector() {
                                     <Image
                                         onClick={() => {
                                             setSelectedGame(game);
-                                            void router.push(`/matches?game=${game.alias.toLowerCase()}`)
+                                            setSelectedTab(TAB_LIST[0]!)
+                                            void router.push(`/matches?game=${game.alias.toLowerCase()}&comp=${TAB_LIST[0]!.alias}`);
                                         }}
                                         src={game.icon}
                                         mah={BigThenMd ? 35 : 20}
