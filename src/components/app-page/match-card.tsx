@@ -180,7 +180,7 @@ export function AppMatchCard(props: {
                 fit="contain"
                 mah={20}
               />
-              <Text size="xs">{props.match.teams[2].name}</Text>
+              <Text size="xs" w={80}>{props.match.teams[2].name}</Text>
             </Group>
           </Stack>
 
@@ -197,7 +197,7 @@ export function AppMatchCard(props: {
               fit="contain"
               mah={30}
             />
-            <Text size="xs">{props.match.league.name}</Text>
+            <Text size="xs" w={150}>{props.match.league.name}</Text>
           </Group>
 
           <Group
