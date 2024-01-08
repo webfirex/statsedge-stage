@@ -20,7 +20,7 @@ export const GameLogoUrl = (params: string) => {
       return "/vec.svg";
     }
 
-    case "codmwii": {
+    case "codmwiii": {
       return "/cod.svg";
     }
 

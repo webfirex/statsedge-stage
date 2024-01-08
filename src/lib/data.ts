@@ -4,7 +4,7 @@ export const GAME_LIST = [
   { game: "Valorant", alias: "valorant" },
   { game: "Rocket League", alias: "rl" },
   { game: "DOTA2", alias: "dota2" },
-  { game: "Call Of Duty", alias: "codmwii" },
+  { game: "Call Of Duty", alias: "codmwiii" },
 ];
 
 export const TAB_LIST = [
