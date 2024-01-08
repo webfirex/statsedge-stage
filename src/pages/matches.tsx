@@ -1,480 +1,261 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
-    Container,
-    Divider,
-    Group,
-    Image,
-    Pagination,
-    SegmentedControl,
-    Space,
-    Stack,
-    Text,
-    Title,
+  Container,
+  Group,
+  Image,
+  Loader,
+  SegmentedControl,
+  Space,
+  Stack,
+  Text,
+  Title,
 } from "@mantine/core";
-import {DatePickerInput} from '@mantine/dates';
-import {useMediaQuery} from "@mantine/hooks";
-import {IconCalendar} from "@tabler/icons-react";
-import {useAtom, useAtomValue} from "jotai";
-import {Children, useEffect, useState} from "react";
-import {FadeUpAni} from "~/components/animation/fade-up";
-import {AppGameSelector} from "~/components/app-page/game-selector";
-import {AppMatchCard} from "~/components/app-page/match-card";
-import {LayoutComp} from "~/components/layout";
-import {SelectedCompTabAtom, SelectedGameAtom} from "~/lib/jotai";
-import {BREAKPOINTS} from "~/styles/globals";
-import {TAB_LIST} from "~/lib/data";
-
-
-function TabsComp({value}: { value: { name: string, alias: string }[] }) {
-
-    const [SelectedTab, setSelectedTab] = useAtom(SelectedCompTabAtom)
-
-    return (
-        <>
-            {Children.toArray(
-                value.map((tab) => (
-                    <>
-                        <Stack
-                            gap={5}
-                            onClick={() => setSelectedTab(tab)}
-                            style={{cursor: "pointer"}}
-                        >
-                            <Text fw="bold" size="sm">
-                                {tab.name}
-                            </Text>
-
-                            <Divider
-                                size="md"
-                                color={SelectedTab === tab ? "blue" : "transparent"}
-                            />
-                        </Stack>
-                    </>
-                ))
-            )}
-        </>
-    );
-}
+import { DatePickerInput } from "@mantine/dates";
+import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
+import { IconCalendar } from "@tabler/icons-react";
+import { Children, useEffect } from "react";
+import { FadeUpAni } from "~/components/animation/fade-up";
+import { LayoutComp } from "~/components/layout";
+import { BREAKPOINTS } from "~/styles/globals";
+import { MatchTabsComp } from "~/components/match-page/tabs";
+import { api } from "~/utils/api";
+import { MatchSportSelector } from "~/components/match-page/sport-selector";
+import { GameLogoUrl, NumTimeFormat } from "~/lib/functions";
+import { MatchCard } from "~/components/match-page/match-card";
+import { PaginatedFooterComp } from "~/components/paginated-footer";
+import { useAtom } from "jotai/react";
+import { MatchesPageAtom } from "~/lib/jotai/matches";
 
 export default function App() {
-    const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
+  const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
-    const SelectedGame = useAtomValue(SelectedGameAtom);
+  const [Query, setQuery] = useAtom(MatchesPageAtom);
 
+  const [DebouncedQuery] = useDebouncedValue(Query, 1000);
 
-    const [vState, setState] = useState({
-        data: [{
-            id: '2131',
-            live: true,
-            startAt: "",
-            date:"",
-            formatCount: "",
-            league: {
-                name: "name",
-                logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
-            },
-            teams: {
-                1: {
-                    name: "Liquid",
-                    logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
-                    points: "6 (1)",
-                },
-                2: {
-                    name: "Master",
-                    logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
-                    points: "6 (1)",
-                },
-            },
-        }],
-        displayData: [{
-            id: '2131',
-            live: true,
-            startAt: "",
-            date:"",
-            formatCount: "",
-            league: {
-                name: "name",
-                logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
-            },
-            teams: {
-                1: {
-                    name: "Liquid",
-                    logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
-                    points: "6 (1)",
-                },
-                2: {
-                    name: "Master",
-                    logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
-                    points: "6 (1)",
-                },
-            },
-        }],
-        dataLoading: false,
-        dateType: 'upcoming',
-        pagination: {
-            total: 1,
-            current: 1
-        }
-    })
-    const [valueDateRange, setValueDateRange] = useState<[Date | null, Date | null]>([(new Date()), (new Date())]);
+  const ListApi = api.fixture.list.useQuery(
+    {
+      from: DebouncedQuery.from
+        ? NumTimeFormat(DebouncedQuery.from?.getTime(), "2017-12-31")
+        : NumTimeFormat(new Date().getTime(), "2017-12-31"),
+      to: DebouncedQuery.to
+        ? NumTimeFormat(DebouncedQuery.to?.getTime(), "2017-12-31")
+        : NumTimeFormat(new Date().getTime(), "2017-12-31"),
+      sport: DebouncedQuery.sport,
+      page: DebouncedQuery.page,
+      pageCount: DebouncedQuery.per,
+    },
+    {
+      enabled: Query.sport !== "",
+    }
+  );
 
-    /* eslint-disable */
-    useEffect(() => {
-        (async () => {
+  // Sync Total Page ========
+  useEffect(() => {
+    if (ListApi.isSuccess && ListApi.data?.data?.total) {
+      console.log(ListApi.data?.data?.total);
 
-            setState(prevState => ({
-                ...prevState,
-                data: [],
-                dataLoading: true
-            }))
+      setQuery((_query) => {
+        _query.total = ListApi.data?.data?.total ?? 0;
+      });
+    }
+  }, [ListApi.data?.data?.total]);
+  // ========================
 
-            /* eslint-disable */
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJza3lsZXJjYW1wZXIiLCJpc3MiOiJHYW1lU2NvcmVrZWVwZXIiLCJqdGkiOi0zMzA5MDQ4MTMzMzUyOTY5Njk3LCJjdXN0b21lciI6dHJ1ZX0.9SkaL3AeufKMI_AAH_1PtYEYAy8FQ46EJjHKsTvDTRo"
+  return (
+    <>
+      <LayoutComp>
+        <Container size="xl" mt="xl">
+          <Stack>
+            <FadeUpAni>
+              <MatchSportSelector />
+            </FadeUpAni>
 
-            const queryParams = {
-                sport: SelectedGame.alias || '',
-                from: (new Date(valueDateRange[0]!)).toISOString().split('T')[0] || '',
-                to: (new Date(valueDateRange[1]!)).toISOString().split('T')[0] || '',
-                page: '1',
-            };
+            <FadeUpAni>
+              <Group gap="xs">
+                <Text c="blue" size="xl">
+                  /
+                </Text>
 
-            const response = await fetch(
-                `https://api.gamescorekeeper.com/v1/fixtures?${new URLSearchParams(queryParams)}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                })
+                <Text tt="uppercase">{Query.sport_name ?? "Error"}</Text>
+              </Group>
+            </FadeUpAni>
 
-            try {
-                const responseImg = await fetch(
-                    `https://img.gamescorekeeper.com/logo/participant/53577`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
+            <FadeUpAni>
+              <Group justify="center" gap="xl">
+                <MatchTabsComp />
+              </Group>
+            </FadeUpAni>
+
+            <Space h="xl" />
+
+            <FadeUpAni>
+              <Group
+                {...(!BigThenMd
+                  ? {
+                      grow: true,
+                      preventGrowOverflow: false,
+                      wrap: "nowrap",
+                    }
+                  : {})}
+              >
+                <Image
+                  src={GameLogoUrl(Query.sport)}
+                  mah={BigThenMd ? 50 : 25}
+                  alt="game icon"
+                  fit="contain"
+                />
+
+                <Title order={BigThenMd ? 1 : 4} lh={1}>
+                  Upcoming {Query.sport_name} Matches
+                </Title>
+              </Group>
+            </FadeUpAni>
+
+            <Space />
+
+            <FadeUpAni>
+              <Group>
+                <Stack gap={5}>
+                  <Text c="dimmed" size="sm">
+                    Select a date
+                  </Text>
+
+                  <Group gap="xs">
+                    <SegmentedControl
+                      size="xs"
+                      color="blue"
+                      radius="xl"
+                      styles={{
+                        root: {
+                          background: "transparent",
+                          border: "1px solid var(--mantine-color-dimmed)",
                         },
-                    })
-                console.log(responseImg)
-            }catch (e) {
-
-            }
-
-            const resData = await response.json()
-            const tempState = resData.fixtures.map((item: any) => {
-
-                const startDate = new Date(item.scheduledStartTime)
-                const pad = (num: number) => (num < 10 ? "0" + num : num);
-
-                const hours = pad(startDate.getHours());
-                const minutes = pad(startDate.getMinutes());
-
-
-                const months = [
-                    'January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'
-                ];
-
-                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-                const dayOfWeek = days[startDate.getDay()];
-                const dayOfMonth = startDate.getDate();
-                const month = months[startDate.getMonth()];
-                const year = startDate.getFullYear();
-
-                const getOrdinalSuffix = (number:number) => {
-                    if (number >= 11 && number <= 13) {
-                        return 'th';
-                    }
-                    const lastDigit = number % 10;
-                    switch (lastDigit) {
-                        case 1:
-                            return 'st';
-                        case 2:
-                            return 'nd';
-                        case 3:
-                            return 'rd';
-                        default:
-                            return 'th';
-                    }
-                };
-
-                const ordinalSuffix = getOrdinalSuffix(dayOfMonth);
-
-                const formattedDate = `${dayOfWeek}, ${dayOfMonth}${ordinalSuffix} ${month} ${year}`;
-
-                return {
-                    id: item.competition.id,
-                    live: item.status != "Ended",
-                    date:formattedDate,
-                    startAt: `${startDate.toLocaleDateString('en-US', { weekday: 'short' })} ${hours}:${minutes}`,
-                    formatCount: item.format.value,
-                    league: {
-                        name: item.competition.name,
-                        logo: "https://cdn.discordapp.com/attachments/1192566850110898177/1192925149452836894/nYADQoBBHeOXRjBW1kFOra.png.png?ex=65aad91f&is=6598641f&hm=fb33c4462de67e31cff4ba38597fc84eb8af58417d1fb4c903ecaf0aeed7f01b&",
-                    },
-                    teams: {
-                        1: {
-                            name: item.participants[0].name?item.participants[0].name:'Unknown',
-                            logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
-                            points: item.participants[0].score,
-                        },
-                        2: {
-                            name: item.participants[1].name?item.participants[1].name:'Unknown',
-                            logo: "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg",
-                            points: item.participants[1].score,
-                        },
-                    },
-                }
-            })
-            if (vState.dateType === 'upcoming') {
-                const displayData = tempState.filter((item: any) => item.live)
-                setState(prevState => ({
-                    ...prevState,
-                    data: tempState,
-                    dataLoading: false,
-                    displayData: displayData,
-                    pagination: {
-                        total: Math.ceil(displayData.length / 10),
-                        current: 1
-                    }
-                }))
-            } else {
-                const displayData = tempState.filter((item: any) => !item.live)
-                setState(prevState => ({
-                    ...prevState,
-                    data: tempState,
-                    dataLoading: false,
-                    displayData: displayData,
-                    pagination: {
-                        total: Math.ceil(displayData.length / 10),
-                        current: 1
-                    }
-                }))
-            }
-        })()
-    }, [SelectedGame, ...valueDateRange])
-
-    useEffect(() => {
-        if (vState.dateType === 'upcoming') {
-            const displayData = vState.data.filter(item => item.live)
-            setState(prevState => ({
-                ...prevState,
-                displayData: displayData,
-                pagination: {
-                    total: Math.ceil(displayData.length / 10),
-                    current: 1
-                }
-            }))
-        } else {
-            const displayData = vState.data.filter(item => !item.live)
-            setState(prevState => ({
-                ...prevState,
-                displayData: displayData,
-                pagination: {
-                    total: Math.ceil(displayData.length / 10),
-                    current: 1
-                }
-            }))
-        }
-    }, [vState.dateType])
-
-    /* eslint-enable */
-
-    return (
-        <>
-            <LayoutComp>
-                <Container size="xl" mt="xl">
-                    <Stack>
-                        <FadeUpAni>
-                            <AppGameSelector/>
-                        </FadeUpAni>
-
-                        <FadeUpAni>
-                            <Group gap="xs">
-                                <Text c="blue" size="xl">
-                                    /
-                                </Text>
-
-                                <Text tt="uppercase">{SelectedGame.game}</Text>
-                            </Group>
-                        </FadeUpAni>
-
-                        <FadeUpAni>
-                            <Group justify="center" gap="xl">
-                                <TabsComp value={TAB_LIST}/>
-                            </Group>
-                        </FadeUpAni>
-
-                        <Space h="xl"/>
-
-                        <FadeUpAni>
-                            <Group
-                                {...(!BigThenMd
-                                    ? {grow: true, preventGrowOverflow: false, wrap: "nowrap"}
-                                    : {})}
-                            >
-                                <Image
-                                    src={SelectedGame.icon}
-                                    mah={BigThenMd ? 50 : 25}
-                                    alt="game icon"
-                                    fit="contain"
-                                />
-
-                                <Title order={BigThenMd ? 1 : 4} lh={1}>
-                                    Upcoming {SelectedGame.game} Matches
-                                </Title>
-                            </Group>
-                        </FadeUpAni>
-
-                        <Space/>
-
-                        <FadeUpAni>
-                            <Group>
-                                <Stack gap={5}>
-                                    <Text c="dimmed" size="sm">
-                                        Select a date
-                                    </Text>
-
-                                    <Group gap="xs">
-                                        <SegmentedControl
-                                            size="xs"
-                                            color="blue"
-                                            radius="xl"
-                                            styles={{
-                                                root: {
-                                                    background: "transparent",
-                                                    border: "1px solid var(--mantine-color-dimmed)",
-                                                },
-                                            }}
-                                            data={[
-                                                {
-                                                    value: "upcoming",
-                                                    label: (
-                                                        <>
-                                                            <Text
-                                                                size={BigThenMd ? "sm" : "xs"}
-                                                                my={3}
-                                                                fw="bold"
-                                                                mx="md"
-                                                            >
-                                                                Upcoming
-                                                            </Text>
-                                                        </>
-                                                    ),
-                                                },
-                                                {
-                                                    value: "past",
-                                                    label: (
-                                                        <>
-                                                            <Text
-                                                                size={BigThenMd ? "sm" : "xs"}
-                                                                my={3}
-                                                                fw="bold"
-                                                                mx="md"
-                                                            >
-                                                                Past
-                                                            </Text>
-                                                        </>
-                                                    ),
-                                                },
-                                            ]}
-                                            value={vState.dateType}
-                                            onChange={(value) => setState(prevState => ({
-                                                ...prevState,
-                                                dateType: value
-                                            }))}
-                                        />
-
-                                        {/*<IconCalendar size={18}/>*/}
-                                        <DatePickerInput
-                                            type="range"
-                                            leftSection={<IconCalendar size={18} stroke={1.5}/>}
-                                            leftSectionPointerEvents="none"
-                                            placeholder="Pick date"
-                                            value={valueDateRange}
-                                            onChange={setValueDateRange}
-                                        />
-                                    </Group>
-                                </Stack>
-                            </Group>
-                        </FadeUpAni>
-
-                        <Space h="xl"/>
-
-                        <Stack gap="xl">
+                      }}
+                      data={[
+                        {
+                          value: "upcoming",
+                          label: (
                             <>
-                                <Stack>
-                                    {Children.toArray(
-                                        vState.displayData.filter((item, idx) => {
-                                            return (idx > ((vState.pagination.current - 1) * 10) - 1) && (idx < (vState.pagination.current) * 10)
-                                        }).map((match,idx) => {
-                                            const filterData=vState.displayData.filter((item, idx) => {
-                                                return (idx > ((vState.pagination.current - 1) * 10) - 1) && (idx < (vState.pagination.current) * 10)
-                                            })
-                                            return (
-                                                <>
-                                                    {
-                                                        idx==0 && (<>
-                                                            <FadeUpAni>
-                                                                <Group>
-                                                                    <Title order={5} tt="uppercase">
-                                                                        {match.date}
-                                                                    </Title>
-                                                                </Group>
-                                                            </FadeUpAni>
-
-                                                            <Space />
-                                                        </>)
-                                                    }
-                                                    {
-                                                        idx!=0 && match.date!= filterData[(idx-1)]?.date && (<>
-                                                            <Space />
-                                                            <FadeUpAni>
-                                                                <Group>
-                                                                    <Title order={5} tt="uppercase">
-                                                                        {match.date}
-                                                                    </Title>
-                                                                </Group>
-                                                            </FadeUpAni>
-
-                                                            <Space />
-                                                        </>)
-                                                    }
-                                                    <FadeUpAni>
-                                                        <AppMatchCard
-                                                            match={match}
-                                                            game={{
-                                                                name: SelectedGame.game,
-                                                                icon: SelectedGame.icon,
-                                                            }}
-                                                        />
-                                                    </FadeUpAni>
-                                                </>
-                                            )
-                                        })
-                                    )}
-                                    {(vState.displayData.length == 0 && !vState.dataLoading) && 'No competition'}
-                                    {vState.dataLoading && "Data Loading. Please wait."}
-                                </Stack>
-                                <Space/>
-                                <Pagination
-                                    total={vState.pagination.total}
-                                    siblings={1}
-                                    defaultValue={1}
-                                    value={vState.pagination.current}
-                                    onChange={(val) => setState(prevState => ({
-                                        ...prevState,
-                                        pagination: {
-                                            total: prevState.pagination.total,
-                                            current: val
-                                        }
-                                    }))}
-                                />
+                              <Text
+                                size={BigThenMd ? "sm" : "xs"}
+                                my={3}
+                                fw="bold"
+                                mx="md"
+                              >
+                                Upcoming
+                              </Text>
                             </>
-                        </Stack>
+                          ),
+                        },
+                        {
+                          value: "past",
+                          label: (
+                            <>
+                              <Text
+                                size={BigThenMd ? "sm" : "xs"}
+                                my={3}
+                                fw="bold"
+                                mx="md"
+                              >
+                                Past
+                              </Text>
+                            </>
+                          ),
+                        },
+                      ]}
+                    />
+
+                    <DatePickerInput
+                      type="range"
+                      leftSection={<IconCalendar size={18} stroke={1.5} />}
+                      leftSectionPointerEvents="none"
+                      placeholder="Pick date"
+                      value={[Query.from, Query.to]}
+                      onChange={([from, to]) => {
+                        setQuery((_query) => {
+                          _query.from = from;
+                          _query.to = to;
+                        });
+                      }}
+                    />
+                  </Group>
+                </Stack>
+              </Group>
+            </FadeUpAni>
+
+            <Space h="xl" />
+
+            {(() => {
+              if (ListApi.isError) {
+                return <Text>Error</Text>;
+              }
+
+              if (ListApi.isLoading) {
+                return <Loader />;
+              }
+
+              if (ListApi.isSuccess) {
+                const data = ListApi.data;
+
+                if (!data.data || data.data.fixtures.length === 0) {
+                  return <Text>No Data</Text>;
+                }
+
+                return (
+                  <>
+                    <Stack>
+                      {Children.toArray(
+                        data.data.fixtures.map((match) => (
+                          <>
+                            <Stack>
+                              <Title order={5} tt="uppercase">
+                                {NumTimeFormat(
+                                  match.day,
+                                  "Monday, 8th January 2021"
+                                )}
+                              </Title>
+
+                              {Children.toArray(
+                                match.fixtures.map((fixture) => (
+                                  <>
+                                    <MatchCard match={fixture} />
+                                  </>
+                                ))
+                              )}
+                            </Stack>
+                          </>
+                        ))
+                      )}
                     </Stack>
-                </Container>
-            </LayoutComp>
-        </>
-    );
+                  </>
+                );
+              }
+            })()}
+
+            <PaginatedFooterComp
+              nextPage={() => {
+                setQuery((_query) => {
+                  _query.page++;
+                });
+              }}
+              prevPage={() => {
+                setQuery((_query) => {
+                  _query.page--;
+                });
+              }}
+              setPerPage={(value) => {
+                setQuery((_query) => {
+                  _query.per = value;
+                });
+              }}
+              page={Query.page}
+              per={Query.per}
+              total={Query.total}
+            />
+          </Stack>
+        </Container>
+      </LayoutComp>
+    </>
+  );
 }

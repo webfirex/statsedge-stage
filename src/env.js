@@ -30,6 +30,9 @@ export const env = createEnv({
     ),
 
     CLERK_SECRET_KEY: z.string().min(1),
+
+    SPORT_API_KEY: z.string().min(1),
+    SPORT_BASE_URL: z.string().url().min(1),
   },
 
   /**
@@ -47,6 +50,8 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    SPORT_BASE_URL: process.env.SPORT_BASE_URL,
+    SPORT_API_KEY: process.env.SPORT_API_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
