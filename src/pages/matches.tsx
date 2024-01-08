@@ -25,6 +25,7 @@ import { MatchCard } from "~/components/match-page/match-card";
 import { PaginatedFooterComp } from "~/components/paginated-footer";
 import { useAtom } from "jotai/react";
 import { MatchesPageAtom } from "~/lib/jotai/matches";
+import { UrlString, useUrlState } from "~/lib/hooks/useUrlState";
 
 export default function App() {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
@@ -32,6 +33,13 @@ export default function App() {
   const [Query, setQuery] = useAtom(MatchesPageAtom);
 
   const [DebouncedQuery] = useDebouncedValue(Query, 1000);
+
+  const [URLQuery, setURLQuery] = useUrlState(
+    {
+      sport: UrlString("lol"),
+    },
+    "m"
+  );
 
   const ListApi = api.fixture.list.useQuery(
     {
@@ -44,17 +52,34 @@ export default function App() {
       sport: DebouncedQuery.sport,
       page: DebouncedQuery.page,
       pageCount: DebouncedQuery.per,
+      upcoming: DebouncedQuery.upcoming,
     },
     {
       enabled: Query.sport !== "",
     }
   );
 
+  // Sync URL Query ========
+
+  useEffect(() => {
+    if (URLQuery.sport !== Query.sport) {
+      setQuery((_query) => {
+        _query.sport = URLQuery.sport;
+      });
+    }
+  }, [URLQuery.sport]);
+
+  useEffect(() => {
+    setURLQuery({
+      sport: Query.sport,
+    });
+  }, [Query.sport]);
+
+  // ========================
+
   // Sync Total Page ========
   useEffect(() => {
     if (ListApi.isSuccess && ListApi.data?.data?.total) {
-      console.log(ListApi.data?.data?.total);
-
       setQuery((_query) => {
         _query.total = ListApi.data?.data?.total ?? 0;
       });
@@ -164,6 +189,12 @@ export default function App() {
                           ),
                         },
                       ]}
+                      value={Query.upcoming ? "upcoming" : "past"}
+                      onChange={(value) => {
+                        setQuery((_query) => {
+                          _query.upcoming = value === "upcoming";
+                        });
+                      }}
                     />
 
                     <DatePickerInput

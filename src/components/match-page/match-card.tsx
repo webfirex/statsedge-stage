@@ -57,6 +57,7 @@ export function MatchCard(props: MatchCardProps) {
                   alt="league logo"
                   fit="contain"
                   mah={rem(15)}
+                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                 />
                 <Text size={rem(10)} maw={100} truncate="end">
                   {props.match.participants[0]!.name}
@@ -69,6 +70,7 @@ export function MatchCard(props: MatchCardProps) {
                   alt="league logo"
                   fit="contain"
                   mah={rem(15)}
+                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                 />
                 <Text size={rem(10)} maw={100} truncate="end">
                   {props.match.participants[1]!.name}
@@ -97,20 +99,47 @@ export function MatchCard(props: MatchCardProps) {
               </Group>
 
               <Group gap={3}>
-                {props.match.links.length > 0 && (
-                  <Group gap={3}>
-                    <Box
-                      style={{
-                        backgroundColor: "var(--mantine-color-red-6)",
-                        borderRadius: "50%",
-                        width: "7px",
-                        height: "7px",
-                      }}
-                    />
+                {(() => {
+                  if (props.match.status === "Started") {
+                    return (
+                      <>
+                        <Group gap={3}>
+                          <Box
+                            style={{
+                              backgroundColor: "var(--mantine-color-red-6)",
+                              borderRadius: "50%",
+                              width: "7px",
+                              height: "7px",
+                            }}
+                          />
 
-                    <Text size={rem(10)}>LIVE</Text>
-                  </Group>
-                )}
+                          <Text size={rem(10)}>LIVE</Text>
+                        </Group>
+                      </>
+                    );
+                  }
+
+                  if (props.match.status === "Scheduled") {
+                    return (
+                      <>
+                        <Group gap={3}>
+                          <Box
+                            style={{
+                              backgroundColor: "var(--mantine-color-yellow-6)",
+                              borderRadius: "50%",
+                              width: "7px",
+                              height: "7px",
+                            }}
+                          />
+
+                          <Text size={rem(10)}>UPCOMING</Text>
+                        </Group>
+                      </>
+                    );
+                  }
+
+                  return <></>;
+                })()}
 
                 <Text size={rem(10)} c="blue">
                   {NumTimeFormat(props.match.scheduledStartTime, "Mon, 14:00")}
@@ -154,6 +183,7 @@ export function MatchCard(props: MatchCardProps) {
                 alt="league logo"
                 fit="contain"
                 mah={20}
+                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
               />
               <Text size="xs" w={120}>
                 {props.match.participants[0]!.name}
@@ -166,6 +196,7 @@ export function MatchCard(props: MatchCardProps) {
                 alt="league logo"
                 fit="contain"
                 mah={20}
+                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
               />
               <Text size="xs" w={120}>
                 {props.match.participants[1]!.name}
@@ -191,23 +222,47 @@ export function MatchCard(props: MatchCardProps) {
             </Text>
           </Group>
 
-          <Group
-            style={{
-              // * hide if not live, without removing space
-              visibility: props.match.links.length > 0 ? "visible" : "hidden",
-            }}
-          >
-            <Box
-              style={{
-                backgroundColor: "var(--mantine-color-red-6)",
-                borderRadius: "50%",
-                width: "7px",
-                height: "7px",
-              }}
-            />
+          {(() => {
+            if (props.match.status === "Started") {
+              return (
+                <>
+                  <Group>
+                    <Box
+                      style={{
+                        backgroundColor: "var(--mantine-color-red-6)",
+                        borderRadius: "50%",
+                        width: "7px",
+                        height: "7px",
+                      }}
+                    />
 
-            <Text size="xs">LIVE</Text>
-          </Group>
+                    <Text size="xs">LIVE</Text>
+                  </Group>
+                </>
+              );
+            }
+
+            if (props.match.status === "Scheduled") {
+              return (
+                <>
+                  <Group>
+                    <Box
+                      style={{
+                        backgroundColor: "var(--mantine-color-yellow-6)",
+                        borderRadius: "50%",
+                        width: "7px",
+                        height: "7px",
+                      }}
+                    />
+
+                    <Text size="xs">UPCOMING</Text>
+                  </Group>
+                </>
+              );
+            }
+
+            return <></>;
+          })()}
 
           <Text size="xs" c="blue">
             {NumTimeFormat(props.match.scheduledStartTime, "Mon, 14:00")}

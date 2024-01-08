@@ -9,6 +9,7 @@ export const MatchesPageAtom = atomWithImmer<{
   sport_name: string;
   from: Date | null;
   to: Date | null;
+  upcoming: boolean;
 }>({
   page: 1,
   per: 10,
@@ -18,4 +19,5 @@ export const MatchesPageAtom = atomWithImmer<{
   sport_name: "League of Legends",
   from: new Date(),
   to: new Date(),
+  upcoming: true,
 });

@@ -66,7 +66,13 @@ export class FixtureList {
           }),
           endTime: z.number().nullable(),
           startTime: z.number().nullable(),
-          status: z.string(),
+          status: z.enum([
+            "Scheduled",
+            "Started",
+            "Ended",
+            "Forfeited",
+            "Cancelled",
+          ]),
           tie: z.boolean().nullable(),
           winnerId: z.number().nullable(),
         })
