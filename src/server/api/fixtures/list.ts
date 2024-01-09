@@ -22,6 +22,14 @@ export const FixtureListRoute = publicProcedure
         typeof SportApi.Fixtures.List.Zod.Response
       >["fixtures"][0][];
 
+      SportApiLogger.info(
+        {
+          route: "FixtureListRoute",
+          input: input,
+        },
+        "Fetching fixture list"
+      );
+
       const AllFixtures: FixtureList = [];
 
       let page = 1;

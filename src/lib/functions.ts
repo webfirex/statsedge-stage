@@ -1,36 +1,24 @@
-export const GameLogoUrl = (params: string) => {
-  switch (params) {
-    case "csgo": {
-      return "/csgo.svg";
-    }
+import { SPORT_INFO } from "./data";
 
-    case "lol": {
-      return "/lol.svg";
-    }
-
-    case "valorant": {
-      return "/valo.svg";
-    }
-
-    case "rl": {
-      return "/bull.svg";
-    }
-
-    case "dota2": {
-      return "/vec.svg";
-    }
-
-    case "codmwiii": {
-      return "/cod.svg";
-    }
-
-    default: {
-      return "https://upload.wikimedia.org/wikipedia/commons/5/55/Question_Mark.svg";
-    }
-  }
+/**
+ *
+ * @param params Game alias
+ * @returns
+ */
+export const SportInfo = (params: string) => {
+  return (
+    SPORT_INFO.find(
+      (game) => game.alias.toLowerCase() === params.toLowerCase()
+    ) ?? null
+  );
 };
 
-type FormatTypes = "Monday, 8th January 2021" | "Mon, 14:00" | "2017-12-31";
+type FormatTypes =
+  | "Monday, 8th January 2021"
+  | "Mon, 14:00"
+  | "2017-12-31"
+  | "19th December 2021"
+  | "14:00";
 
 export const NumTimeFormat = (param: number, format: FormatTypes) => {
   switch (format) {
@@ -60,6 +48,23 @@ export const NumTimeFormat = (param: number, format: FormatTypes) => {
       const year = date.getFullYear();
 
       return `${year}-${month + 1}-${day}`;
+    }
+
+    case "19th December 2021": {
+      const date = new Date(param);
+      const day = date.getDate();
+      const month = date.toLocaleString("default", { month: "long" });
+      const year = date.getFullYear();
+
+      return `${day}th ${month} ${year}`;
+    }
+
+    case "14:00": {
+      const date = new Date(param);
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+
+      return `${hour}:${minute}`;
     }
 
     default: {
@@ -95,6 +100,20 @@ export const NumTimeToDayStartTime = (param: number): number => {
   const year = date.getFullYear();
 
   return new Date(year, month, day).getTime();
+};
+
+export const UTCToLocalTime = (param: number): number => {
+  const date = new Date(param);
+  const offset = date.getTimezoneOffset() * 60000;
+
+  return param + offset;
+};
+
+export const LocalTimeToUTC = (param: number): number => {
+  const date = new Date(param);
+  const offset = date.getTimezoneOffset() * 60000;
+
+  return param - offset;
 };
 
 export const ArrayPagination = <T>(params: {

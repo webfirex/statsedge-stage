@@ -4,7 +4,6 @@ import {
   Group,
   Image,
   Loader,
-  SegmentedControl,
   Space,
   Stack,
   Text,
@@ -20,12 +19,15 @@ import { BREAKPOINTS } from "~/styles/globals";
 import { MatchTabsComp } from "~/components/match-page/tabs";
 import { api } from "~/utils/api";
 import { MatchSportSelector } from "~/components/match-page/sport-selector";
-import { GameLogoUrl, NumTimeFormat } from "~/lib/functions";
+import { SportInfo, NumTimeFormat, LocalTimeToUTC } from "~/lib/functions";
 import { MatchCard } from "~/components/match-page/match-card";
 import { PaginatedFooterComp } from "~/components/paginated-footer";
 import { useAtom } from "jotai/react";
 import { MatchesPageAtom } from "~/lib/jotai/matches";
 import { UrlString, useUrlState } from "~/lib/hooks/useUrlState";
+import { MatchTimeControl } from "~/components/match-page/match-segment";
+import { SPORT_INFO } from "~/lib/data";
+import { PathDisplay } from "~/components/pathdisplay";
 
 export default function App() {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
@@ -41,37 +43,38 @@ export default function App() {
     "m"
   );
 
-  const ListApi = api.fixture.list.useQuery(
-    {
-      from: DebouncedQuery.from
-        ? NumTimeFormat(DebouncedQuery.from?.getTime(), "2017-12-31")
-        : NumTimeFormat(new Date().getTime(), "2017-12-31"),
-      to: DebouncedQuery.to
-        ? NumTimeFormat(DebouncedQuery.to?.getTime(), "2017-12-31")
-        : NumTimeFormat(new Date().getTime(), "2017-12-31"),
-      sport: DebouncedQuery.sport,
-      page: DebouncedQuery.page,
-      pageCount: DebouncedQuery.per,
-      upcoming: DebouncedQuery.upcoming,
-    },
-    {
-      enabled: Query.sport !== "",
-    }
-  );
+  const ListApi = api.fixture.list.useQuery({
+    from: DebouncedQuery.from
+      ? NumTimeFormat(
+          LocalTimeToUTC(DebouncedQuery.from?.getTime()),
+          "2017-12-31"
+        )
+      : NumTimeFormat(LocalTimeToUTC(new Date().getTime()), "2017-12-31"),
+    to: DebouncedQuery.to
+      ? NumTimeFormat(
+          LocalTimeToUTC(DebouncedQuery.to?.getTime()),
+          "2017-12-31"
+        )
+      : NumTimeFormat(LocalTimeToUTC(new Date().getTime()), "2017-12-31"),
+    sport: DebouncedQuery.sport.alias,
+    page: DebouncedQuery.page,
+    pageCount: DebouncedQuery.per,
+    upcoming: DebouncedQuery.upcoming,
+  });
 
   // Sync URL Query ========
 
   useEffect(() => {
-    if (URLQuery.sport !== Query.sport) {
+    if (URLQuery.sport !== Query.sport.alias) {
       setQuery((_query) => {
-        _query.sport = URLQuery.sport;
+        _query.sport = SportInfo(URLQuery.sport) ?? SPORT_INFO[0]!;
       });
     }
   }, [URLQuery.sport]);
 
   useEffect(() => {
     setURLQuery({
-      sport: Query.sport,
+      sport: Query.sport.alias,
     });
   }, [Query.sport]);
 
@@ -87,23 +90,37 @@ export default function App() {
   }, [ListApi.data?.data?.total]);
   // ========================
 
+  // Set Dates ==============
+  useEffect(() => {
+    if (!Query.from || !Query.to) {
+      setQuery((_query) => {
+        _query.from = new Date();
+        _query.to = new Date();
+      });
+    }
+  }, []);
+  // ========================
+
   return (
     <>
       <LayoutComp>
         <Container size="xl" mt="xl">
           <Stack>
             <FadeUpAni>
-              <MatchSportSelector />
+              <MatchSportSelector
+                sport={Query.sport}
+                setSport={(sport) => {
+                  setQuery((_query) => {
+                    _query.sport = sport;
+                    _query.page = 1;
+                    _query.total = 0;
+                  });
+                }}
+              />
             </FadeUpAni>
 
             <FadeUpAni>
-              <Group gap="xs">
-                <Text c="blue" size="xl">
-                  /
-                </Text>
-
-                <Text tt="uppercase">{Query.sport_name ?? "Error"}</Text>
-              </Group>
+              <PathDisplay path={[`${Query.sport.alias} Matches`]} />
             </FadeUpAni>
 
             <FadeUpAni>
@@ -125,14 +142,14 @@ export default function App() {
                   : {})}
               >
                 <Image
-                  src={GameLogoUrl(Query.sport)}
+                  src={Query.sport.logo}
                   mah={BigThenMd ? 50 : 25}
                   alt="game icon"
                   fit="contain"
                 />
 
                 <Title order={BigThenMd ? 1 : 4} lh={1}>
-                  Upcoming {Query.sport_name} Matches
+                  Upcoming {Query.sport.name} Matches
                 </Title>
               </Group>
             </FadeUpAni>
@@ -147,61 +164,14 @@ export default function App() {
                   </Text>
 
                   <Group gap="xs">
-                    <SegmentedControl
-                      size="xs"
-                      color="blue"
-                      radius="xl"
-                      styles={{
-                        root: {
-                          background: "transparent",
-                          border: "1px solid var(--mantine-color-dimmed)",
-                        },
-                      }}
-                      data={[
-                        {
-                          value: "upcoming",
-                          label: (
-                            <>
-                              <Text
-                                size={BigThenMd ? "sm" : "xs"}
-                                my={3}
-                                fw="bold"
-                                mx="md"
-                              >
-                                Upcoming
-                              </Text>
-                            </>
-                          ),
-                        },
-                        {
-                          value: "past",
-                          label: (
-                            <>
-                              <Text
-                                size={BigThenMd ? "sm" : "xs"}
-                                my={3}
-                                fw="bold"
-                                mx="md"
-                              >
-                                Past
-                              </Text>
-                            </>
-                          ),
-                        },
-                      ]}
-                      value={Query.upcoming ? "upcoming" : "past"}
-                      onChange={(value) => {
-                        setQuery((_query) => {
-                          _query.upcoming = value === "upcoming";
-                        });
-                      }}
-                    />
+                    <MatchTimeControl />
 
                     <DatePickerInput
                       type="range"
                       leftSection={<IconCalendar size={18} stroke={1.5} />}
                       leftSectionPointerEvents="none"
                       placeholder="Pick date"
+                      aria-label=""
                       value={[Query.from, Query.to]}
                       onChange={([from, to]) => {
                         setQuery((_query) => {

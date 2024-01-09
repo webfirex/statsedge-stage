@@ -1,8 +1,8 @@
 import { Center, Image, SimpleGrid, rem } from "@mantine/core";
 import { useHover, useMediaQuery } from "@mantine/hooks";
 import { Children } from "react";
-import { GAME_LIST } from "~/lib/data";
-import { GameLogoUrl } from "~/lib/functions";
+import { SPORT_INFO } from "~/lib/data";
+import { SportInfo } from "~/lib/functions";
 import { BREAKPOINTS } from "~/styles/globals";
 
 function GameComp({ src }: { src: string }) {
@@ -31,7 +31,7 @@ export function GameListComp() {
       <Center>
         <SimpleGrid spacing={{ base: rem(20), md: rem(100) }} cols={6}>
           {Children.toArray(
-            GAME_LIST.map((game) => <GameComp src={GameLogoUrl(game.alias)} />)
+            SPORT_INFO.map((game) => <GameComp src={SportInfo(game.alias)?.logo ?? ""} />)
           )}
         </SimpleGrid>
       </Center>

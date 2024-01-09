@@ -1,16 +1,17 @@
 import { Card, Group, Image, SimpleGrid, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { useAtom } from "jotai/react";
 import { Children } from "react";
-import { GAME_LIST } from "~/lib/data";
-import { GameLogoUrl } from "~/lib/functions";
-import { MatchesPageAtom } from "~/lib/jotai/matches";
+import { SPORT_INFO } from "~/lib/data";
 import { BREAKPOINTS } from "~/styles/globals";
 
-export function MatchSportSelector() {
-  const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
+interface MatchSportSelectorProps {
+  sport: (typeof SPORT_INFO)[0];
+  setSport: (sport: (typeof SPORT_INFO)[0]) => void;
+  disabled?: boolean;
+}
 
-  const [Query, setQuery] = useAtom(MatchesPageAtom);
+export function MatchSportSelector(props: MatchSportSelectorProps) {
+  const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
   return (
     <>
@@ -21,7 +22,7 @@ export function MatchSportSelector() {
               <Text>Currently Selected:</Text>
 
               <Text c="yellow" tt="uppercase">
-                {Query.sport_name}
+                {props.sport.name}
               </Text>
             </Group>
           )}
@@ -40,24 +41,22 @@ export function MatchSportSelector() {
             )}
 
             {Children.toArray(
-              GAME_LIST.map((game) => (
+              SPORT_INFO.map((game) => (
                 <>
                   <Image
                     onClick={() => {
-                      setQuery((_query) => {
-                        _query.sport = game.alias;
-                        _query.sport_name = game.game;
-                        _query.tab = "all";
-                      });
+                      if (props.disabled) return;
+
+                      props.setSport(game);
                     }}
-                    src={GameLogoUrl(game.alias)}
+                    src={game.logo}
                     mah={BigThenMd ? 35 : 20}
-                    alt={game.game}
+                    alt={game.name}
                     fit="contain"
                     style={{
-                      cursor: "pointer",
+                      cursor: props.disabled ? "normal" : "pointer",
                       filter:
-                        game.alias === Query.sport
+                        game.alias === props.sport.alias
                           ? "drop-shadow(0px 0px 30px var(--mantine-color-yellow-9))"
                           : "grayscale(1)",
                     }}

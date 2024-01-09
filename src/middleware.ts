@@ -1,7 +1,13 @@
 import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
-  publicRoutes: ["/", "/matches", "/api/trpc/fixture.list", "/api/team/logo"],
+  publicRoutes: [
+    "/",
+    "/api/trpc/fixture.list",
+    "/api/team/logo",
+    "/matches",
+    "/matches/:id",
+  ],
 });
 
 export const config = {

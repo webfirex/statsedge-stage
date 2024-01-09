@@ -36,14 +36,14 @@ export const PaginatedFooterComp = (props: PaginatedFooterProps) => {
           <Group gap="xs">
             <ActionIcon
               variant="default"
-              disabled={props.page === 1}
+              disabled={props.page <= 1}
               onClick={() => props.prevPage()}
             >
               <IconChevronLeft />
             </ActionIcon>
             <ActionIcon
               variant="default"
-              disabled={props.page === Math.ceil(props.total / props.per)}
+              disabled={props.page >= Math.ceil(props.total / props.per)}
               onClick={() => props.nextPage()}
             >
               <IconChevronRight />

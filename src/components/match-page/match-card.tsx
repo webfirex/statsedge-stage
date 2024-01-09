@@ -1,6 +1,7 @@
 import { Box, Card, Flex, Group, Image, Stack, Text, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { GameLogoUrl, NumTimeFormat } from "~/lib/functions";
+import Link from "next/link";
+import { SportInfo, NumTimeFormat } from "~/lib/functions";
 import { BREAKPOINTS } from "~/styles/globals";
 import { type RouterOutputs } from "~/utils/api";
 
@@ -14,13 +15,22 @@ interface MatchCardProps {
 export function MatchCard(props: MatchCardProps) {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
 
+  const sportinfo = SportInfo(props.match.sport.alias);
+
   if (!BigThenMd) {
     return (
       <>
-        <Card withBorder bg="transparent" px={5} py="xs">
+        <Card
+          withBorder
+          bg="transparent"
+          px={5}
+          py="xs"
+          component={Link}
+          href={`/matches/${props.match.id}`}
+        >
           <Flex gap={5} justify="space-between" w="100%">
             <Image
-              src={GameLogoUrl(props.match.sport.alias)}
+              src={sportinfo?.logo}
               mah={rem(20)}
               alt="game icon"
               fit="contain"
@@ -59,8 +69,8 @@ export function MatchCard(props: MatchCardProps) {
                   mah={rem(15)}
                   fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                 />
-                <Text size={rem(10)} maw={100} truncate="end">
-                  {props.match.participants[0]!.name}
+                <Text size={rem(10)} maw={100} truncate="end" tt="capitalize">
+                  {props.match.participants[0]!.name ?? "Unknown"}
                 </Text>
               </Group>
 
@@ -72,8 +82,8 @@ export function MatchCard(props: MatchCardProps) {
                   mah={rem(15)}
                   fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                 />
-                <Text size={rem(10)} maw={100} truncate="end">
-                  {props.match.participants[1]!.name}
+                <Text size={rem(10)} maw={100} truncate="end" tt="capitalize">
+                  {props.match.participants[1]!.name ?? "Unknown"}
                 </Text>
               </Group>
             </Stack>
@@ -154,10 +164,15 @@ export function MatchCard(props: MatchCardProps) {
 
   return (
     <>
-      <Card withBorder bg="transparent">
+      <Card
+        withBorder
+        bg="transparent"
+        component={Link}
+        href={`/matches/${props.match.id}`}
+      >
         <Group justify="space-around">
           <Image
-            src={GameLogoUrl(props.match.sport.alias)}
+            src={sportinfo?.logo}
             mah={30}
             alt="game icon"
             fit="contain"
@@ -185,8 +200,8 @@ export function MatchCard(props: MatchCardProps) {
                 mah={20}
                 fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
               />
-              <Text size="xs" w={120}>
-                {props.match.participants[0]!.name}
+              <Text size="xs" w={120} tt="capitalize">
+                {props.match.participants[0]!.name ?? "Unknown"}
               </Text>
             </Group>
 
@@ -198,8 +213,8 @@ export function MatchCard(props: MatchCardProps) {
                 mah={20}
                 fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
               />
-              <Text size="xs" w={120}>
-                {props.match.participants[1]!.name}
+              <Text size="xs" w={120} tt="capitalize">
+                {props.match.participants[1]!.name ?? "Unknown"}
               </Text>
             </Group>
           </Stack>
