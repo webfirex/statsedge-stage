@@ -4,7 +4,7 @@ export const SPORT_INFO: {
   logo: string;
 }[] = [
   { name: "League of Legends", alias: "lol", logo: "/lol.svg" },
-  { name: "Counter-Strike 2", alias: "csgo", logo: "/csgo.svg" },
+  { name: "Counter-Strike 2", alias: "cs2", logo: "/csgo.svg" },
   { name: "Valorant", alias: "valorant", logo: "/valo.svg" },
   { name: "Rocket League", alias: "rl", logo: "/bull.svg" },
   { name: "DOTA2", alias: "dota2", logo: "/vec.svg" },

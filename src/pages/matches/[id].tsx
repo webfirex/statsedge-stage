@@ -113,7 +113,16 @@ export default function AppTournamentManagePage({
 
             <FadeUpAni>
               <PathDisplay
-                path={[`${sport.alias} Matches`, match.competition.name]}
+                path={[
+                  {
+                    text: `${sport.alias} Matches`,
+                    link: `/matches?m-sport=${sport.alias}`,
+                  },
+                  {
+                    text: match.competition.name,
+                    link: `/matches/${match.id}`,
+                  },
+                ]}
               />
             </FadeUpAni>
 
@@ -656,7 +665,6 @@ export default function AppTournamentManagePage({
                           ),
                         },
                       ]}
-                      value="team"
                     />
 
                     <Card>

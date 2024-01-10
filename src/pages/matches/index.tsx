@@ -19,7 +19,7 @@ import { BREAKPOINTS } from "~/styles/globals";
 import { MatchTabsComp } from "~/components/match-page/tabs";
 import { api } from "~/utils/api";
 import { MatchSportSelector } from "~/components/match-page/sport-selector";
-import { SportInfo, NumTimeFormat, LocalTimeToUTC } from "~/lib/functions";
+import { SportInfo, NumTimeFormat } from "~/lib/functions";
 import { MatchCard } from "~/components/match-page/match-card";
 import { PaginatedFooterComp } from "~/components/paginated-footer";
 import { useAtom } from "jotai/react";
@@ -45,17 +45,11 @@ export default function App() {
 
   const ListApi = api.fixture.list.useQuery({
     from: DebouncedQuery.from
-      ? NumTimeFormat(
-          LocalTimeToUTC(DebouncedQuery.from?.getTime()),
-          "2017-12-31"
-        )
-      : NumTimeFormat(LocalTimeToUTC(new Date().getTime()), "2017-12-31"),
+      ? NumTimeFormat(DebouncedQuery.from?.getTime(), "2017-12-31")
+      : NumTimeFormat(new Date().getTime(), "2017-12-31"),
     to: DebouncedQuery.to
-      ? NumTimeFormat(
-          LocalTimeToUTC(DebouncedQuery.to?.getTime()),
-          "2017-12-31"
-        )
-      : NumTimeFormat(LocalTimeToUTC(new Date().getTime()), "2017-12-31"),
+      ? NumTimeFormat(DebouncedQuery.to?.getTime(), "2017-12-31")
+      : NumTimeFormat(new Date().getTime(), "2017-12-31"),
     sport: DebouncedQuery.sport.alias,
     page: DebouncedQuery.page,
     pageCount: DebouncedQuery.per,
@@ -120,7 +114,14 @@ export default function App() {
             </FadeUpAni>
 
             <FadeUpAni>
-              <PathDisplay path={[`${Query.sport.alias} Matches`]} />
+              <PathDisplay
+                path={[
+                  {
+                    text: `${Query.sport.alias} Matches`,
+                    link: `/matches?m-sport=${Query.sport.alias}`,
+                  },
+                ]}
+              />
             </FadeUpAni>
 
             <FadeUpAni>
@@ -149,7 +150,8 @@ export default function App() {
                 />
 
                 <Title order={BigThenMd ? 1 : 4} lh={1}>
-                  Upcoming {Query.sport.name} Matches
+                  {Query.upcoming ? "Upcoming" : "Past"} {Query.sport.name}{" "}
+                  Matches
                 </Title>
               </Group>
             </FadeUpAni>

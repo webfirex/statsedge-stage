@@ -1,8 +1,12 @@
 import { Group, Text } from "@mantine/core";
+import Link from "next/link";
 import { Children } from "react";
 
 interface PathDisplayProps {
-  path: string[];
+  path: {
+    text: string;
+    link: string;
+  }[];
 }
 
 export function PathDisplay(props: PathDisplayProps) {
@@ -16,7 +20,15 @@ export function PathDisplay(props: PathDisplayProps) {
                 /
               </Text>
 
-              <Text tt="uppercase" maw={250} truncate="end">{path}</Text>
+              <Text
+                tt="uppercase"
+                maw={250}
+                truncate="end"
+                component={Link}
+                href={path.link}
+              >
+                {path.text}
+              </Text>
             </>
           ))
         )}
