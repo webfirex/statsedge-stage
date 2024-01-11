@@ -2,6 +2,7 @@ import { z } from "zod";
 import { SportApiLogger } from "../core";
 import { FixtureGet } from "../fixture/get";
 import { TeamGet } from "../team/get";
+import { FixtureStream } from "../fixture/stream";
 
 export class CustomMatch {
   public static readonly Route = "CustomMatch";
@@ -147,12 +148,17 @@ export class CustomMatch {
     //   })
     // );
 
+    const stream = await FixtureStream.Call({
+      id: params.id,
+    });
+
     return {
       ...fixture,
       participants: {
         one: TeamOne,
         two: TeamTwo,
       },
+      streams: stream?.streams,
     };
   };
 }

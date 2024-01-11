@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+
 import {
   Badge,
   Box,
@@ -12,6 +14,7 @@ import {
   Image,
   Overlay,
   Paper,
+  Progress,
   SimpleGrid,
   Space,
   Stack,
@@ -36,6 +39,22 @@ import { SportApi } from "~/lib/sport-api";
 import { CircleFlag } from "react-circle-flags";
 import { BREAKPOINTS } from "~/styles/globals";
 import { useMediaQuery } from "@mantine/hooks";
+import {
+  IconBomb,
+  IconCross,
+  IconCurrencyDollar,
+  IconLetterA,
+  IconLetterD,
+  IconLetterK,
+  IconShieldFilled,
+} from "@tabler/icons-react";
+
+const ReactTwitchEmbedVideo = dynamic(
+  () => import("react-twitch-embed-video"),
+  {
+    ssr: false,
+  }
+);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -96,6 +115,78 @@ const PlayerCard = (props: { id: number; name: string }) => {
           </Group>
         </Stack>
       </Card>
+    </>
+  );
+};
+
+const ScoreBoardHead = (props: {
+  teamId: number;
+  name: string;
+  bg: string;
+}) => {
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+
+  const iconXs = BigThenXs ? 18 : 14;
+
+  return (
+    <>
+      <Flex align="center" justify="space-between">
+        <Paper py="xs" px={BigThenXs ? "md" : "xs"} radius="xl" bg={props.bg}>
+          <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
+            <Image
+              src={`/api/team/logo?id=${props.teamId}`}
+              alt="league logo"
+              fit="contain"
+              h={BigThenXs ? 20 : 15}
+              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+            />
+            <Text size={BigThenXs ? "sm" : rem(10)} c="black">
+              {props.name}
+            </Text>
+          </Flex>
+        </Paper>
+
+        <Flex gap={BigThenXs ? "md" : "sm"}>
+          <IconCurrencyDollar size={iconXs} />
+          <IconCross size={iconXs} />
+          <IconShieldFilled size={iconXs} />
+          <IconLetterK size={iconXs} />
+          <IconLetterA size={iconXs} />
+          <IconLetterD size={iconXs} />
+
+          <Text size={BigThenXs ? rem(18) : rem(13)}>ADR</Text>
+        </Flex>
+      </Flex>
+    </>
+  );
+};
+
+const ScoreBoardRow = (props: { name: string }) => {
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+
+  const iconXs = BigThenXs ? "xs" : rem(8);
+
+  return (
+    <>
+      <Flex align="center" justify="space-between">
+        <Text size={BigThenXs ? "md" : rem(12)}>{props.name}</Text>
+
+        <Flex gap={BigThenXs ? rem(20) : rem(17)}>
+          <Text size={iconXs}>$4950</Text>
+          <Progress
+            my="auto"
+            value={65}
+            w={BigThenXs ? 20 : 16}
+            color="white"
+            size="sm"
+          />
+          <Text size={iconXs}>200</Text>
+          <Text size={iconXs}>23</Text>
+          <Text size={iconXs}>6</Text>
+          <Text size={iconXs}>12</Text>
+          <Text size={iconXs}>963.0</Text>
+        </Flex>
+      </Flex>
     </>
   );
 };
@@ -485,6 +576,103 @@ export default function AppTournamentManagePage({
               </Card>
             </FadeUpAni>
             {/* Below Hero */}
+
+            {match.status === "Started" && (
+              <>
+                <Card p="lg">
+                  <Stack gap="xl">
+                    <Group>
+                      <Title order={5} tt="uppercase">
+                        LiveStream
+                      </Title>
+
+                      <div
+                        style={{
+                          backgroundColor: "var(--mantine-color-red-6)",
+                          width: 8,
+                          height: 8,
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </Group>
+
+                    {(match.streams?.length ?? 0) >= 0 ? (
+                      <ReactTwitchEmbedVideo
+                        width="100%"
+                        channel="talk2megooseman"
+                        layout="video"
+                        height={BigThenXs ? "500px" : "250px"}
+                      />
+                    ) : (
+                      <Center h="500px">
+                        <Title maw={500} order={4} ta="center">
+                          No stream available for this match. Please check back
+                          later.
+                        </Title>
+                      </Center>
+                    )}
+                  </Stack>
+                </Card>
+              </>
+            )}
+
+            <Card p="lg">
+              <Stack gap="xl">
+                <Flex align="center" justify="space-between">
+                  <Stack>
+                    <Title order={BigThenXs ? 4 : 5} tt="uppercase">
+                      ScoreBoard
+                    </Title>
+
+                    <Flex align="center" gap="xs">
+                      <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
+                        R - 21
+                      </Text>
+                      <Divider orientation="vertical" size="sm" />
+                      <Text size={BigThenXs ? "sm" : "xs"}>MIRAGE</Text>
+                    </Flex>
+                  </Stack>
+
+                  <Flex align="center" gap={rem(5)}>
+                    <Title order={BigThenXs ? 4 : 5}>4</Title>
+                    <Title order={BigThenXs ? 4 : 5}>:</Title>
+                    <Title order={BigThenXs ? 4 : 5}>6</Title>
+                  </Flex>
+
+                  <Flex align="center" gap={rem(5)}>
+                    <Text size={BigThenXs ? "sm" : "xs"}>1:39</Text>
+                    <IconBomb size={BigThenXs ? 20 : 16} />
+                  </Flex>
+                </Flex>
+
+                <Stack gap="md">
+                  <ScoreBoardHead
+                    teamId={match.participants.one.id!}
+                    name={match.participants.one.name!}
+                    bg="yellow.5"
+                  />
+                  <ScoreBoardRow name={match.participants.one.name!} />
+                  <ScoreBoardRow name={match.participants.one.name!} />
+                  <ScoreBoardRow name={match.participants.one.name!} />
+                  <ScoreBoardRow name={match.participants.one.name!} />
+                  <ScoreBoardRow name={match.participants.one.name!} />
+
+                  <Space />
+
+                  <ScoreBoardHead
+                    teamId={match.participants.two.id!}
+                    name={match.participants.two.name!}
+                    bg="blue.5"
+                  />
+
+                  <ScoreBoardRow name={match.participants.two.name!} />
+                  <ScoreBoardRow name={match.participants.two.name!} />
+                  <ScoreBoardRow name={match.participants.two.name!} />
+                  <ScoreBoardRow name={match.participants.two.name!} />
+                  <ScoreBoardRow name={match.participants.two.name!} />
+                </Stack>
+              </Stack>
+            </Card>
 
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&

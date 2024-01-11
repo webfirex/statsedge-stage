@@ -1,6 +1,7 @@
 import { CustomMatch } from "./custom/match";
 import { FixtureGet } from "./fixture/get";
 import { FixtureList } from "./fixture/list";
+import { FixtureStream } from "./fixture/stream";
 import { ParticipantRecent } from "./participant/recent";
 import { PlayerGet } from "./player/get";
 import { TeamGet } from "./team/get";
@@ -9,6 +10,7 @@ import { TeamLogo } from "./team/logo";
 class Fixtures {
   public static List = FixtureList;
   public static Get = FixtureGet;
+  public static Stream = FixtureStream;
 }
 
 class Team {
