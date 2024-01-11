@@ -1,4 +1,4 @@
-import { Group, Text } from "@mantine/core";
+import { Group, Text, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import { Children } from "react";
@@ -12,25 +12,25 @@ interface PathDisplayProps {
 }
 
 export function PathDisplay(props: PathDisplayProps) {
-  const BigThenSm = useMediaQuery(`(min-width: ${BREAKPOINTS.SM})`);
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
   return (
     <>
-      <Group gap="xs">
+      <Group gap={BigThenXs ? rem(10) : rem(4)}>
         {Children.toArray(
           props.path.map((path) => (
             <>
-              <Text c="blue" size="xl">
+              <Text c="blue" size={BigThenXs ? "xl" : "lg"}>
                 /
               </Text>
 
               <Text
                 tt="uppercase"
-                maw={250}
+                maw={BigThenXs ? 250 : 200}
                 truncate="end"
                 component={Link}
                 href={path.link}
-                size={BigThenSm ? "md" : "xs"}
+                size={BigThenXs ? "xs" : rem(10)}
               >
                 {path.text}
               </Text>

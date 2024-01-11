@@ -4,9 +4,9 @@ import {
   Button,
   Card,
   Center,
-  Code,
   Container,
   Divider,
+  Flex,
   Grid,
   Group,
   Image,
@@ -27,7 +27,7 @@ import { Children } from "react";
 import { z } from "zod";
 import { FadeUpAni } from "~/components/animation/fade-up";
 import { LayoutComp } from "~/components/layout";
-import { LogoIcon } from "~/components/logo/icon";
+import { LogoIcon, LogoIconSm } from "~/components/logo/icon";
 import { MatchSportSelector } from "~/components/match-page/sport-selector";
 import { PathDisplay } from "~/components/pathdisplay";
 import { NumTimeFormat, SportInfo, UTCToLocalTime } from "~/lib/functions";
@@ -72,6 +72,34 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
+const PlayerCard = (props: { id: number; name: string }) => {
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+
+  return (
+    <>
+      <Card
+        withBorder
+        p={BigThenXs ? "xs" : 0}
+        style={{
+          backgroundImage: "url(/player.jpg)",
+        }}
+      >
+        <Stack gap={5} mb={BigThenXs ? 0 : rem(10)}>
+          <Image src="/player.png" alt={props.name} fit="contain" />
+
+          <Group justify="center" gap={5}>
+            <Text ta="center" size={BigThenXs ? rem(15) : rem(9)}>
+              {props.name}
+            </Text>
+
+            <CircleFlag countryCode="us" height={BigThenXs ? 15 : 10} />
+          </Group>
+        </Stack>
+      </Card>
+    </>
+  );
+};
+
 export default function AppTournamentManagePage({
   match,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -79,9 +107,7 @@ export default function AppTournamentManagePage({
 
   const timeLeft = useTimeLeft(UTCToLocalTime(match.scheduledStartTime));
 
-  const BigThenSm = useMediaQuery(`(min-width: ${BREAKPOINTS.SM})`);
-  // const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
-  // const BigThenLg = useMediaQuery(`(min-width: ${BREAKPOINTS.LG})`);
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
   if (!sport) {
     return (
@@ -105,7 +131,7 @@ export default function AppTournamentManagePage({
     <>
       <LayoutComp>
         <Container size="xl" mt="xl">
-          <Stack>
+          <Stack gap="xs">
             <FadeUpAni>
               <MatchSportSelector
                 sport={sport}
@@ -131,6 +157,7 @@ export default function AppTournamentManagePage({
               />
             </FadeUpAni>
 
+            {/* Hero */}
             <FadeUpAni>
               <Card
                 style={{
@@ -155,13 +182,13 @@ export default function AppTournamentManagePage({
                     zIndex: 2,
                   }}
                 >
-                  <Group justify="center" grow w="100%">
+                  <Group justify="center" grow w="100%" gap={5}>
                     <Text
                       truncate="end"
-                      maw={BigThenSm ? 400 : 150}
+                      maw={BigThenXs ? rem(400) : rem(150)}
                       ta="right"
                       fw="bold"
-                      size={BigThenSm ? rem(40) : rem(20)}
+                      size={BigThenXs ? rem(40) : rem(15)}
                       tt="uppercase"
                       ff="STNO"
                     >
@@ -170,8 +197,8 @@ export default function AppTournamentManagePage({
 
                     <Image
                       src="/vs.svg"
-                      h={BigThenSm ? 60 : 40}
-                      w={BigThenSm ? 60 : 40}
+                      h={BigThenXs ? rem(60) : rem(30)}
+                      w={BigThenXs ? rem(60) : rem(30)}
                       alt="box"
                       fit="contain"
                       style={{
@@ -181,10 +208,10 @@ export default function AppTournamentManagePage({
 
                     <Text
                       truncate="end"
-                      maw={BigThenSm ? 400 : 150}
+                      maw={BigThenXs ? rem(400) : rem(150)}
                       ta="left"
                       fw="bold"
-                      size={BigThenSm ? rem(40) : rem(20)}
+                      size={BigThenXs ? rem(40) : rem(15)}
                       tt="uppercase"
                       ff="STNO"
                     >
@@ -196,21 +223,21 @@ export default function AppTournamentManagePage({
 
                   <Group>
                     <Card
-                      p="sm"
-                      miw={100}
+                      p={BigThenXs ? "sm" : "xs"}
+                      miw={BigThenXs ? rem(350) : rem(100)}
                       style={{
                         backgroundColor: "rgba(221, 0, 18, 0.45)",
                         position: "relative",
                       }}
                     >
-                      <Group mx="auto">
-                        <Stack gap={0}>
-                          <Text size="xs" ta="right">
+                      <Group mx="auto" gap={BigThenXs ? "md" : 10}>
+                        <Stack gap={5}>
+                          <Text size={BigThenXs ? "xl" : rem(10)} ta="right">
                             {match.participants.one.name}
                           </Text>
 
-                          <Group justify="end" gap={5}>
-                            <Text size="xs" ta="right">
+                          <Group justify="end" gap={rem(5)}>
+                            <Text size={BigThenXs ? "xs" : rem(10)} ta="right">
                               {match.participants.one.team?.country ??
                                 "Unknown"}
                             </Text>
@@ -220,7 +247,7 @@ export default function AppTournamentManagePage({
                                 match.participants.one.team?.countryISO?.toLowerCase() ??
                                 "us"
                               }
-                              height={16}
+                              height={BigThenXs ? 16 : 10}
                             />
                           </Group>
                         </Stack>
@@ -229,7 +256,7 @@ export default function AppTournamentManagePage({
                           src={`/api/team/logo?id=${match.participants.one.id}`}
                           alt="league logo"
                           fit="contain"
-                          h={50}
+                          h={BigThenXs ? rem(30) : rem(10)}
                           fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                         />
                       </Group>
@@ -248,47 +275,44 @@ export default function AppTournamentManagePage({
                       />
                     </Card>
 
-                    <Title order={3}>15:00</Title>
+                    <Title order={BigThenXs ? 3 : 5}>15:00</Title>
 
                     <Card
-                      p="sm"
-                      miw={350}
+                      p={BigThenXs ? "md" : "xs"}
+                      miw={BigThenXs ? rem(350) : rem(100)}
                       style={{
                         backgroundColor: "rgba(0, 165, 57, 0.45)",
                         position: "relative",
                       }}
                     >
-                      <Group mx="auto">
+                      <Group mx="auto" gap={10}>
                         <Image
                           src={`/api/team/logo?id=${match.participants.two.id}`}
                           alt="league logo"
                           fit="contain"
-                          h={50}
+                          h={BigThenXs ? rem(30) : rem(10)}
                           fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                         />
-
-                        <Stack gap={0}>
-                          <Text size="xl" ta="left">
+                        <Stack gap={rem(5)}>
+                          <Text size={BigThenXs ? "xl" : rem(10)} ta="left">
                             {match.participants.two.name}
                           </Text>
 
-                          <Group justify="start" gap={5}>
+                          <Group justify="start" gap={rem(5)}>
                             <CircleFlag
                               countryCode={
-                                match.participants.one.team?.countryISO?.toLowerCase() ??
+                                match.participants.two.team?.countryISO?.toLowerCase() ??
                                 "us"
                               }
-                              height={16}
+                              height={BigThenXs ? 16 : 10}
                             />
-
-                            <Text size="xs" fw="bold" ta="left">
-                              {match.participants.one.team?.country ??
+                            <Text size={rem(10)} ta="left">
+                              {match.participants.two.team?.country ??
                                 "Unknown"}
                             </Text>
                           </Group>
                         </Stack>
                       </Group>
-
                       <Image
                         style={{
                           position: "absolute",
@@ -358,60 +382,109 @@ export default function AppTournamentManagePage({
                 </Stack>
               </Card>
             </FadeUpAni>
+            {/* Hero */}
 
+            {/* Below Hero */}
             <FadeUpAni>
-              <Card p="lg" py="xl">
-                <Group justify="space-between" wrap="nowrap" w="100%">
-                  <Box miw={150}>
-                    <LogoIcon />
+              <Card p={BigThenXs ? "lg" : "sm"} py={BigThenXs ? rem(30) : "xl"}>
+                <Flex
+                  justify="space-between"
+                  align="center"
+                  wrap="nowrap"
+                  w="100%"
+                  gap={BigThenXs ? "md" : 0}
+                >
+                  <Box miw={BigThenXs ? 150 : 50}>
+                    {BigThenXs ? <LogoIcon /> : <LogoIconSm />}
                   </Box>
 
-                  <Group justify="center" wrap="nowrap" w="100%">
-                    <Group w="100%" justify="end">
+                  <Flex
+                    justify="center"
+                    align="center"
+                    wrap="nowrap"
+                    w="100%"
+                    gap={BigThenXs ? "md" : 0}
+                  >
+                    <Flex
+                      w="100%"
+                      justify="end"
+                      align="center"
+                      direction={BigThenXs ? "row" : "column"}
+                      gap={BigThenXs ? "md" : rem(5)}
+                    >
                       <Image
                         src={`/api/team/logo?id=${match.participants.one.id}`}
                         alt="league logo"
                         fit="contain"
-                        h={30}
+                        h={BigThenXs ? 30 : 15}
+                        w={BigThenXs ? 30 : 15}
                         fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                       />
 
-                      <Text size="lg">{match.participants.one.name}</Text>
+                      <Text size={BigThenXs ? "lg" : rem(10)}>
+                        {match.participants.one.name}
+                      </Text>
 
-                      <Code px="md">{match.participants.one.score}</Code>
-                    </Group>
+                      <Paper
+                        bg="dark.5"
+                        px={BigThenXs ? rem(6) : rem(5)}
+                        py={BigThenXs ? rem(3) : rem(5)}
+                      >
+                        <Text size={BigThenXs ? "md" : rem(10)}>
+                          {match.participants.one.score}
+                        </Text>
+                      </Paper>
+                    </Flex>
 
                     <Image
                       src="/vs.svg"
-                      h={40}
-                      w={40}
+                      h={BigThenXs ? 40 : 20}
+                      w={BigThenXs ? 40 : 20}
                       alt="box"
                       fit="contain"
                     />
 
-                    <Group w="100%" justify="start">
-                      <Code px="md">{match.participants.one.score}</Code>
+                    <Flex
+                      w="100%"
+                      justify="start"
+                      align="center"
+                      direction={BigThenXs ? "row" : "column"}
+                      gap={BigThenXs ? "md" : rem(5)}
+                    >
+                      <Paper
+                        bg="dark.5"
+                        px={BigThenXs ? rem(6) : rem(5)}
+                        py={BigThenXs ? rem(3) : rem(5)}
+                      >
+                        <Text size={BigThenXs ? "md" : rem(10)}>
+                          {match.participants.one.score}
+                        </Text>
+                      </Paper>
 
-                      <Text size="lg">{match.participants.two.name}</Text>
+                      <Text size={BigThenXs ? "lg" : rem(10)}>
+                        {match.participants.one.name}
+                      </Text>
 
                       <Image
-                        src={`/api/team/logo?id=${match.participants.two.id}`}
+                        src={`/api/team/logo?id=${match.participants.one.id}`}
                         alt="league logo"
                         fit="contain"
-                        h={30}
+                        h={BigThenXs ? 30 : 15}
+                        w={BigThenXs ? 30 : 15}
                         fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                       />
-                    </Group>
-                  </Group>
+                    </Flex>
+                  </Flex>
 
-                  <Group miw={150} justify="end">
-                    <Button px="xl" size="md">
-                      Bet Now
+                  <Group miw={BigThenXs ? 150 : 50} justify="end">
+                    <Button size={BigThenXs ? "sm" : "compact-xs"}>
+                      <Text size={BigThenXs ? "sm" : rem(9)}>Bet Now</Text>
                     </Button>
                   </Group>
-                </Group>
+                </Flex>
               </Card>
             </FadeUpAni>
+            {/* Below Hero */}
 
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
@@ -461,7 +534,7 @@ export default function AppTournamentManagePage({
             <FadeUpAni>
               <Grid columns={10}>
                 <Grid.Col span={{ base: 10, md: 7 }}>
-                  <Card p="lg">
+                  <Card p="xs">
                     <Stack>
                       <Group>
                         <Image
@@ -482,32 +555,7 @@ export default function AppTournamentManagePage({
                             match.participants.one.team?.most_recent_lineup.map(
                               (player) => (
                                 <>
-                                  <Card
-                                    withBorder
-                                    p={0}
-                                    style={{
-                                      backgroundImage: "url(/player.jpg)",
-                                    }}
-                                  >
-                                    <Stack gap={5} mb={rem(10)}>
-                                      <Image
-                                        src="/player.png"
-                                        alt={player.name}
-                                        fit="contain"
-                                      />
-
-                                      <Group justify="center" gap={5}>
-                                        <Text ta="center" size={rem(9)}>
-                                          {player.name}
-                                        </Text>
-
-                                        <CircleFlag
-                                          countryCode="us"
-                                          height={10}
-                                        />
-                                      </Group>
-                                    </Stack>
-                                  </Card>
+                                  <PlayerCard {...player} />
                                 </>
                               )
                             )
@@ -518,32 +566,7 @@ export default function AppTournamentManagePage({
                           <SimpleGrid spacing={5} cols={5}>
                             {Array.from(Array(5)).map(() => (
                               <>
-                                <Card
-                                  withBorder
-                                  p={0}
-                                  style={{
-                                    backgroundImage: "url(/player.jpg)",
-                                  }}
-                                >
-                                  <Stack gap={5} mb={rem(10)}>
-                                    <Image
-                                      src="/player.png"
-                                      alt="player"
-                                      fit="contain"
-                                    />
-
-                                    <Group justify="center" gap={5}>
-                                      <Text ta="center" size={rem(9)}>
-                                        Unknown
-                                      </Text>
-
-                                      <CircleFlag
-                                        countryCode="us"
-                                        height={10}
-                                      />
-                                    </Group>
-                                  </Stack>
-                                </Card>
+                                <PlayerCard id={0} name="Unknown" />
                               </>
                             ))}
                           </SimpleGrid>
@@ -569,30 +592,7 @@ export default function AppTournamentManagePage({
                             match.participants.two.team?.most_recent_lineup.map(
                               (player) => (
                                 <>
-                                  <Card
-                                    withBorder
-                                    p="xs"
-                                    style={{
-                                      backgroundImage: "url(/player.jpg)",
-                                    }}
-                                  >
-                                    <Stack gap={5}>
-                                      <Image
-                                        src="/player.png"
-                                        alt={player.name}
-                                        fit="contain"
-                                      />
-
-                                      <Group justify="center" gap={5}>
-                                        <Text ta="center">{player.name}</Text>
-
-                                        <CircleFlag
-                                          countryCode="us"
-                                          height={16}
-                                        />
-                                      </Group>
-                                    </Stack>
-                                  </Card>
+                                  <PlayerCard {...player} />
                                 </>
                               )
                             )
@@ -603,30 +603,7 @@ export default function AppTournamentManagePage({
                           <SimpleGrid spacing={5} cols={5}>
                             {Array.from(Array(5)).map(() => (
                               <>
-                                <Card
-                                  withBorder
-                                  p="xs"
-                                  style={{
-                                    backgroundImage: "url(/player.jpg)",
-                                  }}
-                                >
-                                  <Stack gap={5}>
-                                    <Image
-                                      src="/player.png"
-                                      alt="player"
-                                      fit="contain"
-                                    />
-
-                                    <Group justify="center" gap={5}>
-                                      <Text ta="center">Unknown</Text>
-
-                                      <CircleFlag
-                                        countryCode="us"
-                                        height={16}
-                                      />
-                                    </Group>
-                                  </Stack>
-                                </Card>
+                                <PlayerCard id={0} name="Unknown" />
                               </>
                             ))}
                           </SimpleGrid>
@@ -922,46 +899,62 @@ export default function AppTournamentManagePage({
                   <Space />
 
                   <Card bg="dark.5">
-                    <Group justify="space-evenly">
-                      <Group>
+                    <Flex justify="space-evenly" align="center" wrap="nowrap">
+                      <Flex align="center" gap={BigThenXs ? "md" : rem(5)}>
                         <Image
                           src={`/api/team/logo?id=${match.participants.one.id}`}
                           alt="league logo"
                           fit="contain"
-                          h={50}
+                          h={BigThenXs ? 50 : 15}
                           fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                         />
 
-                        <Text size="md">{match.participants.one.name}</Text>
-                      </Group>
+                        <Text size={BigThenXs ? "md" : rem(8)}>
+                          {match.participants.one.name}
+                        </Text>
+                      </Flex>
 
                       <Stack gap={0}>
-                        <Text ta="center">6</Text>
-                        <Text ta="center">Wins</Text>
+                        <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
+                          6
+                        </Text>
+                        <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
+                          Wins
+                        </Text>
                       </Stack>
 
                       <Stack gap={0}>
-                        <Text ta="center">3</Text>
-                        <Text ta="center">Overtimes</Text>
+                        <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
+                          6
+                        </Text>
+                        <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
+                          Overview
+                        </Text>
                       </Stack>
 
                       <Stack gap={0}>
-                        <Text ta="center">5</Text>
-                        <Text ta="center">Wins</Text>
+                        <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
+                          6
+                        </Text>
+                        <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
+                          Wins
+                        </Text>
                       </Stack>
 
-                      <Group>
-                        <Text size="md">{match.participants.two.name}</Text>
+                      <Flex align="center" gap={BigThenXs ? "md" : rem(5)}>
+                        <Text size={BigThenXs ? "md" : rem(8)}>
+                          {match.participants.two.name}
+                        </Text>
 
                         <Image
                           src={`/api/team/logo?id=${match.participants.two.id}`}
                           alt="league logo"
                           fit="contain"
-                          h={50}
+                          h={BigThenXs ? 50 : 15}
                           fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                         />
-                      </Group>
-                    </Group>
+                      </Flex>
+                    </Flex>
                   </Card>
 
                   {(() => {
@@ -1015,12 +1008,15 @@ export default function AppTournamentManagePage({
                                     dindex % 2 === 0 ? "transparent" : "dark.5"
                                   }
                                   radius="sm"
-                                  px="xl"
+                                  px={BigThenXs ? "xl" : "xs"}
                                   py="xs"
                                 >
-                                  <Group justify="space-between">
+                                  <Flex justify="space-between" align="center">
                                     <Group>
-                                      <Text size="sm">{data.date}</Text>
+                                      <Text size={BigThenXs ? "sm" : rem(10)}>
+                                        {data.date}
+                                      </Text>
+
                                       <Divider
                                         orientation="vertical"
                                         size="sm"
@@ -1030,13 +1026,15 @@ export default function AppTournamentManagePage({
                                         src={`/api/team/logo?id=${match.participants.one.id}`}
                                         alt="league logo"
                                         fit="contain"
-                                        h={20}
+                                        h={BigThenXs ? 20 : 10}
                                         fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                                       />
 
-                                      <Text size="sm">
-                                        {match.participants.one.name}
-                                      </Text>
+                                      {BigThenXs && (
+                                        <Text size="sm">
+                                          {match.participants.one.name}
+                                        </Text>
+                                      )}
 
                                       <Image
                                         src={`/api/team/logo?id=${match.participants.two.id}`}
@@ -1046,9 +1044,11 @@ export default function AppTournamentManagePage({
                                         fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                                       />
 
-                                      <Text size="sm">
-                                        {match.participants.two.name}
-                                      </Text>
+                                      {BigThenXs && (
+                                        <Text size="sm">
+                                          {match.participants.two.name}
+                                        </Text>
+                                      )}
 
                                       <Divider
                                         orientation="vertical"
@@ -1056,14 +1056,16 @@ export default function AppTournamentManagePage({
                                         color="blue"
                                       />
 
-                                      <Text size="sm">{data.name}</Text>
+                                      <Text size={BigThenXs ? "sm" : rem(10)}>
+                                        {data.name}
+                                      </Text>
                                     </Group>
 
                                     <Group>
                                       {sport.alias !== "lol" && (
                                         <>
                                           <Text
-                                            size="sm"
+                                            size={BigThenXs ? "sm" : rem(8)}
                                             tt="uppercase"
                                             c="dimmed"
                                           >
@@ -1077,17 +1079,17 @@ export default function AppTournamentManagePage({
                                         </>
                                       )}
 
-                                      <Text>
-                                        <Text inherit span c="red" size="sm">
+                                      <Text size={BigThenXs ? "sm" : rem(10)}>
+                                        <Text inherit span c="red">
                                           {data.score.one}
                                         </Text>{" "}
                                         -{" "}
-                                        <Text inherit span c="green" size="sm">
+                                        <Text inherit span c="green">
                                           {data.score.two}
                                         </Text>
                                       </Text>
                                     </Group>
-                                  </Group>
+                                  </Flex>
                                 </Paper>
                               </>
                             ))
