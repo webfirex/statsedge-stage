@@ -1,6 +1,7 @@
 import { CustomMatch } from "./custom/match";
 import { FixtureGet } from "./fixture/get";
 import { FixtureList } from "./fixture/list";
+import { ParticipantRecent } from "./participant/recent";
 import { PlayerGet } from "./player/get";
 import { TeamGet } from "./team/get";
 import { TeamLogo } from "./team/logo";
@@ -15,6 +16,10 @@ class Team {
   public static Get = TeamGet;
 }
 
+class Participant {
+  public static Recent = ParticipantRecent;
+}
+
 class Player {
   public static Get = PlayerGet;
 }
@@ -26,6 +31,7 @@ class Custom {
 export class SportApi {
   public static readonly Fixtures = Fixtures;
   public static readonly Player = Player;
+  public static readonly Participant = Participant;
   public static readonly Team = Team;
   public static readonly Custom = Custom;
 }

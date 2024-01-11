@@ -12,7 +12,6 @@ import {
   Image,
   Overlay,
   Paper,
-  SegmentedControl,
   SimpleGrid,
   Space,
   Stack,
@@ -35,6 +34,8 @@ import { NumTimeFormat, SportInfo, UTCToLocalTime } from "~/lib/functions";
 import { useTimeLeft } from "~/lib/hooks/useTimeLeft";
 import { SportApi } from "~/lib/sport-api";
 import { CircleFlag } from "react-circle-flags";
+import { BREAKPOINTS } from "~/styles/globals";
+import { useMediaQuery } from "@mantine/hooks";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -77,6 +78,10 @@ export default function AppTournamentManagePage({
   const sport = SportInfo(match.sport.alias);
 
   const timeLeft = useTimeLeft(UTCToLocalTime(match.scheduledStartTime));
+
+  const BigThenSm = useMediaQuery(`(min-width: ${BREAKPOINTS.SM})`);
+  // const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
+  // const BigThenLg = useMediaQuery(`(min-width: ${BREAKPOINTS.LG})`);
 
   if (!sport) {
     return (
@@ -153,10 +158,10 @@ export default function AppTournamentManagePage({
                   <Group justify="center" grow w="100%">
                     <Text
                       truncate="end"
-                      maw={400}
+                      maw={BigThenSm ? 400 : 150}
                       ta="right"
                       fw="bold"
-                      size={rem(40)}
+                      size={BigThenSm ? rem(40) : rem(20)}
                       tt="uppercase"
                       ff="STNO"
                     >
@@ -165,8 +170,8 @@ export default function AppTournamentManagePage({
 
                     <Image
                       src="/vs.svg"
-                      h={60}
-                      w={60}
+                      h={BigThenSm ? 60 : 40}
+                      w={BigThenSm ? 60 : 40}
                       alt="box"
                       fit="contain"
                       style={{
@@ -176,10 +181,10 @@ export default function AppTournamentManagePage({
 
                     <Text
                       truncate="end"
-                      maw={400}
+                      maw={BigThenSm ? 400 : 150}
                       ta="left"
                       fw="bold"
-                      size={rem(40)}
+                      size={BigThenSm ? rem(40) : rem(20)}
                       tt="uppercase"
                       ff="STNO"
                     >
@@ -192,7 +197,7 @@ export default function AppTournamentManagePage({
                   <Group>
                     <Card
                       p="sm"
-                      miw={350}
+                      miw={100}
                       style={{
                         backgroundColor: "rgba(221, 0, 18, 0.45)",
                         position: "relative",
@@ -200,12 +205,12 @@ export default function AppTournamentManagePage({
                     >
                       <Group mx="auto">
                         <Stack gap={0}>
-                          <Text size="xl" ta="right">
+                          <Text size="xs" ta="right">
                             {match.participants.one.name}
                           </Text>
 
                           <Group justify="end" gap={5}>
-                            <Text size="xs" fw="bold" ta="right">
+                            <Text size="xs" ta="right">
                               {match.participants.one.team?.country ??
                                 "Unknown"}
                             </Text>
@@ -455,7 +460,7 @@ export default function AppTournamentManagePage({
 
             <FadeUpAni>
               <Grid columns={10}>
-                <Grid.Col span={7}>
+                <Grid.Col span={{ base: 10, md: 7 }}>
                   <Card p="lg">
                     <Stack>
                       <Group>
@@ -479,12 +484,12 @@ export default function AppTournamentManagePage({
                                 <>
                                   <Card
                                     withBorder
-                                    p="xs"
+                                    p={0}
                                     style={{
                                       backgroundImage: "url(/player.jpg)",
                                     }}
                                   >
-                                    <Stack gap={5}>
+                                    <Stack gap={5} mb={rem(10)}>
                                       <Image
                                         src="/player.png"
                                         alt={player.name}
@@ -492,11 +497,13 @@ export default function AppTournamentManagePage({
                                       />
 
                                       <Group justify="center" gap={5}>
-                                        <Text ta="center">{player.name}</Text>
+                                        <Text ta="center" size={rem(9)}>
+                                          {player.name}
+                                        </Text>
 
                                         <CircleFlag
                                           countryCode="us"
-                                          height={16}
+                                          height={10}
                                         />
                                       </Group>
                                     </Stack>
@@ -513,12 +520,12 @@ export default function AppTournamentManagePage({
                               <>
                                 <Card
                                   withBorder
-                                  p="xs"
+                                  p={0}
                                   style={{
                                     backgroundImage: "url(/player.jpg)",
                                   }}
                                 >
-                                  <Stack gap={5}>
+                                  <Stack gap={5} mb={rem(10)}>
                                     <Image
                                       src="/player.png"
                                       alt="player"
@@ -526,11 +533,13 @@ export default function AppTournamentManagePage({
                                     />
 
                                     <Group justify="center" gap={5}>
-                                      <Text ta="center">Unknown</Text>
+                                      <Text ta="center" size={rem(9)}>
+                                        Unknown
+                                      </Text>
 
                                       <CircleFlag
                                         countryCode="us"
-                                        height={16}
+                                        height={10}
                                       />
                                     </Group>
                                   </Stack>
@@ -626,13 +635,13 @@ export default function AppTournamentManagePage({
                     </Stack>
                   </Card>
                 </Grid.Col>
-                <Grid.Col span={3}>
+                <Grid.Col span={{ base: 10, md: 3 }}>
                   <Stack mt={10}>
                     <Title order={5} tt="uppercase">
                       Match History
                     </Title>
 
-                    <SegmentedControl
+                    {/* <SegmentedControl
                       maw={200}
                       size="xs"
                       color="blue"
@@ -665,7 +674,7 @@ export default function AppTournamentManagePage({
                           ),
                         },
                       ]}
-                    />
+                    /> */}
 
                     <Card>
                       <Stack>

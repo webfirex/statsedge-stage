@@ -16,7 +16,6 @@ import { Children, useEffect } from "react";
 import { FadeUpAni } from "~/components/animation/fade-up";
 import { LayoutComp } from "~/components/layout";
 import { BREAKPOINTS } from "~/styles/globals";
-import { MatchTabsComp } from "~/components/match-page/tabs";
 import { api } from "~/utils/api";
 import { MatchSportSelector } from "~/components/match-page/sport-selector";
 import { SportInfo, NumTimeFormat } from "~/lib/functions";
@@ -124,13 +123,13 @@ export default function App() {
               />
             </FadeUpAni>
 
-            <FadeUpAni>
+            {/* <FadeUpAni>
               <Group justify="center" gap="xl">
                 <MatchTabsComp />
               </Group>
-            </FadeUpAni>
+            </FadeUpAni> */}
 
-            <Space h="xl" />
+            {/* <Space h="xl" /> */}
 
             <FadeUpAni>
               <Group

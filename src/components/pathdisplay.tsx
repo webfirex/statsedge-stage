@@ -1,6 +1,8 @@
 import { Group, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import { Children } from "react";
+import { BREAKPOINTS } from "~/styles/globals";
 
 interface PathDisplayProps {
   path: {
@@ -10,6 +12,8 @@ interface PathDisplayProps {
 }
 
 export function PathDisplay(props: PathDisplayProps) {
+  const BigThenSm = useMediaQuery(`(min-width: ${BREAKPOINTS.SM})`);
+
   return (
     <>
       <Group gap="xs">
@@ -26,6 +30,7 @@ export function PathDisplay(props: PathDisplayProps) {
                 truncate="end"
                 component={Link}
                 href={path.link}
+                size={BigThenSm ? "md" : "xs"}
               >
                 {path.text}
               </Text>

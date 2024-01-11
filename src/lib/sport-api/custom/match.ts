@@ -33,6 +33,8 @@ export class CustomMatch {
       throw new Error("Error while fetching match");
     }
 
+    // const teamOne =
+
     const completeTeams = await Promise.all(
       fixture.participants.map(async (parti) => {
         if (!parti.id) {
@@ -98,11 +100,58 @@ export class CustomMatch {
       })
     );
 
+    const TeamOne = completeTeams[0]!;
+    const TeamTwo = completeTeams[1]!;
+
+    // const [TeamOneFixture, TeamTwoFixture] = await Promise.all([
+    //   ParticipantRecent.Call(
+    //     {
+    //       teamId: TeamOne.id!,
+    //     },
+    //     {
+    //       opponentTeamId: TeamTwo.id!,
+    //       count: 5,
+    //     }
+    //   ),
+    //   ParticipantRecent.Call(
+    //     {
+    //       teamId: TeamTwo.id!,
+    //     },
+    //     {
+    //       opponentTeamId: TeamOne.id!,
+    //       count: 5,
+    //     }
+    //   ),
+    // ]);
+
+    // const CompleteTeamOneFixtures = await Promise.all(
+    //   TeamOneFixture!.fixtures.map(async (fixture) => {
+    //     const completeFixture = await FixtureGet.Call({
+    //       id: fixture.fixtureId,
+    //     });
+
+    //     if (!completeFixture) {
+    //       SportApiLogger.fatal({
+    //         fixture,
+    //         params,
+    //         route: this.Route,
+    //       });
+
+    //       throw new Error("Error while fetching fixture");
+    //     }
+
+    //     return {
+    //       ...fixture,
+    //       detail: completeFixture,
+    //     };
+    //   })
+    // );
+
     return {
       ...fixture,
       participants: {
-        one: completeTeams[0]!,
-        two: completeTeams[1]!,
+        one: TeamOne,
+        two: TeamTwo,
       },
     };
   };
