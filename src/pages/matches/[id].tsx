@@ -678,7 +678,7 @@ export default function AppTournamentManagePage({
               sport.alias !== "dota2" &&
               sport.alias !== "rl" && (
                 <FadeUpAni>
-                  <SimpleGrid cols={2}>
+                  <SimpleGrid cols={BigThenXs ? 2 : 1}>
                     <Card p="lg">
                       <Stack>
                         <Title order={5} tt="uppercase">
@@ -705,7 +705,7 @@ export default function AppTournamentManagePage({
                                     zIndex: 2,
                                   }}
                                 >
-                                  <Title ta="center" order={1}>
+                                  <Title fz={BigThenXs ? 58 : 28} ta="center" order={1}>
                                     TBA
                                   </Title>
                                 </div>
@@ -934,11 +934,11 @@ export default function AppTournamentManagePage({
               sport.alias !== "rl" && (
                 <FadeUpAni>
                   <Grid columns={10}>
-                    <Grid.Col span={7}>
-                      <Card p="lg" bg="transparent">
+                    <Grid.Col span={BigThenXs ? 7 : 10}>
+                      <Card p={BigThenXs ? 'lg' : 'xs'} bg="transparent">
                         <Stack>
                           <Grid columns={10}>
-                            <Grid.Col span={5}>
+                            <Grid.Col p={BigThenXs ? 20 : 20} span={5}>
                               <Title order={5} tt="uppercase">
                                 Maps Status
                               </Title>
@@ -950,7 +950,7 @@ export default function AppTournamentManagePage({
                                   withBorder
                                   p="xs"
                                   radius="xl"
-                                  py={5}
+                                  py={BigThenXs ? 5 : 2}
                                   bg="transparent"
                                   style={{
                                     borderColor: "var(--mantine-color-red-4)",
@@ -969,6 +969,7 @@ export default function AppTournamentManagePage({
                                       fw="bold"
                                       truncate="end"
                                       maw={100}
+                                      display={BigThenXs ? "block" : "none"}
                                     >
                                       {match.participants.one.team?.name}
                                     </Text>
@@ -979,7 +980,7 @@ export default function AppTournamentManagePage({
                                   withBorder
                                   p="xs"
                                   radius="xl"
-                                  py={5}
+                                  py={BigThenXs ? 5 : 2}
                                   bg="transparent"
                                   style={{
                                     borderColor: "var(--mantine-color-green-4)",
@@ -998,6 +999,7 @@ export default function AppTournamentManagePage({
                                       fw="bold"
                                       truncate="end"
                                       maw={100}
+                                      display={BigThenXs ? "block" : "none"}
                                     >
                                       {match.participants.two.team?.name}
                                     </Text>
@@ -1012,7 +1014,7 @@ export default function AppTournamentManagePage({
                           {Children.toArray(
                             Array.from(Array(5)).map(() => (
                               <Grid columns={10}>
-                                <Grid.Col span={5} m="auto" h="100%">
+                                <Grid.Col span={BigThenXs ? 5 : 4} m="auto" h="100%">
                                   <Card
                                     h="100%"
                                     style={{
@@ -1029,19 +1031,20 @@ export default function AppTournamentManagePage({
                                         zIndex: 2,
                                       }}
                                     >
-                                      <Title ta="center" order={1}>
+                                      <Title ta="center" 
+                                          fz={BigThenXs ? 38 : 18} order={1}>
                                         TBA
                                       </Title>
                                     </div>
                                   </Card>
                                 </Grid.Col>
 
-                                <Grid.Col span={5} m="auto">
+                                <Grid.Col span={BigThenXs ? 5 : 6} m="auto">
                                   <Card>
                                     <Group justify="space-between">
                                       <Group gap={0}>
                                         <Badge
-                                          size="xs"
+                                          fz={BigThenXs ? 8 : 8}
                                           color="green"
                                           style={{
                                             transform: "rotate(90deg)",
@@ -1049,18 +1052,19 @@ export default function AppTournamentManagePage({
                                         >
                                           Pick
                                         </Badge>
-                                        <Stack gap={5}>
-                                          <Title order={3}>100%</Title>
-                                          <Text size="xs" c="dimmed">
+                                        <Stack gap={BigThenXs ? 5 : 0}>
+                                          <Title order={3} 
+                                          fz={BigThenXs ? 24 : 14}>100%</Title>
+                                          <Text fz={BigThenXs ? 12 : 10} c="dimmed">
                                             11 maps
                                           </Text>
                                         </Stack>
                                       </Group>
 
-                                      <Stack gap={5}>
-                                        <Title order={3}>50%</Title>
+                                      <Stack gap={BigThenXs ? 5 : 0}>
+                                        <Title fz={BigThenXs ? 24 : 14} order={3}>50%</Title>
 
-                                        <Text size="xs" c="dimmed">
+                                        <Text fz={BigThenXs ? 12 : 10} c="dimmed">
                                           4 maps
                                         </Text>
                                       </Stack>
