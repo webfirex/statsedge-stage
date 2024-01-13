@@ -48,6 +48,7 @@ import {
   IconLetterK,
   IconShieldFilled,
 } from "@tabler/icons-react";
+import { PlayerGet } from "~/lib/sport-api/player/get";
 
 const ReactTwitchEmbedVideo = dynamic(
   () => import("react-twitch-embed-video"),
@@ -104,14 +105,14 @@ const PlayerCard = (props: { id: number; name: string }) => {
         }}
       >
         <Stack gap={5} mb={BigThenXs ? 0 : rem(10)}>
-          <Image src="/player.png" alt={props.name} fit="contain" />
+          <Image src="/playerimg.png" alt={props.name} radius={6} fit="contain" />
 
           <Group justify="center" gap={5}>
             <Text ta="center" size={BigThenXs ? rem(15) : rem(9)}>
               {props.name}
             </Text>
 
-            <CircleFlag countryCode="us" height={BigThenXs ? 15 : 10} />
+            <CircleFlag countryCode="" height={BigThenXs ? 15 : 10} />
           </Group>
         </Stack>
       </Card>
@@ -120,11 +121,13 @@ const PlayerCard = (props: { id: number; name: string }) => {
 };
 
 const ScoreBoardHead = (props: {
+  game: string;
   teamId: number;
   name: string;
   bg: string;
 }) => {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+  const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
 
   const iconXs = BigThenXs ? 18 : 14;
 
@@ -146,23 +149,77 @@ const ScoreBoardHead = (props: {
           </Flex>
         </Paper>
 
-        <Flex gap={BigThenXs ? "md" : "sm"}>
-          <IconCurrencyDollar size={iconXs} />
-          <IconCross size={iconXs} />
-          <IconShieldFilled size={iconXs} />
-          <IconLetterK size={iconXs} />
-          <IconLetterA size={iconXs} />
-          <IconLetterD size={iconXs} />
+        {props.game == "cs2" && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <IconCurrencyDollar size={iconXs} />
+            <IconCross size={iconXs} />
+            <IconShieldFilled size={iconXs} />
+            <IconLetterK size={iconXs} />
+            <IconLetterA size={iconXs} />
+            <IconLetterD size={iconXs} />
 
-          <Text size={BigThenXs ? rem(18) : rem(13)}>ADR</Text>
-        </Flex>
+            <Text size={BigThenXs ? rem(18) : rem(13)}>ADR</Text>
+          </Flex>
+        )}
+        {props.game == "valorant" && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>Agent</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>K</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>D</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>A</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>HS%</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>FK</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(10)}>FD</Text>
+            </Box>
+          </Flex>
+        )}
+        {(props.game == "lol" || props.game == "dota2") && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>K</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>D</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>A</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>CS</Text></Box>
+          </Flex>
+        )}
+        {(props.game == "rl") && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Goals</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Asissts</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Saves</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Shots</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Demos</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Demoed</Text></Box>
+          </Flex>
+        )}
+        {(props.game == "cod") && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>K</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>D</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>K/D</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Damage</Text></Box>
+          </Flex>
+        )}
       </Flex>
     </>
   );
 };
 
-const ScoreBoardRow = (props: { name: string }) => {
+const ScoreBoardRow = (props: { name: string; game: String }) => {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+  const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
 
   const iconXs = BigThenXs ? "xs" : rem(8);
 
@@ -171,21 +228,71 @@ const ScoreBoardRow = (props: { name: string }) => {
       <Flex align="center" justify="space-between">
         <Text size={BigThenXs ? "md" : rem(12)}>{props.name}</Text>
 
-        <Flex gap={BigThenXs ? rem(20) : rem(17)}>
-          <Text size={iconXs}>$4950</Text>
-          <Progress
-            my="auto"
-            value={65}
-            w={BigThenXs ? 20 : 16}
-            color="white"
-            size="sm"
-          />
-          <Text size={iconXs}>200</Text>
-          <Text size={iconXs}>23</Text>
-          <Text size={iconXs}>6</Text>
-          <Text size={iconXs}>12</Text>
-          <Text size={iconXs}>963.0</Text>
-        </Flex>
+        {props.game == "cs2" && (
+          <Flex gap={BigThenXs ? rem(20) : rem(17)}>
+            <Text size={iconXs}>$4950</Text>
+            <Progress
+              my="auto"
+              value={65}
+              w={BigThenXs ? 20 : 16}
+              color="white"
+              size="sm"
+            />
+            <Text size={iconXs}>200</Text>
+            <Text size={iconXs}>23</Text>
+            <Text size={iconXs}>6</Text>
+            <Text size={iconXs}>12</Text>
+            <Text size={iconXs}>963.0</Text>
+          </Flex>
+        )}
+        {props.game == "valorant" && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={40} ta="center">
+              <Image mx="auto" src="/heroavatar.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Hero" />
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>200</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>23</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>6</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>50%</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>12</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>32</Text></Box>
+          </Flex>
+        )}
+        {(props.game == "lol" || props.game == "dota2") && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Flex gap={0}>
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+            </Flex>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>23</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>6</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>12</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>963.0</Text></Box>
+          </Flex>
+        )}
+        {(props.game == "rl") && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>200</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>23</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>23</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>6</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>0</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>0</Text></Box>
+          </Flex>
+        )}
+        {(props.game == "cod") && (
+          <Flex gap={BigThenXs ? "md" : rem(2)}>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>23</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>6</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>12</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>963.0</Text></Box>
+          </Flex>
+        )}
       </Flex>
     </>
   );
@@ -211,6 +318,7 @@ export default function AppTournamentManagePage({
     );
   }
 
+  console.log(match);
   const teamOneLength =
     match.participants.one.team?.most_recent_lineup?.length ?? 0;
   const teamTwoLength =
@@ -617,7 +725,8 @@ export default function AppTournamentManagePage({
               </>
             )}
 
-            {/* <Card p="lg">
+            {match.status === "Started" && (
+            <Card p="lg">
               <Stack gap="xl">
                 <Flex align="center" justify="space-between">
                   <Stack>
@@ -648,32 +757,64 @@ export default function AppTournamentManagePage({
 
                 <Stack gap="md">
                   <ScoreBoardHead
+                    game={sport.alias}
                     teamId={match.participants.one.id!}
                     name={match.participants.one.name!}
                     bg="yellow.5"
                   />
-                  <ScoreBoardRow name={match.participants.one.name!} />
-                  <ScoreBoardRow name={match.participants.one.name!} />
-                  <ScoreBoardRow name={match.participants.one.name!} />
-                  <ScoreBoardRow name={match.participants.one.name!} />
-                  <ScoreBoardRow name={match.participants.one.name!} />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.one.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.one.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.one.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.one.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.one.name!}
+                  />
 
                   <Space />
 
                   <ScoreBoardHead
+                    game={sport.alias}
                     teamId={match.participants.two.id!}
                     name={match.participants.two.name!}
                     bg="blue.5"
                   />
 
-                  <ScoreBoardRow name={match.participants.two.name!} />
-                  <ScoreBoardRow name={match.participants.two.name!} />
-                  <ScoreBoardRow name={match.participants.two.name!} />
-                  <ScoreBoardRow name={match.participants.two.name!} />
-                  <ScoreBoardRow name={match.participants.two.name!} />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.two.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.two.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.two.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.two.name!}
+                  />
+                  <ScoreBoardRow
+                    game={sport.alias}
+                    name={match.participants.two.name!}
+                  />
                 </Stack>
               </Stack>
-            </Card> */}
+            </Card> )}
 
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
@@ -1106,7 +1247,7 @@ export default function AppTournamentManagePage({
             <FadeUpAni>
               <Card p="lg">
                 <Stack>
-                  <Title tt="uppercase" order={5}>
+                  <Title tt="uppercase" fz={BigThenXs ? 28 : 18} order={5}>
                     Head to Head
                   </Title>
 
