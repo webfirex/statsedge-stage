@@ -48,7 +48,7 @@ import {
   IconLetterK,
   IconShieldFilled,
 } from "@tabler/icons-react";
-import { PlayerGet } from "~/lib/sport-api/player/get";
+// import { PlayerGet } from "~/lib/sport-api/player/get";
 
 const ReactTwitchEmbedVideo = dynamic(
   () => import("react-twitch-embed-video"),
@@ -217,7 +217,7 @@ const ScoreBoardHead = (props: {
   );
 };
 
-const ScoreBoardRow = (props: { name: string; game: String }) => {
+const ScoreBoardRow = (props: { name: string; game: string }) => {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
 
