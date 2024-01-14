@@ -998,7 +998,7 @@ export default function AppTournamentManagePage({
                           <p style={{textAlign: "center"}}>MATCH ENDED</p>
                           <Box display={"flex"} style={{ gap: "10px", }}>
                             <Box display={"flex"} style={{ flexDirection: "column", }}>
-                              <Title order={3}>14</Title>
+                              <Title order={3}>{match.participants.one.score}</Title>
                             </Box>
                             <Box display={"flex"} style={{flexDirection: "column", alignItems: "center"}}>
                               <Text c="dark" size="sm">
@@ -1013,7 +1013,7 @@ export default function AppTournamentManagePage({
                               </Text>
                             </Box>
                             <Box display={"flex"} style={{ flexDirection: "column", }}>
-                              <Title order={3}>14</Title>
+                              <Title order={3}>{match.participants.two.score}</Title>
                             </Box>
                           </Box>
                         </Box>
@@ -1028,30 +1028,30 @@ export default function AppTournamentManagePage({
 
                       </Box>
 
-                      <Flex direction="column">
-                      <Flex justify="space-between">
-                        <Text c="red">5</Text>
-                        <Text>Turrets</Text>
-                        <Text c="blue">9</Text>
-                      </Flex>
-                      <Divider />
-                      <Flex justify="space-between">
-                        <Text c="red">0</Text>
-                        <Text>Inhibitors</Text>
-                        <Text c="blue">2</Text>
-                      </Flex>
-                      <Divider />
-                      <Flex justify="space-between">
-                        <Text c="red">0</Text>
-                        <Text>Barons</Text>
-                        <Text c="blue">0</Text>
-                      </Flex>
-                      <Divider />
-                      <Flex justify="space-between">
-                        <Text c="red">0</Text>
-                        <Text>Dragons</Text>
-                        <Text c="blue">0</Text>
-                      </Flex>
+                      <Flex direction="column" gap="sm">
+                        <Flex justify="space-between">
+                          <Text c="red">5</Text>
+                          <Text>Turrets</Text>
+                          <Text c="blue">9</Text>
+                        </Flex>
+                        <Divider />
+                        <Flex justify="space-between">
+                          <Text c="red">0</Text>
+                          <Text>Inhibitors</Text>
+                          <Text c="blue">2</Text>
+                        </Flex>
+                        <Divider />
+                        <Flex justify="space-between">
+                          <Text c="red">0</Text>
+                          <Text>Barons</Text>
+                          <Text c="blue">0</Text>
+                        </Flex>
+                        <Divider />
+                        <Flex justify="space-between">
+                          <Text c="red">0</Text>
+                          <Text>Dragons</Text>
+                          <Text c="blue">0</Text>
+                        </Flex>
                       </Flex>
 
                     </Card>
@@ -1307,7 +1307,7 @@ export default function AppTournamentManagePage({
 
                         <SimpleGrid cols={{base: sport.alias === "codmwiii" ? 3 : 1, md: sport.alias === "codmwiii" ? 4 : 1}}>
                           {Children.toArray(
-                            Array.from(match.maps).map((map) => (
+                            Array.from(Array(5)).map((map) => (
                               <>
                                 <Card
                                   style={{
@@ -1332,7 +1332,6 @@ export default function AppTournamentManagePage({
                                         </Title>
                                       </Flex>
                                     }
-                                    {JSON.stringify(map)}
 
                                     {match.status !== "Scheduled" && (sport.alias === "cs2" || sport.alias === "valorant") &&
                                       <Flex align="center" justify="space-between">
