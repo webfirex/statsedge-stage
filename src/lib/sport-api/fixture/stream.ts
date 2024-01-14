@@ -15,7 +15,7 @@ export class FixtureStream {
         fixtureId: z.number().int(),
         streams: z.array(
           z.object({
-            streamName: z.string(),
+            streamName: z.string().nullable(),
             language: z.string(),
             url: z.string(),
           })
@@ -55,6 +55,8 @@ export class FixtureStream {
     const rawData: unknown = await rawRes.json();
 
     const validatedRes = this.Zod.Response.safeParse(rawData);
+
+    console.log(JSON.stringify(validatedRes))
 
     if (!validatedRes.success) {
       SportApiLogger.error({

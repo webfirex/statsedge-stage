@@ -15,6 +15,7 @@ import {
   Overlay,
   Paper,
   Progress,
+  SegmentedControl,
   SimpleGrid,
   Space,
   Stack,
@@ -48,6 +49,7 @@ import {
   IconLetterK,
   IconShieldFilled,
 } from "@tabler/icons-react";
+import moment from 'moment'
 // import { PlayerGet } from "~/lib/sport-api/player/get";
 
 const ReactTwitchEmbedVideo = dynamic(
@@ -129,7 +131,7 @@ const ScoreBoardHead = (props: {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
 
-  const iconXs = BigThenXs ? 18 : 14;
+  const iconXs = BigThenXs ? 18 : 12;
 
   return (
     <>
@@ -150,15 +152,15 @@ const ScoreBoardHead = (props: {
         </Paper>
 
         {props.game == "cs2" && (
-          <Flex gap={BigThenXs ? "md" : rem(2)}>
-            <IconCurrencyDollar size={iconXs} />
-            <IconCross size={iconXs} />
-            <IconShieldFilled size={iconXs} />
-            <IconLetterK size={iconXs} />
-            <IconLetterA size={iconXs} />
-            <IconLetterD size={iconXs} />
+          <Flex gap={BigThenXs ? rem(20) : rem(2)} align="center">
+            <Box miw={30} ta="center"><IconCurrencyDollar size={iconXs} /></Box>
+            <Box miw={25} ta="center"><IconCross size={iconXs} /></Box>
+            <Box miw={25} ta="center"><IconShieldFilled size={iconXs} /></Box>
+            <Box miw={25} ta="center"><IconLetterK size={iconXs} /></Box>
+            <Box miw={25} ta="center"><IconLetterA size={iconXs} /></Box>
+            <Box miw={25} ta="center"><IconLetterD size={iconXs} /></Box>
 
-            <Text size={BigThenXs ? rem(18) : rem(13)}>ADR</Text>
+            <Box miw={30} ta="center"><Text size={BigThenXs ? rem(18) : rem(11)}>ADR</Text></Box>
           </Flex>
         )}
         {props.game == "valorant" && (
@@ -188,28 +190,56 @@ const ScoreBoardHead = (props: {
         )}
         {(props.game == "lol" || props.game == "dota2") && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>K</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>D</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>A</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>CS</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>K</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>D</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>A</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>CS</Text>
+            </Box>
           </Flex>
         )}
-        {(props.game == "rl") && (
+        {props.game == "rl" && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Goals</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Asissts</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Saves</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Shots</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Demos</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Demoed</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Goals</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Asissts</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Saves</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Shots</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Demos</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Demoed</Text>
+            </Box>
           </Flex>
         )}
-        {(props.game == "cod") && (
+        {props.game == "codmwiii" && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>K</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>D</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>K/D</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>Damage</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>K</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>D</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>K/D</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 50 : 70} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>Damage</Text>
+            </Box>
           </Flex>
         )}
       </Flex>
@@ -229,70 +259,246 @@ const ScoreBoardRow = (props: { name: string; game: string }) => {
         <Text size={BigThenXs ? "md" : rem(12)}>{props.name}</Text>
 
         {props.game == "cs2" && (
-          <Flex gap={BigThenXs ? rem(20) : rem(17)}>
-            <Text size={iconXs}>$4950</Text>
-            <Progress
-              my="auto"
-              value={65}
-              w={BigThenXs ? 20 : 16}
-              color="white"
-              size="sm"
-            />
-            <Text size={iconXs}>200</Text>
-            <Text size={iconXs}>23</Text>
-            <Text size={iconXs}>6</Text>
-            <Text size={iconXs}>12</Text>
-            <Text size={iconXs}>963.0</Text>
+          <Flex gap={BigThenXs ? rem(20) : rem(2)}>
+            <Box miw={30} ta="center"><Text size={iconXs}>$4950</Text></Box>
+            <Flex miw={25}>
+              <Progress
+                my="auto"
+                mx="auto"
+                value={65}
+                w={BigThenXs ? 20 : 16}
+                color="white"
+                size="sm"
+              />
+            </Flex>
+            <Box miw={25} ta="center"><Text size={iconXs}>200</Text></Box>
+            <Box miw={25} ta="center"><Text size={iconXs}>23</Text></Box>
+            <Box miw={25} ta="center"><Text size={iconXs}>6</Text></Box>
+            <Box miw={25} ta="center"><Text size={iconXs}>12</Text></Box>
+            <Box miw={30} ta="center"><Text size={iconXs}>963.0</Text></Box>
           </Flex>
         )}
         {props.game == "valorant" && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
             <Box miw={40} ta="center">
-              <Image mx="auto" src="/heroavatar.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Hero" />
+              <Image
+                mx="auto"
+                src="/heroavatar.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Hero"
+              />
             </Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>200</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>23</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>6</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>50%</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>12</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>32</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>200</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>23</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>6</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>50%</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>12</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>32</Text>
+            </Box>
           </Flex>
         )}
         {(props.game == "lol" || props.game == "dota2") && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
             <Flex gap={0}>
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
-              <Image src="/item.png" w={SmallThenSm ? 12 : 22} h={SmallThenSm ? 12 : 22} alt="Item" />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
+              <Image
+                src="/item.png"
+                w={SmallThenSm ? 12 : 22}
+                h={SmallThenSm ? 12 : 22}
+                alt="Item"
+              />
             </Flex>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>23</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>6</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>12</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={iconXs}>963.0</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>23</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>6</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>12</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={iconXs}>963.0</Text>
+            </Box>
           </Flex>
         )}
-        {(props.game == "rl") && (
+        {props.game == "rl" && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>200</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>23</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>23</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>6</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>0</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 50} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>0</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>200</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>23</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>23</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>6</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>0</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 50} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>0</Text>
+            </Box>
           </Flex>
         )}
-        {(props.game == "cod") && (
+        {props.game == "codmwiii" && (
           <Flex gap={BigThenXs ? "md" : rem(2)}>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>23</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>6</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>12</Text></Box>
-            <Box miw={SmallThenSm ? 30 : 40} ta="center"><Text size={BigThenXs ? rem(18) : rem(13)}>963.0</Text></Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>23</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>6</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 30 : 40} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>12</Text>
+            </Box>
+            <Box miw={SmallThenSm ? 50 : 70} ta="center">
+              <Text size={BigThenXs ? rem(18) : rem(13)}>963.0</Text>
+            </Box>
           </Flex>
         )}
+      </Flex>
+    </>
+  );
+};
+
+const MatchStats = () => {
+  const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
+
+  return (
+    <>
+      <SegmentedControl
+        size={SmallThenSm ? "sm" : "lg"}
+        data={["All Maps", "Map 1", "Map 2", "Map 3"]}
+      />
+    </>
+  );
+};
+
+const MatchDetail = ({
+  match,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+
+  return (
+    <>
+      <Flex direction="column">
+        <Flex justify="space-between">
+          <Image
+            src={`/api/team/logo?id=${match.participants.one.id}`}
+            alt="league logo"
+            fit="contain"
+            h={BigThenXs ? 100 : 50}
+            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+          />
+          <Flex direction="column">
+            <Text tt="uppercase" ta="center" c="dark">
+              Match ended
+            </Text>
+            <Flex w="100%" justify="space-between" align="center" gap={5}>
+              <Text c="red" style={{ fontSize: 40 }}>
+                {match.participants.one.score}
+              </Text>
+              <Flex direction="column" align="center">
+                <Text>
+                  {moment(match.endTime).diff(moment(match.startTime), "m")} : {moment(match.endTime).diff(moment(match.startTime), "s") % 60}
+                </Text>
+                <Text c="dark" size="sm">
+                  Duration
+                </Text>
+              </Flex>
+              <Text c="blue" style={{ fontSize: 40 }}>
+                {match.participants.two.score}
+              </Text>
+            </Flex>
+            <Flex justify="center" align="center" gap={16}>
+              <Text>55.00k</Text>
+              <Image src={"/coin.png"} h={14} />
+              <Text>60.30k</Text>
+            </Flex>
+          </Flex>
+          <Image
+            src={`/api/team/logo?id=${match.participants.two.id}`}
+            alt="league logo"
+            fit="contain"
+            h={BigThenXs ? 100 : 50}
+            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+          />
+        </Flex>
+
+        <Flex justify="space-between">
+          <Text c="red">5</Text>
+          <Text>Turrets</Text>
+          <Text c="blue">9</Text>
+        </Flex>
+        <Divider />
+        <Flex justify="space-between">
+          <Text c="red">0</Text>
+          <Text>Inhibitors</Text>
+          <Text c="blue">2</Text>
+        </Flex>
+        <Divider />
+        <Flex justify="space-between">
+          <Text c="red">0</Text>
+          <Text>Barons</Text>
+          <Text c="blue">0</Text>
+        </Flex>
+        <Divider />
+        <Flex justify="space-between">
+          <Text c="red">0</Text>
+          <Text>Dragons</Text>
+          <Text c="blue">0</Text>
+        </Flex>
       </Flex>
     </>
   );
@@ -725,15 +931,211 @@ export default function AppTournamentManagePage({
               </>
             )}
 
-            {match.status === "Started" && (
+            {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
+              <FadeUpAni>
+                <Grid columns={10}>
+                  <Grid.Col span={{ base: 10, md: 5 }}>
+                    <Card>
+
+                      <SegmentedControl
+                        h={50}
+                        size="xs"
+                        color="black"
+                        radius="ms"
+                        styles={{
+                          label: {
+                            height: "100%",
+                          },
+                          root: {
+                            background: "transparent",
+                            border: "1px solid var(--mantine-color-dimmed)",
+                          },
+                        }}
+                        data={[
+                          {
+                            value: "match1",
+                            label: (
+                              <>
+                                <Text size="xs" h={"100%"} py={5} my={3} c={"#fff"} mx="md">
+                                  Match 1
+                                </Text>
+                              </>
+                            ),
+                          },
+                          {
+                            value: "match2",
+                            label: (
+                              <>
+                                <Text size="xs" h={"100%"} py={5} my={3} c={"#fff"} mx="md">
+                                  Match 2
+                                </Text>
+                              </>
+                            ),
+                          },
+                          {
+                            value: "match3",
+                            label: (
+                              <>
+                                <Text size="xs" h={"100%"} py={5} my={3} c={"#fff"} mx="md">
+                                  Match 3
+                                </Text>
+                              </>
+                            ),
+                          },
+                        ]}
+                      />
+
+                      <Box display={"flex"} w="100%" p="md" style={{ justifyContent: "space-between", }}>
+                        <Image
+                          src={`/api/team/logo?id=${match.participants.one.id!}`}
+                          alt="league logo"
+                          fit="contain"
+                          h={BigThenXs ? 50 : 25}
+                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                        />
+
+                        <Box display={"flex"} style={{ flexDirection: "column", }}>
+                          <p style={{textAlign: "center"}}>MATCH ENDED</p>
+                          <Box display={"flex"} style={{ gap: "10px", }}>
+                            <Box display={"flex"} style={{ flexDirection: "column", }}>
+                              <Title order={3}>14</Title>
+                            </Box>
+                            <Box display={"flex"} style={{flexDirection: "column", alignItems: "center"}}>
+                              <Text c="dark" size="sm">
+                                Duration
+                              </Text>
+                              <Text>
+                                {
+                                  match.endTime ? (
+                                    <>{moment(match.endTime).diff(moment(match.startTime), "m")} : {moment(match.endTime).diff(moment(match.startTime), "s") % 60}</>
+                                  ) : <></>
+                                }
+                              </Text>
+                            </Box>
+                            <Box display={"flex"} style={{ flexDirection: "column", }}>
+                              <Title order={3}>14</Title>
+                            </Box>
+                          </Box>
+                        </Box>
+
+                        <Image
+                          src={`/api/team/logo?id=${match.participants.two.id!}`}
+                          alt="league logo"
+                          fit="contain"
+                          h={BigThenXs ? 50 : 25}
+                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                        />
+
+                      </Box>
+
+                      <Flex direction="column">
+                      <Flex justify="space-between">
+                        <Text c="red">5</Text>
+                        <Text>Turrets</Text>
+                        <Text c="blue">9</Text>
+                      </Flex>
+                      <Divider />
+                      <Flex justify="space-between">
+                        <Text c="red">0</Text>
+                        <Text>Inhibitors</Text>
+                        <Text c="blue">2</Text>
+                      </Flex>
+                      <Divider />
+                      <Flex justify="space-between">
+                        <Text c="red">0</Text>
+                        <Text>Barons</Text>
+                        <Text c="blue">0</Text>
+                      </Flex>
+                      <Divider />
+                      <Flex justify="space-between">
+                        <Text c="red">0</Text>
+                        <Text>Dragons</Text>
+                        <Text c="blue">0</Text>
+                      </Flex>
+                      </Flex>
+
+                    </Card>
+                  </Grid.Col>
+
+                  <Grid.Col span={{ base: 10, md: 5 }}>
+                    <Card>
+                      <Title order={5} p={"md"} tt={"uppercase"} ta={"center"} style={{
+                        backgroundColor: "#4a4848",
+                        borderRadius: "10px",
+                      }}>Champions</Title>
+
+                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "10px", borderBottom: "1px solid #4a4848", }}>
+                        <Image
+                          src={`/api/team/logo?id=${match.participants.one.id!}`}
+                          alt="league logo"
+                          fit="contain"
+                          h={BigThenXs ? 20 : 15}
+                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                        />
+                        {match.participants.one.name}
+                      </Box>
+                      
+                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
+                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Ban</Box>
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                      </Box>
+                      
+                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
+                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Pick</Box>
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                      </Box>
+
+                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "10px", borderBottom: "1px solid #4a4848", }}>
+                        <Image
+                          src={`/api/team/logo?id=${match.participants.two.id!}`}
+                          alt="league logo"
+                          fit="contain"
+                          h={BigThenXs ? 20 : 15}
+                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                        />
+                        {match.participants.two.name}
+                      </Box>
+                      
+                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
+                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Ban</Box>
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                      </Box>
+                      
+                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
+                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Pick</Box>
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
+                      </Box>
+
+                    </Card>
+                  </Grid.Col>
+                </Grid>
+              </FadeUpAni>
+            )}
+
+            {match.status !== "Scheduled" && sport.alias !== "lol" && sport.alias !== "dota2" &&(
             <Card p="lg">
+              <Title order={BigThenXs ? 4 : 5} tt="uppercase" mb={10}>
+                ScoreBoard
+              </Title>
               <Stack gap="xl">
                 <Flex align="center" justify="space-between">
                   <Stack>
-                    <Title order={BigThenXs ? 4 : 5} tt="uppercase">
-                      ScoreBoard
-                    </Title>
-
                     <Flex align="center" gap="xs">
                       <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
                         R - 21
@@ -754,6 +1156,10 @@ export default function AppTournamentManagePage({
                     <IconBomb size={BigThenXs ? 20 : 16} />
                   </Flex>
                 </Flex>
+
+                {sport.alias !== "valorant" &&
+                  sport.alias !== "dota2" &&
+                  sport.alias !== "lol" && <MatchStats />}
 
                 <Stack gap="md">
                   <ScoreBoardHead
@@ -816,11 +1222,81 @@ export default function AppTournamentManagePage({
               </Stack>
             </Card> )}
 
+            {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
+            <Card p="lg">
+              <Stack gap="xl">
+                  <Flex align="center" justify="space-between">
+                    
+                    <Stack w="48%">
+                      <ScoreBoardHead
+                        game={sport.alias}
+                        teamId={match.participants.one.id!}
+                        name={match.participants.one.name!}
+                        bg="yellow.5"
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                    </Stack>
+    
+                    
+                    <Stack w="48%">
+                      <ScoreBoardHead
+                        game={sport.alias}
+                        teamId={match.participants.two.id!}
+                        name={match.participants.two.name!}
+                        bg="blue.5"
+                      />
+    
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                    </Stack>
+
+                  </Flex>
+                
+              </Stack>
+            </Card> )}
+
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
               sport.alias !== "rl" && (
                 <FadeUpAni>
-                  <SimpleGrid cols={{ base: 1, md: 2 }}>
+                  <SimpleGrid cols={{ base: 1, md: sport.alias === "codmwiii" ? 1 : 2 }}>
                     <Card p="lg">
                       <Stack>
                         <Title order={5} tt="uppercase">
@@ -829,34 +1305,230 @@ export default function AppTournamentManagePage({
 
                         <Divider />
 
-                        {Children.toArray(
-                          Array.from(Array(5)).map(() => (
-                            <>
-                              <Card
-                                style={{
-                                  backgroundImage: "url(/map.jpg)",
-                                }}
-                              >
-                                <Overlay
+                        <SimpleGrid cols={{base: sport.alias === "codmwiii" ? 3 : 1, md: sport.alias === "codmwiii" ? 4 : 1}}>
+                          {Children.toArray(
+                            Array.from(match.maps).map((map) => (
+                              <>
+                                <Card
                                   style={{
-                                    zIndex: 1,
-                                  }}
-                                />
-                                <div
-                                  style={{
-                                    zIndex: 2,
+                                    backgroundImage: "url(/map.jpg)",
                                   }}
                                 >
-                                  <Title ta="center" order={1}>
-                                    TBA
-                                  </Title>
-                                </div>
-                              </Card>
-                            </>
-                          ))
-                        )}
+                                  <Overlay
+                                    style={{
+                                      zIndex: 1,
+                                    }}
+                                  />
+                                  <div
+                                    style={{
+                                      zIndex: 2,
+                                    }}
+                                  >
+                                    {
+                                      match.status === "Scheduled" &&
+                                      <Flex align="center" justify="center">
+                                        <Title order={3} ta="center">
+                                          {JSON.stringify(map)}
+                                        </Title>
+                                      </Flex>
+                                    }
+                                    {JSON.stringify(map)}
+
+                                    {match.status !== "Scheduled" && (sport.alias === "cs2" || sport.alias === "valorant") &&
+                                      <Flex align="center" justify="space-between">
+                                        <Title order={3}>
+                                          TBA
+                                        </Title>
+                                        <Flex
+                                          justify="space-between"
+                                          align="center"
+                                          gap={SmallThenSm ? "sm" : "xl"}
+                                        >
+                                          <Flex
+                                            direction="column"
+                                            align="center"
+                                            justify="center"
+                                          >
+                                            <Image
+                                              src={`/api/team/logo?id=${match.participants.one.id}`}
+                                              alt="league logo"
+                                              fit="contain"
+                                              h={30}
+                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                            />
+                                            <Text c="red">{match.participants.one.scoreWithoutHandicap}</Text>
+                                          </Flex>
+                                          <Flex
+                                            direction="column"
+                                            align="center"
+                                            bg="black"
+                                            p="sm"
+                                          >
+                                            <Text size="sm">Stats</Text>
+                                            <Text>3:9 | 5:4</Text>
+                                          </Flex>
+                                          <Flex direction="column" align="center">
+                                            <Image
+                                              src={`/api/team/logo?id=${match.participants.two.id}`}
+                                              alt="league logo"
+                                              fit="contain"
+                                              h={30}
+                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                            />
+                                            <Text c="green">{match.participants.two.scoreWithoutHandicap}</Text>
+                                          </Flex>
+                                        </Flex>
+                                      </Flex>
+                                    }
+
+                                    {match.status !== "Scheduled" && sport.alias === "codmwiii" &&
+                                      <SimpleGrid cols={{ base: 1, md: 1 }}>
+                                        <Title order={5}>
+                                          TBA
+                                        </Title>
+                                        <Divider />
+                                        <Text size="sm">Terminal</Text>
+                                        <Flex
+                                          justify="space-between"
+                                          align="center"
+                                          gap="xs"
+                                        >
+                                          <Flex
+                                            direction="column"
+                                            align="center"
+                                            justify="center"
+                                          >
+                                            <Image
+                                              src={`/api/team/logo?id=${match.participants.one.id}`}
+                                              alt="league logo"
+                                              fit="contain"
+                                              h={30}
+                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                            />
+                                            <Text c="red">5</Text>
+                                          </Flex>
+                                          <Flex
+                                            direction="column"
+                                            align="center"
+                                            bg="black"
+                                            p="2"
+                                          >
+                                            <Text size={SmallThenSm ? "xs" : "sm"}>Stats</Text>
+                                          </Flex>
+                                          <Flex direction="column" align="center">
+                                            <Image
+                                              src={`/api/team/logo?id=${match.participants.one.id}`}
+                                              alt="league logo"
+                                              fit="contain"
+                                              h={30}
+                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                            />
+                                            <Text c="green">5</Text>
+                                          </Flex>
+                                        </Flex>
+                                      </SimpleGrid>
+                                    }
+                                  </div>
+                                </Card>
+                              </>
+                            ))
+                          )}
+                        </SimpleGrid>
                       </Stack>
                     </Card>
+                    {
+                      match.status !== "Scheduled" && 
+                      (sport.alias === "cs2" || sport.alias === "valorant") &&
+                      <Stack mt={SmallThenSm ? "10" : "60"}>
+                        <Flex gap="md" px={20}>
+                          <Text c="indigo">Maps</Text>
+                          <Text c="indigo" ml="auto">
+                            Removed
+                          </Text>
+                          <Text c="indigo">Picked</Text>
+                        </Flex>
+                        <Card>
+                          <Flex align="center" py="xs">
+                            <Text>Ancient</Text>
+                            <Box miw={100} ta="center" ml="auto">
+                              <Image
+                                src={`/api/team/logo?id=${match.participants.one.id}`}
+                                alt="league logo"
+                                fit="contain"
+                                h={30}
+                                ml="auto"
+                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                              />
+                            </Box>
+                            <Box miw={60} ta="center">
+                              <Text>-</Text>
+                            </Box>
+                          </Flex>
+                          <Divider />
+                          <Flex align="center" py="xs">
+                            <Text>Nuke</Text>
+                            <Box miw={100} ta="center" ml="auto">
+                              <Image
+                                src={`/api/team/logo?id=${match.participants.two.id}`}
+                                alt="league logo"
+                                fit="contain"
+                                h={30}
+                                ml="auto"
+                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                              />
+                            </Box>
+                            <Box miw={60} ta="center">
+                              <Text>-</Text>
+                            </Box>
+                          </Flex>
+                          <Divider />
+                          <Flex align="center" py="xs">
+                            <Text>Vertigo</Text>
+                            <Box miw={100} ta="center" ml="auto">
+                              <Text>-</Text>
+                            </Box>
+                            <Box miw={60} ta="center">
+                              <Image
+                                src={`/api/team/logo?id=${match.participants.one.id}`}
+                                alt="league logo"
+                                fit="contain"
+                                h={30}
+                                ml="auto"
+                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                              />
+                            </Box>
+                          </Flex>
+                          <Divider />
+                          <Flex align="center" py="xs">
+                            <Text>Mirage</Text>
+                            <Box miw={100} ta="center" ml="auto">
+                              <Text>-</Text>
+                            </Box>
+                            <Box miw={60} ta="center">
+                              <Image
+                                src={`/api/team/logo?id=${match.participants.two.id}`}
+                                alt="league logo"
+                                fit="contain"
+                                h={30}
+                                ml="auto"
+                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                              />
+                            </Box>
+                          </Flex>
+                          <Divider />
+                          <Flex align="center" py="xs">
+                            <Text>Overpass</Text>
+                            <Box miw={100} ta="center" ml="auto">
+                              <Text>-</Text>
+                            </Box>
+                            <Box miw={60} ta="center">
+                              <Text>-</Text>
+                            </Box>
+                          </Flex>
+                        </Card>
+                        <Text c="indigo" ta="center">Overpass was left Over</Text>
+                      </Stack>
+                    }
                   </SimpleGrid>
                 </FadeUpAni>
               )}
@@ -1073,7 +1745,9 @@ export default function AppTournamentManagePage({
 
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
-              sport.alias !== "rl" && (
+              sport.alias !== "rl" &&
+              sport.alias !== "codmwiii" &&
+              match.status !== "Ended" && (
                 <FadeUpAni>
                   <Grid columns={10}>
                     <Grid.Col span={BigThenXs ? 7 : 10}>

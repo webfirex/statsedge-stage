@@ -26,6 +26,7 @@ export class FixtureGet {
         participants: z.array(SportApiZod.Participants),
         links: z.array(SportApiZod.Links),
         maps: z.array(SportApiZod.Map.Base).optional(),
+        // maps: z.array(SportApiZod.Map.Base).optional(),
       })
       .nullable(),
   };
