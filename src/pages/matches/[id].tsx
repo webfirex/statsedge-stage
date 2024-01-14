@@ -1168,27 +1168,16 @@ export default function AppTournamentManagePage({
                     name={match.participants.one.name!}
                     bg="yellow.5"
                   />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.one.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.one.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.one.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.one.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.one.name!}
-                  />
-
+                  {
+                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
+                      <ScoreBoardRow
+                        key={index}
+                        game={sport.alias}
+                        name={player.name}
+                      />
+                    ))
+                  }
+                  
                   <Space />
 
                   <ScoreBoardHead
@@ -1198,26 +1187,15 @@ export default function AppTournamentManagePage({
                     bg="blue.5"
                   />
 
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.two.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.two.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.two.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.two.name!}
-                  />
-                  <ScoreBoardRow
-                    game={sport.alias}
-                    name={match.participants.two.name!}
-                  />
+                  {
+                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
+                      <ScoreBoardRow
+                        key={index}
+                        game={sport.alias}
+                        name={player.name}
+                      />
+                    ))
+                  }
                 </Stack>
               </Stack>
             </Card> )}
@@ -1225,70 +1203,68 @@ export default function AppTournamentManagePage({
             {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
             <Card p="lg">
               <Stack gap="xl">
-                  <Flex align="center" justify="space-between">
-                    
-                    <Stack w="48%">
-                      <ScoreBoardHead
-                        game={sport.alias}
-                        teamId={match.participants.one.id!}
-                        name={match.participants.one.name!}
-                        bg="yellow.5"
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                    </Stack>
-    
-                    
-                    <Stack w="48%">
-                      <ScoreBoardHead
-                        game={sport.alias}
-                        teamId={match.participants.two.id!}
-                        name={match.participants.two.name!}
-                        bg="blue.5"
-                      />
-    
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                    </Stack>
+                <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
+                  
+                  <Stack>
+                    <ScoreBoardHead
+                      game={sport.alias}
+                      teamId={match.participants.one.id!}
+                      name={match.participants.one.name!}
+                      bg="yellow.5"
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                  </Stack>
+                  
+                  <Stack>
+                    <ScoreBoardHead
+                      game={sport.alias}
+                      teamId={match.participants.two.id!}
+                      name={match.participants.two.name!}
+                      bg="blue.5"
+                    />
+  
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                  </Stack>
 
-                  </Flex>
-                
+                </SimpleGrid>
               </Stack>
             </Card> )}
 
