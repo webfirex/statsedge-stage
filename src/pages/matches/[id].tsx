@@ -450,6 +450,9 @@ export default function AppTournamentManagePage({
   const teamTwoLength =
     match.participants.two.team?.most_recent_lineup?.length ?? 0;
 
+  const teamOneId = match.participants.one.id;
+  const teamTwoId = match.participants.two.id;
+
   const teamOneTotalScore = match.maps?.reduce((totalScore, map) => totalScore + (map.roundScores?.[0]?.roundsWon ?? 0), 0);
   const teamTwoTotalScore = match.maps?.reduce((totalScore, map) => totalScore + (map.roundScores?.[1]?.roundsWon ?? 0), 0);
 
@@ -1725,8 +1728,8 @@ export default function AppTournamentManagePage({
                           <Divider size="sm" />
 
                           {Children.toArray(
-                            Array.from(Array(5)).map(() => (
-                              <Grid columns={10}>
+                            Array.from(match.maps ?? []).map((map, index) => (
+                              <Grid key={index} columns={10}>
                                 <Grid.Col
                                   span={{ base: 3, sm: 5 }}
                                   m="auto"
@@ -1754,7 +1757,7 @@ export default function AppTournamentManagePage({
                                         order={SmallThenSm ? 5 : 1}
                                         ta="center"
                                       >
-                                        TBA
+                                        {map.mapName}
                                       </Title>
                                     </div>
                                   </Card>
@@ -1885,7 +1888,7 @@ export default function AppTournamentManagePage({
 
                   <Stack gap={0}>
                     {
-                      match.hth?.fixtures?.length &&
+                      match.hth?.fixtures?.length != null &&
                       match.hth.fixtures.length > 0 &&
                       match.hth.fixtures.map((data, dindex) => (
                         <>
@@ -1989,6 +1992,10 @@ export default function AppTournamentManagePage({
                           </Paper>
                         </>
                       ))
+                    }
+                    {
+                      !match.hth?.fixtures?.length &&
+                      <Text ta="center">No data available</Text>
                     }
                   </Stack>
                 </Stack>
