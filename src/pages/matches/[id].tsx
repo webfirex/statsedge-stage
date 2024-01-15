@@ -1842,7 +1842,7 @@ export default function AppTournamentManagePage({
 
                       <Stack gap={0}>
                         <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
-                          6
+                          {match.hth?.fixtures?.reduce((totalScore, fixture) => (totalScore + fixture.score), 0)}
                         </Text>
                         <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
                           Wins
@@ -1851,7 +1851,7 @@ export default function AppTournamentManagePage({
 
                       <Stack gap={0}>
                         <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
-                          6
+                          {match.hth?.fixtures?.reduce((totalScore, fixture) => (totalScore + fixture.score + fixture.opponentScore), 0)}
                         </Text>
                         <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
                           Overview
@@ -1860,7 +1860,7 @@ export default function AppTournamentManagePage({
 
                       <Stack gap={0}>
                         <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
-                          6
+                        {match.hth?.fixtures?.reduce((totalScore, fixture) => (totalScore + fixture.opponentScore), 0)}
                         </Text>
                         <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
                           Wins
@@ -1900,7 +1900,7 @@ export default function AppTournamentManagePage({
                             <Flex justify="space-between" align="center">
                               <Group>
                                 <Text size={BigThenXs ? "sm" : rem(10)}>
-                                  {moment(data.fixtureTime / 1000).format("DD/MM/YYYY")}
+                                  {moment(data.fixtureTime).format("DD/MM/YYYY")}
                                 </Text>
 
                                 <Divider
@@ -1932,7 +1932,7 @@ export default function AppTournamentManagePage({
 
                                 {BigThenXs && (
                                   <Text size="sm">
-                                    {match.participants.two.name}
+                                    {match.participants.two.name ?? "Unknown"}
                                   </Text>
                                 )}
 
@@ -1946,7 +1946,7 @@ export default function AppTournamentManagePage({
                                   size={BigThenXs ? "sm" : rem(10)}
                                   visibleFrom="sm"
                                 >
-                                  {data.name}
+                                  {data.competitionName ?? "Unknown"}
                                 </Text>
                               </Group>
 
@@ -1957,14 +1957,14 @@ export default function AppTournamentManagePage({
                                       size={BigThenXs ? "sm" : rem(8)}
                                       hiddenFrom="sm"
                                     >
-                                      {data.name}
+                                      {data.mapName ?? "Unknown"}
                                     </Text>
                                     <Text
                                       size={BigThenXs ? "sm" : rem(8)}
                                       tt="uppercase"
                                       c="dimmed"
                                     >
-                                      {data.map}
+                                      {data.mapName ?? "Unknown"}
                                     </Text>
 
                                     <Divider
@@ -1976,11 +1976,11 @@ export default function AppTournamentManagePage({
 
                                 <Text size={BigThenXs ? "sm" : rem(10)}>
                                   <Text inherit span c="red">
-                                    {data.score.one}
+                                    {data.score ?? "NA"}
                                   </Text>{" "}
                                   -{" "}
                                   <Text inherit span c="green">
-                                    {data.score.two}
+                                    {data.opponentScore ?? "NA"}
                                   </Text>
                                 </Text>
                               </Group>

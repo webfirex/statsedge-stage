@@ -161,6 +161,17 @@ export class CustomMatch {
       TeamForm.Call({ id: TeamTwo.id ?? 0 }),
     ]);
 
+    if(hth?.fixtures?.length && hth.fixtures.length > 0) {
+      const fixtures = await Promise.all(hth.fixtures.map(async (fixture) => {
+        return await FixtureGet.Call({ id: fixture.fixtureId });
+      }));
+
+      hth.fixtures.map((fixture, index) => {
+        fixture.competitionName = fixtures[index]?.competition.name ?? null;
+        fixture.mapName = fixtures[index]?.maps?.[0]?.mapName ?? null;
+      });
+    }
+
     const TeamOneOdds = odds?.map_total_rounds_over_under ?? [];
     const TeamTwoOdds = odds?.map_total_rounds_over_under ?? [];
 

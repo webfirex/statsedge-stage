@@ -18,7 +18,10 @@ export class TeamForm {
           opponentName: z.string().nullable(),
           score: z.number(),
           opponentScore: z.number(),
-          fixtureTime: z.number()
+          fixtureTime: z.number(),
+          fixtureId: z.number(),
+          competitionName: z.string().optional().nullable(),
+          mapName: z.string().optional().nullable()
         })).nullable()
       })
       .nullable(),
