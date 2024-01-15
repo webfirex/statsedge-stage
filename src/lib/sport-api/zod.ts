@@ -11,6 +11,27 @@ class MapZod {
   public static Base = z.object({
     status: this.$Status,
     mapNumber: z.number(),
+    mapName: z.string(),
+    teamStats: z
+      .array(
+        z.object({
+          kills: z.number(),
+          deaths: z.number(),
+          teamId: z.number(),
+          assists: z.number(),
+          suicides: z.number(),
+          headshots: z.number(),
+          entryKills: z.number(),
+        })
+      )
+      .optional(),
+    roundScores: z.array(
+      z.object({
+        id: z.number(),
+        roundsWon: z.number(),
+        halfScores: z.array(z.number())
+      })
+    ),
   });
 
   public static CSGO = z.object({

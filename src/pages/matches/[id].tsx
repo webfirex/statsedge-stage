@@ -49,7 +49,7 @@ import {
   IconLetterK,
   IconShieldFilled,
 } from "@tabler/icons-react";
-import moment from 'moment'
+import moment from 'moment';
 // import { PlayerGet } from "~/lib/sport-api/player/get";
 
 const ReactTwitchEmbedVideo = dynamic(
@@ -85,7 +85,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     "public, s-maxage=30, stale-while-revalidate=30"
   );
 
-  console.log(JSON.stringify(match, null, 2));
+  // console.log(JSON.stringify(match, null, 2));
 
   return {
     props: {
@@ -159,8 +159,7 @@ const ScoreBoardHead = (props: {
             <Box miw={25} ta="center"><IconLetterK size={iconXs} /></Box>
             <Box miw={25} ta="center"><IconLetterA size={iconXs} /></Box>
             <Box miw={25} ta="center"><IconLetterD size={iconXs} /></Box>
-
-            <Box miw={30} ta="center"><Text size={BigThenXs ? rem(18) : rem(11)}>ADR</Text></Box>
+            <Box miw={30} ta="center" display="flex"><Text size={BigThenXs ? rem(18) : rem(11)}>ADR</Text></Box>
           </Flex>
         )}
         {props.game == "valorant" && (
@@ -425,85 +424,6 @@ const MatchStats = () => {
   );
 };
 
-const MatchDetail = ({
-  match,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-
-  return (
-    <>
-      <Flex direction="column">
-        <Flex justify="space-between">
-          <Image
-            src={`/api/team/logo?id=${match.participants.one.id}`}
-            alt="league logo"
-            fit="contain"
-            h={BigThenXs ? 100 : 50}
-            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-          />
-          <Flex direction="column">
-            <Text tt="uppercase" ta="center" c="dark">
-              Match ended
-            </Text>
-            <Flex w="100%" justify="space-between" align="center" gap={5}>
-              <Text c="red" style={{ fontSize: 40 }}>
-                {match.participants.one.score}
-              </Text>
-              <Flex direction="column" align="center">
-                <Text>
-                  {moment(match.endTime).diff(moment(match.startTime), "m")} : {moment(match.endTime).diff(moment(match.startTime), "s") % 60}
-                </Text>
-                <Text c="dark" size="sm">
-                  Duration
-                </Text>
-              </Flex>
-              <Text c="blue" style={{ fontSize: 40 }}>
-                {match.participants.two.score}
-              </Text>
-            </Flex>
-            <Flex justify="center" align="center" gap={16}>
-              <Text>55.00k</Text>
-              <Image src={"/coin.png"} h={14} />
-              <Text>60.30k</Text>
-            </Flex>
-          </Flex>
-          <Image
-            src={`/api/team/logo?id=${match.participants.two.id}`}
-            alt="league logo"
-            fit="contain"
-            h={BigThenXs ? 100 : 50}
-            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-          />
-        </Flex>
-
-        <Flex justify="space-between">
-          <Text c="red">5</Text>
-          <Text>Turrets</Text>
-          <Text c="blue">9</Text>
-        </Flex>
-        <Divider />
-        <Flex justify="space-between">
-          <Text c="red">0</Text>
-          <Text>Inhibitors</Text>
-          <Text c="blue">2</Text>
-        </Flex>
-        <Divider />
-        <Flex justify="space-between">
-          <Text c="red">0</Text>
-          <Text>Barons</Text>
-          <Text c="blue">0</Text>
-        </Flex>
-        <Divider />
-        <Flex justify="space-between">
-          <Text c="red">0</Text>
-          <Text>Dragons</Text>
-          <Text c="blue">0</Text>
-        </Flex>
-      </Flex>
-    </>
-  );
-};
-
 export default function AppTournamentManagePage({
   match,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -529,6 +449,14 @@ export default function AppTournamentManagePage({
     match.participants.one.team?.most_recent_lineup?.length ?? 0;
   const teamTwoLength =
     match.participants.two.team?.most_recent_lineup?.length ?? 0;
+
+  const teamOneTotalScore = match.maps?.reduce((totalScore, map) => totalScore + (map.roundScores?.[0]?.roundsWon ?? 0), 0);
+  const teamTwoTotalScore = match.maps?.reduce((totalScore, map) => totalScore + (map.roundScores?.[1]?.roundsWon ?? 0), 0);
+
+  const teamOneOdd = match.odds.one.length ? match.odds.one.reduce((totalOdd, odd) => totalOdd + (odd.decimalOdd ?? 0), 0) / (match.odds.one.length ? match.odds.one.length : 1) : "NA";
+  const teamTwoOdd = match.odds.two.length ? match.odds.two.reduce((totalOdd, odd) => totalOdd + (odd.decimalOdd ?? 0), 0) / (match.odds.two.length ? match.odds.two.length : 1) : "NA";
+
+  // const teamOneTotalScore = match.maps?.reduce((totalScore, map) => totalScore + map.roundScores[1]?.roundsWon);
 
   const teamLength =
     teamOneLength > teamTwoLength ? teamOneLength : teamTwoLength;
@@ -651,7 +579,7 @@ export default function AppTournamentManagePage({
                             <CircleFlag
                               countryCode={
                                 match.participants.one.team?.countryISO?.toLowerCase() ??
-                                "us"
+                                ""
                               }
                               height={BigThenXs ? 16 : 10}
                             />
@@ -681,7 +609,9 @@ export default function AppTournamentManagePage({
                       />
                     </Card>
 
-                    <Title order={BigThenXs ? 3 : 5}>15:00</Title>
+                    <Title order={BigThenXs ? 3 : 5}>
+                      {teamOneTotalScore}:{teamTwoTotalScore}
+                    </Title>
 
                     <Card
                       p={BigThenXs ? "md" : "xs"}
@@ -708,7 +638,7 @@ export default function AppTournamentManagePage({
                             <CircleFlag
                               countryCode={
                                 match.participants.two.team?.countryISO?.toLowerCase() ??
-                                "us"
+                                ""
                               }
                               height={BigThenXs ? 16 : 10}
                             />
@@ -837,7 +767,7 @@ export default function AppTournamentManagePage({
                         py={BigThenXs ? rem(3) : rem(5)}
                       >
                         <Text size={BigThenXs ? "md" : rem(10)}>
-                          {match.participants.one.score}
+                          {teamOneOdd}
                         </Text>
                       </Paper>
                     </Flex>
@@ -863,7 +793,7 @@ export default function AppTournamentManagePage({
                         py={BigThenXs ? rem(3) : rem(5)}
                       >
                         <Text size={BigThenXs ? "md" : rem(10)}>
-                          {match.participants.one.score}
+                          {teamTwoOdd}
                         </Text>
                       </Paper>
 
@@ -1128,146 +1058,6 @@ export default function AppTournamentManagePage({
               </FadeUpAni>
             )}
 
-            {match.status !== "Scheduled" && sport.alias !== "lol" && sport.alias !== "dota2" &&(
-            <Card p="lg">
-              <Title order={BigThenXs ? 4 : 5} tt="uppercase" mb={10}>
-                ScoreBoard
-              </Title>
-              <Stack gap="xl">
-                <Flex align="center" justify="space-between">
-                  <Stack>
-                    <Flex align="center" gap="xs">
-                      <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
-                        R - 21
-                      </Text>
-                      <Divider orientation="vertical" size="sm" />
-                      <Text size={BigThenXs ? "sm" : "xs"}>MIRAGE</Text>
-                    </Flex>
-                  </Stack>
-
-                  <Flex align="center" gap={rem(5)}>
-                    <Title order={BigThenXs ? 4 : 5}>4</Title>
-                    <Title order={BigThenXs ? 4 : 5}>:</Title>
-                    <Title order={BigThenXs ? 4 : 5}>6</Title>
-                  </Flex>
-
-                  <Flex align="center" gap={rem(5)}>
-                    <Text size={BigThenXs ? "sm" : "xs"}>1:39</Text>
-                    <IconBomb size={BigThenXs ? 20 : 16} />
-                  </Flex>
-                </Flex>
-
-                {sport.alias !== "valorant" &&
-                  sport.alias !== "dota2" &&
-                  sport.alias !== "lol" && <MatchStats />}
-
-                <Stack gap="md">
-                  <ScoreBoardHead
-                    game={sport.alias}
-                    teamId={match.participants.one.id!}
-                    name={match.participants.one.name!}
-                    bg="yellow.5"
-                  />
-                  {
-                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
-                      <ScoreBoardRow
-                        key={index}
-                        game={sport.alias}
-                        name={player.name}
-                      />
-                    ))
-                  }
-                  
-                  <Space />
-
-                  <ScoreBoardHead
-                    game={sport.alias}
-                    teamId={match.participants.two.id!}
-                    name={match.participants.two.name!}
-                    bg="blue.5"
-                  />
-
-                  {
-                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
-                      <ScoreBoardRow
-                        key={index}
-                        game={sport.alias}
-                        name={player.name}
-                      />
-                    ))
-                  }
-                </Stack>
-              </Stack>
-            </Card> )}
-
-            {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
-            <Card p="lg">
-              <Stack gap="xl">
-                <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
-                  
-                  <Stack>
-                    <ScoreBoardHead
-                      game={sport.alias}
-                      teamId={match.participants.one.id!}
-                      name={match.participants.one.name!}
-                      bg="yellow.5"
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                  </Stack>
-                  
-                  <Stack>
-                    <ScoreBoardHead
-                      game={sport.alias}
-                      teamId={match.participants.two.id!}
-                      name={match.participants.two.name!}
-                      bg="blue.5"
-                    />
-  
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                  </Stack>
-
-                </SimpleGrid>
-              </Stack>
-            </Card> )}
-
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
               sport.alias !== "rl" && (
@@ -1283,7 +1073,7 @@ export default function AppTournamentManagePage({
 
                         <SimpleGrid cols={{base: sport.alias === "codmwiii" ? 3 : 1, md: sport.alias === "codmwiii" ? 4 : 1}}>
                           {Children.toArray(
-                            Array.from(Array(5)).map((map) => (
+                            Array.from(match.maps ?? []).map((map) => (
                               <>
                                 <Card
                                   style={{
@@ -1304,7 +1094,7 @@ export default function AppTournamentManagePage({
                                       match.status === "Scheduled" &&
                                       <Flex align="center" justify="center">
                                         <Title order={3} ta="center">
-                                          {JSON.stringify(map)}
+                                          {map.mapName}
                                         </Title>
                                       </Flex>
                                     }
@@ -1312,7 +1102,7 @@ export default function AppTournamentManagePage({
                                     {match.status !== "Scheduled" && (sport.alias === "cs2" || sport.alias === "valorant") &&
                                       <Flex align="center" justify="space-between">
                                         <Title order={3}>
-                                          TBA
+                                          {map.mapName}
                                         </Title>
                                         <Flex
                                           justify="space-between"
@@ -1331,7 +1121,7 @@ export default function AppTournamentManagePage({
                                               h={30}
                                               fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                                             />
-                                            <Text c="red">{match.participants.one.scoreWithoutHandicap}</Text>
+                                            <Text c="red">{map.roundScores[0]?.roundsWon}</Text>
                                           </Flex>
                                           <Flex
                                             direction="column"
@@ -1340,7 +1130,11 @@ export default function AppTournamentManagePage({
                                             p="sm"
                                           >
                                             <Text size="sm">Stats</Text>
-                                            <Text>3:9 | 5:4</Text>
+                                            <Text>
+                                              {map.roundScores[0]?.halfScores[0]}:{map.roundScores[1]?.halfScores[0]}
+                                              &nbsp;|&nbsp;
+                                              {map.roundScores[0]?.halfScores[1]}:{map.roundScores[1]?.halfScores[1]}
+                                            </Text>
                                           </Flex>
                                           <Flex direction="column" align="center">
                                             <Image
@@ -1350,7 +1144,7 @@ export default function AppTournamentManagePage({
                                               h={30}
                                               fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                                             />
-                                            <Text c="green">{match.participants.two.scoreWithoutHandicap}</Text>
+                                            <Text c="green">{map.roundScores[1]?.roundsWon}</Text>
                                           </Flex>
                                         </Flex>
                                       </Flex>
@@ -1508,6 +1302,146 @@ export default function AppTournamentManagePage({
                 </FadeUpAni>
               )}
 
+            {match.status !== "Scheduled" && sport.alias !== "lol" && sport.alias !== "dota2" &&(
+            <Card p="lg">
+              <Title order={BigThenXs ? 4 : 5} tt="uppercase" mb={10}>
+                ScoreBoard
+              </Title>
+              <Stack gap="xl">
+                <Flex align="center" justify="space-between">
+                  <Stack>
+                    <Flex align="center" gap="xs">
+                      <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
+                        R - 21
+                      </Text>
+                      <Divider orientation="vertical" size="sm" />
+                      <Text size={BigThenXs ? "sm" : "xs"}>MIRAGE</Text>
+                    </Flex>
+                  </Stack>
+
+                  <Flex align="center" gap={rem(5)}>
+                    <Title order={BigThenXs ? 4 : 5}>4</Title>
+                    <Title order={BigThenXs ? 4 : 5}>:</Title>
+                    <Title order={BigThenXs ? 4 : 5}>6</Title>
+                  </Flex>
+
+                  <Flex align="center" gap={rem(5)}>
+                    <Text size={BigThenXs ? "sm" : "xs"}>1:39</Text>
+                    <IconBomb size={BigThenXs ? 20 : 16} />
+                  </Flex>
+                </Flex>
+
+                {sport.alias !== "valorant" &&
+                  sport.alias !== "dota2" &&
+                  sport.alias !== "lol" && <MatchStats />}
+
+                <Stack gap="md">
+                  <ScoreBoardHead
+                    game={sport.alias}
+                    teamId={match.participants.one.id!}
+                    name={match.participants.one.name!}
+                    bg="yellow.5"
+                  />
+                  {
+                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
+                      <ScoreBoardRow
+                        key={index}
+                        game={sport.alias}
+                        name={player.name}
+                      />
+                    ))
+                  }
+                  
+                  <Space />
+
+                  <ScoreBoardHead
+                    game={sport.alias}
+                    teamId={match.participants.two.id!}
+                    name={match.participants.two.name!}
+                    bg="blue.5"
+                  />
+
+                  {
+                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
+                      <ScoreBoardRow
+                        key={index}
+                        game={sport.alias}
+                        name={player.name}
+                      />
+                    ))
+                  }
+                </Stack>
+              </Stack>
+            </Card> )}
+
+            {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
+            <Card p="lg">
+              <Stack gap="xl">
+                <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
+                  
+                  <Stack>
+                    <ScoreBoardHead
+                      game={sport.alias}
+                      teamId={match.participants.one.id!}
+                      name={match.participants.one.name!}
+                      bg="yellow.5"
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.one.name!}
+                    />
+                  </Stack>
+                  
+                  <Stack>
+                    <ScoreBoardHead
+                      game={sport.alias}
+                      teamId={match.participants.two.id!}
+                      name={match.participants.two.name!}
+                      bg="blue.5"
+                    />
+  
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                    <ScoreBoardRow
+                      game={sport.alias}
+                      name={match.participants.two.name!}
+                    />
+                  </Stack>
+
+                </SimpleGrid>
+              </Stack>
+            </Card> )}
+
             <FadeUpAni>
               <Grid columns={10}>
                 <Grid.Col span={{ base: 10, md: 7 }}>
@@ -1641,34 +1575,28 @@ export default function AppTournamentManagePage({
                             fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                           />
 
-                          <Text>{match.participants.one.name}</Text>
+                          <Text>{match.participants.one.name ?? "Unknown"}</Text>
                         </Group>
                         <Divider />
 
-                        <Group justify="space-between">
-                          France
-                          <Badge color="red" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
-                        <Group justify="space-between">
-                          China
-                          <Badge color="red" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
-                        <Group justify="space-between">
-                          Russia
-                          <Badge color="green" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
-                        <Group justify="space-between">
-                          Australia
-                          <Badge color="red" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
+                        {
+                          match.fmh?.fixtures?.length &&
+                          match.fmh.fixtures.length > 0 &&
+                          <>{
+                            match.fmh.fixtures.map((fixture) => (
+                              <Group justify="space-between">
+                                {fixture.opponentName ?? "Unknown"}
+                                <Badge color="red" variant="light" c="white">
+                                  BO{fixture.score + fixture.opponentScore} {fixture.score}-{fixture.opponentScore}
+                                </Badge>
+                              </Group>
+                            ))
+                          }</>
+                        }
+                        {
+                          !match.fmh?.fixtures?.length &&
+                          <Text>No History</Text>
+                        }
                       </Stack>
                     </Card>
 
@@ -1683,34 +1611,28 @@ export default function AppTournamentManagePage({
                             fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                           />
 
-                          <Text>{match.participants.two.name}</Text>
+                          <Text>{match.participants.two.name ?? "Unknown"}</Text>
                         </Group>
                         <Divider />
 
-                        <Group justify="space-between">
-                          France
-                          <Badge color="red" c="white" variant="light">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
-                        <Group justify="space-between">
-                          China
-                          <Badge color="red" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
-                        <Group justify="space-between">
-                          Russia
-                          <Badge color="green" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
-                        <Group justify="space-between">
-                          Australia
-                          <Badge color="red" variant="light" c="white">
-                            BO3 2-1
-                          </Badge>
-                        </Group>
+                        {
+                          match.tmh?.fixtures?.length &&
+                          match.tmh.fixtures.length > 0 &&
+                          <>{
+                            match.tmh.fixtures.map((fixture) => (
+                              <Group justify="space-between">
+                                {fixture.opponentName ?? "Unknown"}
+                                <Badge color="red" variant="light" c="white">
+                                  BO{fixture.score + fixture.opponentScore} {fixture.score}-{fixture.opponentScore}
+                                </Badge>
+                              </Group>
+                            ))
+                          }</>
+                        }
+                        {
+                          !match.tmh?.fixtures?.length &&
+                          <Text>No History</Text>
+                        }
                       </Stack>
                     </Card>
                   </Stack>
@@ -1914,7 +1836,7 @@ export default function AppTournamentManagePage({
                         />
 
                         <Text size={BigThenXs ? "md" : rem(8)}>
-                          {match.participants.one.name}
+                          {match.participants.one.name ?? "Unknown"}
                         </Text>
                       </Flex>
 
@@ -1947,7 +1869,7 @@ export default function AppTournamentManagePage({
 
                       <Flex align="center" gap={BigThenXs ? "md" : rem(5)}>
                         <Text size={BigThenXs ? "md" : rem(8)}>
-                          {match.participants.two.name}
+                          {match.participants.two.name ?? "Unknown"}
                         </Text>
 
                         <Image
@@ -1961,156 +1883,113 @@ export default function AppTournamentManagePage({
                     </Flex>
                   </Card>
 
-                  {(() => {
-                    const demo_data = [
-                      {
-                        date: "25 / 10 / 23",
-                        name: "Roobet Cup 2023",
-                        map: "Miraja",
-                        score: {
-                          one: 9,
-                          two: 10,
-                        },
-                      },
-                      {
-                        date: "25 / 10 / 23",
-                        name: "Roobet Cup 2023",
-                        map: "Miraja",
-                        score: {
-                          one: 9,
-                          two: 10,
-                        },
-                      },
-                      {
-                        date: "25 / 10 / 23",
-                        name: "Roobet Cup 2023",
-                        map: "Miraja",
-                        score: {
-                          one: 9,
-                          two: 10,
-                        },
-                      },
-                      {
-                        date: "25 / 10 / 23",
-                        name: "Roobet Cup 2023",
-                        map: "Miraja",
-                        score: {
-                          one: 9,
-                          two: 10,
-                        },
-                      },
-                    ];
+                  <Stack gap={0}>
+                    {
+                      match.hth?.fixtures?.length &&
+                      match.hth.fixtures.length > 0 &&
+                      match.hth.fixtures.map((data, dindex) => (
+                        <>
+                          <Paper
+                            bg={
+                              dindex % 2 === 0 ? "transparent" : "dark.5"
+                            }
+                            radius="sm"
+                            px={BigThenXs ? "xl" : "xs"}
+                            py="xs"
+                          >
+                            <Flex justify="space-between" align="center">
+                              <Group>
+                                <Text size={BigThenXs ? "sm" : rem(10)}>
+                                  {moment(data.fixtureTime / 1000).format("DD/MM/YYYY")}
+                                </Text>
 
-                    return (
-                      <>
-                        <Stack gap={0}>
-                          {Children.toArray(
-                            demo_data.map((data, dindex) => (
-                              <>
-                                <Paper
-                                  bg={
-                                    dindex % 2 === 0 ? "transparent" : "dark.5"
-                                  }
-                                  radius="sm"
-                                  px={BigThenXs ? "xl" : "xs"}
-                                  py="xs"
+                                <Divider
+                                  orientation="vertical"
+                                  size="sm"
+                                />
+
+                                <Image
+                                  src={`/api/team/logo?id=${match.participants.one.id}`}
+                                  alt="league logo"
+                                  fit="contain"
+                                  h={BigThenXs ? 20 : 10}
+                                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                />
+
+                                {BigThenXs && (
+                                  <Text size="sm">
+                                    {match.participants.one.name}
+                                  </Text>
+                                )}
+
+                                <Image
+                                  src={`/api/team/logo?id=${match.participants.two.id}`}
+                                  alt="league logo"
+                                  fit="contain"
+                                  h={20}
+                                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                />
+
+                                {BigThenXs && (
+                                  <Text size="sm">
+                                    {match.participants.two.name}
+                                  </Text>
+                                )}
+
+                                <Divider
+                                  orientation="vertical"
+                                  size="sm"
+                                  color="blue"
+                                />
+
+                                <Text
+                                  size={BigThenXs ? "sm" : rem(10)}
+                                  visibleFrom="sm"
                                 >
-                                  <Flex justify="space-between" align="center">
-                                    <Group>
-                                      <Text size={BigThenXs ? "sm" : rem(10)}>
-                                        {data.date}
-                                      </Text>
+                                  {data.name}
+                                </Text>
+                              </Group>
 
-                                      <Divider
-                                        orientation="vertical"
-                                        size="sm"
-                                      />
+                              <Group gap={SmallThenSm ? rem(7) : "md"}>
+                                {sport.alias !== "lol" && (
+                                  <>
+                                    <Text
+                                      size={BigThenXs ? "sm" : rem(8)}
+                                      hiddenFrom="sm"
+                                    >
+                                      {data.name}
+                                    </Text>
+                                    <Text
+                                      size={BigThenXs ? "sm" : rem(8)}
+                                      tt="uppercase"
+                                      c="dimmed"
+                                    >
+                                      {data.map}
+                                    </Text>
 
-                                      <Image
-                                        src={`/api/team/logo?id=${match.participants.one.id}`}
-                                        alt="league logo"
-                                        fit="contain"
-                                        h={BigThenXs ? 20 : 10}
-                                        fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                      />
+                                    <Divider
+                                      orientation="vertical"
+                                      size="sm"
+                                    />
+                                  </>
+                                )}
 
-                                      {BigThenXs && (
-                                        <Text size="sm">
-                                          {match.participants.one.name}
-                                        </Text>
-                                      )}
-
-                                      <Image
-                                        src={`/api/team/logo?id=${match.participants.two.id}`}
-                                        alt="league logo"
-                                        fit="contain"
-                                        h={20}
-                                        fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                      />
-
-                                      {BigThenXs && (
-                                        <Text size="sm">
-                                          {match.participants.two.name}
-                                        </Text>
-                                      )}
-
-                                      <Divider
-                                        orientation="vertical"
-                                        size="sm"
-                                        color="blue"
-                                      />
-
-                                      <Text
-                                        size={BigThenXs ? "sm" : rem(10)}
-                                        visibleFrom="sm"
-                                      >
-                                        {data.name}
-                                      </Text>
-                                    </Group>
-
-                                    <Group gap={SmallThenSm ? rem(7) : "md"}>
-                                      {sport.alias !== "lol" && (
-                                        <>
-                                          <Text
-                                            size={BigThenXs ? "sm" : rem(8)}
-                                            hiddenFrom="sm"
-                                          >
-                                            {data.name}
-                                          </Text>
-                                          <Text
-                                            size={BigThenXs ? "sm" : rem(8)}
-                                            tt="uppercase"
-                                            c="dimmed"
-                                          >
-                                            {data.map}
-                                          </Text>
-
-                                          <Divider
-                                            orientation="vertical"
-                                            size="sm"
-                                          />
-                                        </>
-                                      )}
-
-                                      <Text size={BigThenXs ? "sm" : rem(10)}>
-                                        <Text inherit span c="red">
-                                          {data.score.one}
-                                        </Text>{" "}
-                                        -{" "}
-                                        <Text inherit span c="green">
-                                          {data.score.two}
-                                        </Text>
-                                      </Text>
-                                    </Group>
-                                  </Flex>
-                                </Paper>
-                              </>
-                            ))
-                          )}
-                        </Stack>
-                      </>
-                    );
-                  })()}
+                                <Text size={BigThenXs ? "sm" : rem(10)}>
+                                  <Text inherit span c="red">
+                                    {data.score.one}
+                                  </Text>{" "}
+                                  -{" "}
+                                  <Text inherit span c="green">
+                                    {data.score.two}
+                                  </Text>
+                                </Text>
+                              </Group>
+                            </Flex>
+                          </Paper>
+                        </>
+                      ))
+                    }
+                  </Stack>
                 </Stack>
               </Card>
             </FadeUpAni>

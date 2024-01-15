@@ -56,8 +56,6 @@ export class FixtureStream {
 
     const validatedRes = this.Zod.Response.safeParse(rawData);
 
-    console.log(JSON.stringify(validatedRes))
-
     if (!validatedRes.success) {
       SportApiLogger.error({
         err: validatedRes.error,

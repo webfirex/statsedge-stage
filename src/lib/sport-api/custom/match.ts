@@ -3,6 +3,8 @@ import { SportApiLogger } from "../core";
 import { FixtureGet } from "../fixture/get";
 import { TeamGet } from "../team/get";
 import { FixtureStream } from "../fixture/stream";
+import { FixtureOdd } from "../fixture/odds";
+import { TeamForm } from "../team/form";
 
 export class CustomMatch {
   public static readonly Route = "CustomMatch";
@@ -148,9 +150,19 @@ export class CustomMatch {
     //   })
     // );
 
-    const stream = await FixtureStream.Call({
-      id: params.id,
-    });
+    const [stream, odds, hth, fmh, tmh] = await Promise.all([
+      FixtureStream.Call({ id: params.id }),
+      FixtureOdd.Call({ id: params.id }),
+      TeamForm.Call({
+        id: TeamOne.id ?? 0,
+        opponentId: TeamTwo.id ?? 0,
+      }),
+      TeamForm.Call({ id: TeamOne.id ?? 0 }),
+      TeamForm.Call({ id: TeamTwo.id ?? 0 }),
+    ]);
+
+    const TeamOneOdds = odds?.map_total_rounds_over_under ?? [];
+    const TeamTwoOdds = odds?.map_total_rounds_over_under ?? [];
 
     return {
       ...fixture,
@@ -158,6 +170,13 @@ export class CustomMatch {
         one: TeamOne,
         two: TeamTwo,
       },
+      odds: {
+        one: TeamOneOdds,
+        two: TeamTwoOdds,
+      },
+      hth,
+      fmh,
+      tmh,
       streams: stream?.streams,
     };
   };
