@@ -15,13 +15,13 @@ class MapZod {
     teamStats: z
       .array(
         z.object({
-          kills: z.number(),
-          deaths: z.number(),
-          teamId: z.number(),
-          assists: z.number(),
-          suicides: z.number(),
-          headshots: z.number(),
-          entryKills: z.number(),
+          kills: z.number().optional(),
+          deaths: z.number().optional(),
+          teamId: z.number().optional(),
+          assists: z.number().optional(),
+          suicides: z.number().optional(),
+          headshots: z.number().optional(),
+          entryKills: z.number().optional(),
         })
       )
       .optional(),
@@ -38,6 +38,11 @@ class MapZod {
     status: this.$Status,
     mapNumber: z.number(),
   });
+
+  public static VALORANT = z.object({
+    status: this.$Status,
+    mapNumber: z.number(),
+  })
 
   public static DOTA2 = z.object({
     mapNumber: z.number(),

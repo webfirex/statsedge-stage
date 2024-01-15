@@ -25,7 +25,7 @@ export class FixtureGet {
         sport: SportApiZod.Sport,
         participants: z.array(SportApiZod.Participants),
         links: z.array(SportApiZod.Links),
-        maps: z.array(z.any()).optional(),
+        maps: z.array(SportApiZod.Map.Base).optional(),
         // maps: z.array(SportApiZod.Map.Base).optional(),
       })
       .nullable(),
@@ -36,7 +36,7 @@ export class FixtureGet {
   ): Promise<z.infer<typeof this.Zod.Response>> => {
     const url = SportApiCore.URL(`${this.Path}/${params.id}`);
 
-    console.log("*****", url)
+    console.log("-----", url)
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),

@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { SportApiCore, SportApiLogger } from "../core";
 
-export class TeamForm {
-  public static readonly Route = "TeamForm";
-  public static readonly Path = "/v1/participants/{}/form";
+export class MapPBGet {
+  public static readonly Route = "MapPBGet";
+  public static readonly Path = "/v1/pickban/{}/maps";
 
   public static readonly Zod = {
     Params: z.object({
@@ -13,16 +13,12 @@ export class TeamForm {
 
     Response: z
       .object({
-        teamName: z.string(),
-        fixtures: z.array(z.object({
-          opponentName: z.string().nullable(),
-          score: z.number(),
-          opponentScore: z.number(),
-          fixtureTime: z.number(),
-          fixtureId: z.number(),
-          competitionName: z.string().optional().nullable(),
-          mapName: z.string().optional().nullable()
-        })).nullable()
+        pickBan: z.array(z.object({
+          order: z.number(),
+          teamId: z.number().nullable(),
+          pickOrBan: z.string(),
+          mapName: z.string()
+        }))
       })
       .nullable(),
   };
@@ -30,7 +26,9 @@ export class TeamForm {
   public static Call = async (
     params: z.infer<typeof this.Zod.Params>
   ): Promise<z.infer<typeof this.Zod.Response>> => {
-    const url = SportApiCore.URL(this.Path.replace("{}", params.id.toString()) + `?count=5${params.opponentId ? "&opponent=" + params.opponentId.toString() : ""}`);
+    const url = SportApiCore.URL(this.Path.replace("{}", params.id.toString()));
+
+    console.log("+++++", url.toString());
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),

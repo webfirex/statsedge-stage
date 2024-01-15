@@ -5,6 +5,7 @@ import { TeamGet } from "../team/get";
 import { FixtureStream } from "../fixture/stream";
 import { FixtureOdd } from "../fixture/odds";
 import { TeamForm } from "../team/form";
+import { MapPBGet } from "../map/pbget";
 
 export class CustomMatch {
   public static readonly Route = "CustomMatch";
@@ -161,6 +162,8 @@ export class CustomMatch {
       TeamForm.Call({ id: TeamTwo.id ?? 0 }),
     ]);
 
+    const pbmaps = await MapPBGet.Call({ id: params.id });
+
     if(hth?.fixtures?.length && hth.fixtures.length > 0) {
       const fixtures = await Promise.all(hth.fixtures.map(async (fixture) => {
         return await FixtureGet.Call({ id: fixture.fixtureId });
@@ -188,6 +191,7 @@ export class CustomMatch {
       hth,
       fmh,
       tmh,
+      pbmaps,
       streams: stream?.streams,
     };
   };

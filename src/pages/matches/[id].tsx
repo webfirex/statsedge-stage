@@ -1220,85 +1220,42 @@ export default function AppTournamentManagePage({
                           <Text c="indigo">Picked</Text>
                         </Flex>
                         <Card>
-                          <Flex align="center" py="xs">
-                            <Text>Ancient</Text>
-                            <Box miw={100} ta="center" ml="auto">
-                              <Image
-                                src={`/api/team/logo?id=${match.participants.one.id}`}
-                                alt="league logo"
-                                fit="contain"
-                                h={30}
-                                ml="auto"
-                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                              />
-                            </Box>
-                            <Box miw={60} ta="center">
-                              <Text>-</Text>
-                            </Box>
-                          </Flex>
-                          <Divider />
-                          <Flex align="center" py="xs">
-                            <Text>Nuke</Text>
-                            <Box miw={100} ta="center" ml="auto">
-                              <Image
-                                src={`/api/team/logo?id=${match.participants.two.id}`}
-                                alt="league logo"
-                                fit="contain"
-                                h={30}
-                                ml="auto"
-                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                              />
-                            </Box>
-                            <Box miw={60} ta="center">
-                              <Text>-</Text>
-                            </Box>
-                          </Flex>
-                          <Divider />
-                          <Flex align="center" py="xs">
-                            <Text>Vertigo</Text>
-                            <Box miw={100} ta="center" ml="auto">
-                              <Text>-</Text>
-                            </Box>
-                            <Box miw={60} ta="center">
-                              <Image
-                                src={`/api/team/logo?id=${match.participants.one.id}`}
-                                alt="league logo"
-                                fit="contain"
-                                h={30}
-                                ml="auto"
-                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                              />
-                            </Box>
-                          </Flex>
-                          <Divider />
-                          <Flex align="center" py="xs">
-                            <Text>Mirage</Text>
-                            <Box miw={100} ta="center" ml="auto">
-                              <Text>-</Text>
-                            </Box>
-                            <Box miw={60} ta="center">
-                              <Image
-                                src={`/api/team/logo?id=${match.participants.two.id}`}
-                                alt="league logo"
-                                fit="contain"
-                                h={30}
-                                ml="auto"
-                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                              />
-                            </Box>
-                          </Flex>
-                          <Divider />
-                          <Flex align="center" py="xs">
-                            <Text>Overpass</Text>
-                            <Box miw={100} ta="center" ml="auto">
-                              <Text>-</Text>
-                            </Box>
-                            <Box miw={60} ta="center">
-                              <Text>-</Text>
-                            </Box>
-                          </Flex>
+                          {
+                            match.pbmaps?.pickBan.map((map, index) => (
+                              <>
+                                <Flex key={index} align="center" py="xs">
+                                  <Text>{map.mapName}</Text>
+                                  <Box miw={100} ta="center" ml="auto">
+                                    {
+                                      map.pickOrBan === "ban" ? 
+                                      <Image
+                                        src={`/api/team/logo?id=${map.teamId}`}
+                                        alt="league logo"
+                                        fit="contain"
+                                        h={30}
+                                        ml="auto"
+                                        fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                      /> : <Text>-</Text>
+                                    }
+                                  </Box>
+                                  <Box miw={60} ta="center">
+                                    {
+                                      map.pickOrBan === "pick" ? 
+                                      <Image
+                                        src={`/api/team/logo?id=${map.teamId}`}
+                                        alt="league logo"
+                                        fit="contain"
+                                        h={30}
+                                        ml="auto"
+                                        fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                      /> : <Text>-</Text>
+                                    }
+                                  </Box>
+                                </Flex>
+                              </>
+                           ))
+                          }
                         </Card>
-                        <Text c="indigo" ta="center">Overpass was left Over</Text>
                       </Stack>
                     }
                   </SimpleGrid>
