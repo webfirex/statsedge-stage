@@ -1583,8 +1583,8 @@ export default function AppTournamentManagePage({
                           match.fmh?.fixtures?.length &&
                           match.fmh.fixtures.length > 0 &&
                           <>{
-                            match.fmh.fixtures.map((fixture) => (
-                              <Group justify="space-between">
+                            match.fmh.fixtures.map((fixture, index) => (
+                              <Group key={index} justify="space-between">
                                 {fixture.opponentName ?? "Unknown"}
                                 <Badge color="red" variant="light" c="white">
                                   BO{fixture.score + fixture.opponentScore} {fixture.score}-{fixture.opponentScore}
@@ -1619,8 +1619,8 @@ export default function AppTournamentManagePage({
                           match.tmh?.fixtures?.length &&
                           match.tmh.fixtures.length > 0 &&
                           <>{
-                            match.tmh.fixtures.map((fixture) => (
-                              <Group justify="space-between">
+                            match.tmh.fixtures.map((fixture, index) => (
+                              <Group key={index} justify="space-between">
                                 {fixture.opponentName ?? "Unknown"}
                                 <Badge color="red" variant="light" c="white">
                                   BO{fixture.score + fixture.opponentScore} {fixture.score}-{fixture.opponentScore}
@@ -1893,6 +1893,7 @@ export default function AppTournamentManagePage({
                             bg={
                               dindex % 2 === 0 ? "transparent" : "dark.5"
                             }
+                            key={dindex}
                             radius="sm"
                             px={BigThenXs ? "xl" : "xs"}
                             py="xs"
