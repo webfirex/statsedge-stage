@@ -8,17 +8,19 @@ export class MapPBGet {
   public static readonly Zod = {
     Params: z.object({
       id: z.number(),
-      opponentId: z.number().optional()
+      opponentId: z.number().optional(),
     }),
 
     Response: z
       .object({
-        pickBan: z.array(z.object({
-          order: z.number(),
-          teamId: z.number().nullable(),
-          pickOrBan: z.string(),
-          mapName: z.string()
-        }))
+        pickBan: z.array(
+          z.object({
+            order: z.number(),
+            teamId: z.number().nullable(),
+            pickOrBan: z.string(),
+            mapName: z.string(),
+          })
+        ),
       })
       .nullable(),
   };
@@ -50,8 +52,7 @@ export class MapPBGet {
         route: this.Route,
       });
 
-      // throw new Error("Error while fetching team");
-      return null;
+      throw new Error("Error while fetching team");
     }
 
     const rawData: unknown = await rawRes.json();
@@ -68,8 +69,7 @@ export class MapPBGet {
         route: this.Route,
       });
 
-      // throw new Error("Error while validating team");
-      return null;
+      throw new Error("Error while validating team");
     }
 
     return validatedRes.data;

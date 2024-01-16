@@ -49,8 +49,7 @@ import {
   IconLetterK,
   IconShieldFilled,
 } from "@tabler/icons-react";
-import moment from 'moment';
-// import { PlayerGet } from "~/lib/sport-api/player/get";
+import moment from "moment";
 
 const ReactTwitchEmbedVideo = dynamic(
   () => import("react-twitch-embed-video"),
@@ -85,8 +84,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     "public, s-maxage=30, stale-while-revalidate=30"
   );
 
-  // console.log(JSON.stringify(match, null, 2));
-
   return {
     props: {
       match,
@@ -107,7 +104,12 @@ const PlayerCard = (props: { id: number; name: string }) => {
         }}
       >
         <Stack gap={5} mb={BigThenXs ? 0 : rem(10)}>
-          <Image src="/playerimg.png" alt={props.name} radius={6} fit="contain" />
+          <Image
+            src="/playerimg.png"
+            alt={props.name}
+            radius={6}
+            fit="contain"
+          />
 
           <Group justify="center" gap={5}>
             <Text ta="center" size={BigThenXs ? rem(15) : rem(9)}>
@@ -153,13 +155,27 @@ const ScoreBoardHead = (props: {
 
         {props.game == "cs2" && (
           <Flex gap={BigThenXs ? rem(20) : rem(2)} align="center">
-            <Box miw={30} ta="center"><IconCurrencyDollar size={iconXs} /></Box>
-            <Box miw={25} ta="center"><IconCross size={iconXs} /></Box>
-            <Box miw={25} ta="center"><IconShieldFilled size={iconXs} /></Box>
-            <Box miw={25} ta="center"><IconLetterK size={iconXs} /></Box>
-            <Box miw={25} ta="center"><IconLetterA size={iconXs} /></Box>
-            <Box miw={25} ta="center"><IconLetterD size={iconXs} /></Box>
-            <Box miw={30} ta="center" display="flex"><Text size={BigThenXs ? rem(18) : rem(11)}>ADR</Text></Box>
+            <Box miw={30} ta="center">
+              <IconCurrencyDollar size={iconXs} />
+            </Box>
+            <Box miw={25} ta="center">
+              <IconCross size={iconXs} />
+            </Box>
+            <Box miw={25} ta="center">
+              <IconShieldFilled size={iconXs} />
+            </Box>
+            <Box miw={25} ta="center">
+              <IconLetterK size={iconXs} />
+            </Box>
+            <Box miw={25} ta="center">
+              <IconLetterA size={iconXs} />
+            </Box>
+            <Box miw={25} ta="center">
+              <IconLetterD size={iconXs} />
+            </Box>
+            <Box miw={30} ta="center" display="flex">
+              <Text size={BigThenXs ? rem(18) : rem(11)}>ADR</Text>
+            </Box>
           </Flex>
         )}
         {props.game == "valorant" && (
@@ -259,7 +275,9 @@ const ScoreBoardRow = (props: { name: string; game: string }) => {
 
         {props.game == "cs2" && (
           <Flex gap={BigThenXs ? rem(20) : rem(2)}>
-            <Box miw={30} ta="center"><Text size={iconXs}>$4950</Text></Box>
+            <Box miw={30} ta="center">
+              <Text size={iconXs}>$4950</Text>
+            </Box>
             <Flex miw={25}>
               <Progress
                 my="auto"
@@ -270,11 +288,21 @@ const ScoreBoardRow = (props: { name: string; game: string }) => {
                 size="sm"
               />
             </Flex>
-            <Box miw={25} ta="center"><Text size={iconXs}>200</Text></Box>
-            <Box miw={25} ta="center"><Text size={iconXs}>23</Text></Box>
-            <Box miw={25} ta="center"><Text size={iconXs}>6</Text></Box>
-            <Box miw={25} ta="center"><Text size={iconXs}>12</Text></Box>
-            <Box miw={30} ta="center"><Text size={iconXs}>963.0</Text></Box>
+            <Box miw={25} ta="center">
+              <Text size={iconXs}>200</Text>
+            </Box>
+            <Box miw={25} ta="center">
+              <Text size={iconXs}>23</Text>
+            </Box>
+            <Box miw={25} ta="center">
+              <Text size={iconXs}>6</Text>
+            </Box>
+            <Box miw={25} ta="center">
+              <Text size={iconXs}>12</Text>
+            </Box>
+            <Box miw={30} ta="center">
+              <Text size={iconXs}>963.0</Text>
+            </Box>
           </Flex>
         )}
         {props.game == "valorant" && (
@@ -444,22 +472,10 @@ export default function AppTournamentManagePage({
     );
   }
 
-  console.log(match);
   const teamOneLength =
     match.participants.one.team?.most_recent_lineup?.length ?? 0;
   const teamTwoLength =
     match.participants.two.team?.most_recent_lineup?.length ?? 0;
-
-  const teamOneId = match.participants.one.id;
-  const teamTwoId = match.participants.two.id;
-
-  const teamOneTotalScore = match.maps?.reduce((totalScore, map) => totalScore + (map.roundScores?.[0]?.roundsWon ?? 0), 0);
-  const teamTwoTotalScore = match.maps?.reduce((totalScore, map) => totalScore + (map.roundScores?.[1]?.roundsWon ?? 0), 0);
-
-  const teamOneOdd = match.odds.one.length ? match.odds.one.reduce((totalOdd, odd) => totalOdd + (odd.decimalOdd ?? 0), 0) / (match.odds.one.length ? match.odds.one.length : 1) : "NA";
-  const teamTwoOdd = match.odds.two.length ? match.odds.two.reduce((totalOdd, odd) => totalOdd + (odd.decimalOdd ?? 0), 0) / (match.odds.two.length ? match.odds.two.length : 1) : "NA";
-
-  // const teamOneTotalScore = match.maps?.reduce((totalScore, map) => totalScore + map.roundScores[1]?.roundsWon);
 
   const teamLength =
     teamOneLength > teamTwoLength ? teamOneLength : teamTwoLength;
@@ -612,9 +628,7 @@ export default function AppTournamentManagePage({
                       />
                     </Card>
 
-                    <Title order={BigThenXs ? 3 : 5}>
-                      {teamOneTotalScore}:{teamTwoTotalScore}
-                    </Title>
+                    <Title order={BigThenXs ? 3 : 5}>1:3</Title>
 
                     <Card
                       p={BigThenXs ? "md" : "xs"}
@@ -769,9 +783,7 @@ export default function AppTournamentManagePage({
                         px={BigThenXs ? rem(6) : rem(5)}
                         py={BigThenXs ? rem(3) : rem(5)}
                       >
-                        <Text size={BigThenXs ? "md" : rem(10)}>
-                          {teamOneOdd}
-                        </Text>
+                        <Text size={BigThenXs ? "md" : rem(10)}>4</Text>
                       </Paper>
                     </Flex>
 
@@ -795,9 +807,7 @@ export default function AppTournamentManagePage({
                         px={BigThenXs ? rem(6) : rem(5)}
                         py={BigThenXs ? rem(3) : rem(5)}
                       >
-                        <Text size={BigThenXs ? "md" : rem(10)}>
-                          {teamTwoOdd}
-                        </Text>
+                        <Text size={BigThenXs ? "md" : rem(10)}>4</Text>
                       </Paper>
 
                       <Text size={BigThenXs ? "lg" : rem(10)}>
@@ -844,7 +854,7 @@ export default function AppTournamentManagePage({
                       />
                     </Group>
 
-                    {(match.streams?.length ?? 0) >= 0 ? (
+                    {(match.streams?.streams.length ?? 0) >= 0 ? (
                       <ReactTwitchEmbedVideo
                         width="100%"
                         channel="talk2megooseman"
@@ -864,208 +874,441 @@ export default function AppTournamentManagePage({
               </>
             )}
 
-            {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
-              <FadeUpAni>
-                <Grid columns={10}>
-                  <Grid.Col span={{ base: 10, md: 5 }}>
-                    <Card>
-
-                      <SegmentedControl
-                        h={50}
-                        size="xs"
-                        color="black"
-                        radius="ms"
-                        styles={{
-                          label: {
-                            height: "100%",
-                          },
-                          root: {
-                            background: "transparent",
-                            border: "1px solid var(--mantine-color-dimmed)",
-                          },
-                        }}
-                        data={[
-                          {
-                            value: "match1",
-                            label: (
-                              <>
-                                <Text size="xs" h={"100%"} py={5} my={3} c={"#fff"} mx="md">
-                                  Match 1
-                                </Text>
-                              </>
-                            ),
-                          },
-                          {
-                            value: "match2",
-                            label: (
-                              <>
-                                <Text size="xs" h={"100%"} py={5} my={3} c={"#fff"} mx="md">
-                                  Match 2
-                                </Text>
-                              </>
-                            ),
-                          },
-                          {
-                            value: "match3",
-                            label: (
-                              <>
-                                <Text size="xs" h={"100%"} py={5} my={3} c={"#fff"} mx="md">
-                                  Match 3
-                                </Text>
-                              </>
-                            ),
-                          },
-                        ]}
-                      />
-
-                      <Box display={"flex"} w="100%" p="md" style={{ justifyContent: "space-between", }}>
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.one.id!}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={BigThenXs ? 50 : 25}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+            {match.status !== "Scheduled" &&
+              sport.alias !== "cs2" &&
+              sport.alias !== "rl" &&
+              sport.alias !== "val" &&
+              sport.alias !== "codmwiii" && (
+                <FadeUpAni>
+                  <Grid columns={10}>
+                    <Grid.Col span={{ base: 10, md: 5 }}>
+                      <Card>
+                        <SegmentedControl
+                          h={50}
+                          size="xs"
+                          color="black"
+                          radius="ms"
+                          styles={{
+                            label: {
+                              height: "100%",
+                            },
+                            root: {
+                              background: "transparent",
+                              border: "1px solid var(--mantine-color-dimmed)",
+                            },
+                          }}
+                          data={[
+                            {
+                              value: "match1",
+                              label: (
+                                <>
+                                  <Text
+                                    size="xs"
+                                    h={"100%"}
+                                    py={5}
+                                    my={3}
+                                    c={"#fff"}
+                                    mx="md"
+                                  >
+                                    Match 1
+                                  </Text>
+                                </>
+                              ),
+                            },
+                            {
+                              value: "match2",
+                              label: (
+                                <>
+                                  <Text
+                                    size="xs"
+                                    h={"100%"}
+                                    py={5}
+                                    my={3}
+                                    c={"#fff"}
+                                    mx="md"
+                                  >
+                                    Match 2
+                                  </Text>
+                                </>
+                              ),
+                            },
+                            {
+                              value: "match3",
+                              label: (
+                                <>
+                                  <Text
+                                    size="xs"
+                                    h={"100%"}
+                                    py={5}
+                                    my={3}
+                                    c={"#fff"}
+                                    mx="md"
+                                  >
+                                    Match 3
+                                  </Text>
+                                </>
+                              ),
+                            },
+                          ]}
                         />
 
-                        <Box display={"flex"} style={{ flexDirection: "column", }}>
-                          <p style={{textAlign: "center"}}>MATCH ENDED</p>
-                          <Box display={"flex"} style={{ gap: "10px", }}>
-                            <Box display={"flex"} style={{ flexDirection: "column", }}>
-                              <Title order={3}>{match.participants.one.score}</Title>
-                            </Box>
-                            <Box display={"flex"} style={{flexDirection: "column", alignItems: "center"}}>
-                              <Text c="dark" size="sm">
-                                Duration
-                              </Text>
-                              <Text>
-                                {
-                                  match.endTime ? (
-                                    <>{moment(match.endTime).diff(moment(match.startTime), "m")} : {moment(match.endTime).diff(moment(match.startTime), "s") % 60}</>
-                                  ) : <></>
-                                }
-                              </Text>
-                            </Box>
-                            <Box display={"flex"} style={{ flexDirection: "column", }}>
-                              <Title order={3}>{match.participants.two.score}</Title>
+                        <Box
+                          display={"flex"}
+                          w="100%"
+                          p="md"
+                          style={{ justifyContent: "space-between" }}
+                        >
+                          <Image
+                            src={`/api/team/logo?id=${match.participants.one
+                              .id!}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 50 : 25}
+                            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          />
+
+                          <Box
+                            display={"flex"}
+                            style={{ flexDirection: "column" }}
+                          >
+                            <p style={{ textAlign: "center" }}>MATCH ENDED</p>
+                            <Box display={"flex"} style={{ gap: "10px" }}>
+                              <Box
+                                display={"flex"}
+                                style={{ flexDirection: "column" }}
+                              >
+                                <Title order={3}>
+                                  {match.participants.one.score}
+                                </Title>
+                              </Box>
+                              <Box
+                                display={"flex"}
+                                style={{
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Text c="dark" size="sm">
+                                  Duration
+                                </Text>
+                                <Text>
+                                  {match.endTime ? (
+                                    <>
+                                      {moment(match.endTime).diff(
+                                        moment(match.startTime),
+                                        "m"
+                                      )}{" "}
+                                      :{" "}
+                                      {moment(match.endTime).diff(
+                                        moment(match.startTime),
+                                        "s"
+                                      ) % 60}
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={"flex"}
+                                style={{ flexDirection: "column" }}
+                              >
+                                <Title order={3}>
+                                  {match.participants.two.score}
+                                </Title>
+                              </Box>
                             </Box>
                           </Box>
+
+                          <Image
+                            src={`/api/team/logo?id=${match.participants.two
+                              .id!}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 50 : 25}
+                            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          />
                         </Box>
 
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.two.id!}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={BigThenXs ? 50 : 25}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-
-                      </Box>
-
-                      <Flex direction="column" gap="sm">
-                        <Flex justify="space-between">
-                          <Text c="red">5</Text>
-                          <Text>Turrets</Text>
-                          <Text c="blue">9</Text>
+                        <Flex direction="column" gap="sm">
+                          <Flex justify="space-between">
+                            <Text c="red">5</Text>
+                            <Text>Turrets</Text>
+                            <Text c="blue">9</Text>
+                          </Flex>
+                          <Divider />
+                          <Flex justify="space-between">
+                            <Text c="red">0</Text>
+                            <Text>Inhibitors</Text>
+                            <Text c="blue">2</Text>
+                          </Flex>
+                          <Divider />
+                          <Flex justify="space-between">
+                            <Text c="red">0</Text>
+                            <Text>Barons</Text>
+                            <Text c="blue">0</Text>
+                          </Flex>
+                          <Divider />
+                          <Flex justify="space-between">
+                            <Text c="red">0</Text>
+                            <Text>Dragons</Text>
+                            <Text c="blue">0</Text>
+                          </Flex>
                         </Flex>
-                        <Divider />
-                        <Flex justify="space-between">
-                          <Text c="red">0</Text>
-                          <Text>Inhibitors</Text>
-                          <Text c="blue">2</Text>
-                        </Flex>
-                        <Divider />
-                        <Flex justify="space-between">
-                          <Text c="red">0</Text>
-                          <Text>Barons</Text>
-                          <Text c="blue">0</Text>
-                        </Flex>
-                        <Divider />
-                        <Flex justify="space-between">
-                          <Text c="red">0</Text>
-                          <Text>Dragons</Text>
-                          <Text c="blue">0</Text>
-                        </Flex>
-                      </Flex>
+                      </Card>
+                    </Grid.Col>
 
-                    </Card>
-                  </Grid.Col>
+                    <Grid.Col span={{ base: 10, md: 5 }}>
+                      <Card>
+                        <Title
+                          order={5}
+                          p={"md"}
+                          tt={"uppercase"}
+                          ta={"center"}
+                          style={{
+                            backgroundColor: "#4a4848",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          Champions
+                        </Title>
 
-                  <Grid.Col span={{ base: 10, md: 5 }}>
-                    <Card>
-                      <Title order={5} p={"md"} tt={"uppercase"} ta={"center"} style={{
-                        backgroundColor: "#4a4848",
-                        borderRadius: "10px",
-                      }}>Champions</Title>
+                        <Box
+                          display={"flex"}
+                          p={"sm"}
+                          w={"100%"}
+                          style={{
+                            gap: "10px",
+                            borderBottom: "1px solid #4a4848",
+                          }}
+                        >
+                          <Image
+                            src={`/api/team/logo?id=${match.participants.one
+                              .id!}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 15}
+                            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          />
+                          {match.participants.one.name}
+                        </Box>
 
-                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "10px", borderBottom: "1px solid #4a4848", }}>
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.one.id!}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={BigThenXs ? 20 : 15}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-                        {match.participants.one.name}
-                      </Box>
-                      
-                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
-                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Ban</Box>
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                      </Box>
-                      
-                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
-                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Pick</Box>
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                      </Box>
+                        <Box
+                          display={"flex"}
+                          p={"sm"}
+                          w={"100%"}
+                          style={{ gap: "20px", alignItems: "center" }}
+                        >
+                          <Box
+                            bg={"#090909"}
+                            py={"xs"}
+                            px={"md"}
+                            style={{ borderRadius: "10px" }}
+                          >
+                            Ban
+                          </Box>
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                        </Box>
 
-                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "10px", borderBottom: "1px solid #4a4848", }}>
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.two.id!}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={BigThenXs ? 20 : 15}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-                        {match.participants.two.name}
-                      </Box>
-                      
-                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
-                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Ban</Box>
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                      </Box>
-                      
-                      <Box display={"flex"} p={"sm"} w={"100%"} style={{ gap: "20px", alignItems: "center" }}>
-                        <Box bg={"#090909"} py={"xs"} px={"md"} style={{ borderRadius: "10px", }} >Pick</Box>
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                        <Image src="/item.png" w={SmallThenSm ? 12 : 28} h={SmallThenSm ? 12 : 28} alt="Item" />
-                      </Box>
+                        <Box
+                          display={"flex"}
+                          p={"sm"}
+                          w={"100%"}
+                          style={{ gap: "20px", alignItems: "center" }}
+                        >
+                          <Box
+                            bg={"#090909"}
+                            py={"xs"}
+                            px={"md"}
+                            style={{ borderRadius: "10px" }}
+                          >
+                            Pick
+                          </Box>
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                        </Box>
 
-                    </Card>
-                  </Grid.Col>
-                </Grid>
-              </FadeUpAni>
-            )}
+                        <Box
+                          display={"flex"}
+                          p={"sm"}
+                          w={"100%"}
+                          style={{
+                            gap: "10px",
+                            borderBottom: "1px solid #4a4848",
+                          }}
+                        >
+                          <Image
+                            src={`/api/team/logo?id=${match.participants.two
+                              .id!}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 15}
+                            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          />
+                          {match.participants.two.name}
+                        </Box>
+
+                        <Box
+                          display={"flex"}
+                          p={"sm"}
+                          w={"100%"}
+                          style={{ gap: "20px", alignItems: "center" }}
+                        >
+                          <Box
+                            bg={"#090909"}
+                            py={"xs"}
+                            px={"md"}
+                            style={{ borderRadius: "10px" }}
+                          >
+                            Ban
+                          </Box>
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                        </Box>
+
+                        <Box
+                          display={"flex"}
+                          p={"sm"}
+                          w={"100%"}
+                          style={{ gap: "20px", alignItems: "center" }}
+                        >
+                          <Box
+                            bg={"#090909"}
+                            py={"xs"}
+                            px={"md"}
+                            style={{ borderRadius: "10px" }}
+                          >
+                            Pick
+                          </Box>
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                          <Image
+                            src="/item.png"
+                            w={SmallThenSm ? 12 : 28}
+                            h={SmallThenSm ? 12 : 28}
+                            alt="Item"
+                          />
+                        </Box>
+                      </Card>
+                    </Grid.Col>
+                  </Grid>
+                </FadeUpAni>
+              )}
 
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
               sport.alias !== "rl" && (
                 <FadeUpAni>
-                  <SimpleGrid cols={{ base: 1, md: sport.alias === "codmwiii" ? 1 : 2 }}>
+                  <SimpleGrid
+                    cols={{ base: 1, md: sport.alias === "codmwiii" ? 1 : 2 }}
+                  >
                     <Card p="lg">
                       <Stack>
                         <Title order={5} tt="uppercase">
@@ -1074,9 +1317,14 @@ export default function AppTournamentManagePage({
 
                         <Divider />
 
-                        <SimpleGrid cols={{base: sport.alias === "codmwiii" ? 3 : 1, md: sport.alias === "codmwiii" ? 4 : 1}}>
+                        <SimpleGrid
+                          cols={{
+                            base: sport.alias === "codmwiii" ? 3 : 1,
+                            md: sport.alias === "codmwiii" ? 4 : 1,
+                          }}
+                        >
                           {Children.toArray(
-                            Array.from(match.maps ?? []).map((map) => (
+                            Array.from(match.maps?.pickBan ?? []).map((map) => (
                               <>
                                 <Card
                                   style={{
@@ -1093,113 +1341,147 @@ export default function AppTournamentManagePage({
                                       zIndex: 2,
                                     }}
                                   >
-                                    {
-                                      match.status === "Scheduled" &&
+                                    {match.status === "Scheduled" && (
                                       <Flex align="center" justify="center">
                                         <Title order={3} ta="center">
                                           {map.mapName}
                                         </Title>
                                       </Flex>
-                                    }
+                                    )}
 
-                                    {match.status !== "Scheduled" && (sport.alias === "cs2" || sport.alias === "valorant") &&
-                                      <Flex align="center" justify="space-between">
-                                        <Title order={3}>
-                                          {map.mapName}
-                                        </Title>
+                                    {match.status !== "Scheduled" &&
+                                      (sport.alias === "cs2" ||
+                                        sport.alias === "valorant") && (
                                         <Flex
-                                          justify="space-between"
                                           align="center"
-                                          gap={SmallThenSm ? "sm" : "xl"}
+                                          justify="space-between"
                                         >
+                                          <Title order={3}>{map.mapName}</Title>
                                           <Flex
-                                            direction="column"
+                                            justify="space-between"
                                             align="center"
-                                            justify="center"
+                                            gap={SmallThenSm ? "sm" : "xl"}
                                           >
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.one.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="red">{map.roundScores[0]?.roundsWon}</Text>
-                                          </Flex>
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                            bg="black"
-                                            p="sm"
-                                          >
-                                            <Text size="sm">Stats</Text>
-                                            <Text>
-                                              {map.roundScores[0]?.halfScores[0]}:{map.roundScores[1]?.halfScores[0]}
-                                              &nbsp;|&nbsp;
-                                              {map.roundScores[0]?.halfScores[1]}:{map.roundScores[1]?.halfScores[1]}
-                                            </Text>
-                                          </Flex>
-                                          <Flex direction="column" align="center">
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.two.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="green">{map.roundScores[1]?.roundsWon}</Text>
+                                            <Flex
+                                              direction="column"
+                                              align="center"
+                                              justify="center"
+                                            >
+                                              <Image
+                                                src={`/api/team/logo?id=${match.participants.one.id}`}
+                                                alt="league logo"
+                                                fit="contain"
+                                                h={30}
+                                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                              />
+                                              <Text c="red">
+                                                {/* {map.[0]?.roundsWon} */}
+                                                as
+                                              </Text>
+                                            </Flex>
+                                            <Flex
+                                              direction="column"
+                                              align="center"
+                                              bg="black"
+                                              p="sm"
+                                            >
+                                              <Text size="sm">Stats</Text>
+                                              <Text>
+                                                {/* {
+                                                  map.roundScores[0]
+                                                    ?.halfScores[0]
+                                                }
+                                                :
+                                                {
+                                                  map.roundScores[1]
+                                                    ?.halfScores[0]
+                                                }
+                                                &nbsp;|&nbsp;
+                                                {
+                                                  map.roundScores[0]
+                                                    ?.halfScores[1]
+                                                }
+                                                :
+                                                {
+                                                  map.roundScores[1]
+                                                    ?.halfScores[1]
+                                                } */}
+                                                s
+                                              </Text>
+                                            </Flex>
+                                            <Flex
+                                              direction="column"
+                                              align="center"
+                                            >
+                                              <Image
+                                                src={`/api/team/logo?id=${match.participants.two.id}`}
+                                                alt="league logo"
+                                                fit="contain"
+                                                h={30}
+                                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                              />
+                                              <Text c="green">
+                                                {/* {map.roundScores[1]?.roundsWon} */}
+                                                s
+                                              </Text>
+                                            </Flex>
                                           </Flex>
                                         </Flex>
-                                      </Flex>
-                                    }
+                                      )}
 
-                                    {match.status !== "Scheduled" && sport.alias === "codmwiii" &&
-                                      <SimpleGrid cols={{ base: 1, md: 1 }}>
-                                        <Title order={5}>
-                                          TBA
-                                        </Title>
-                                        <Divider />
-                                        <Text size="sm">Terminal</Text>
-                                        <Flex
-                                          justify="space-between"
-                                          align="center"
-                                          gap="xs"
-                                        >
+                                    {match.status !== "Scheduled" &&
+                                      sport.alias === "codmwiii" && (
+                                        <SimpleGrid cols={{ base: 1, md: 1 }}>
+                                          <Title order={5}>TBA</Title>
+                                          <Divider />
+                                          <Text size="sm">Terminal</Text>
                                           <Flex
-                                            direction="column"
+                                            justify="space-between"
                                             align="center"
-                                            justify="center"
+                                            gap="xs"
                                           >
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.one.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="red">5</Text>
+                                            <Flex
+                                              direction="column"
+                                              align="center"
+                                              justify="center"
+                                            >
+                                              <Image
+                                                src={`/api/team/logo?id=${match.participants.one.id}`}
+                                                alt="league logo"
+                                                fit="contain"
+                                                h={30}
+                                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                              />
+                                              <Text c="red">5</Text>
+                                            </Flex>
+                                            <Flex
+                                              direction="column"
+                                              align="center"
+                                              bg="black"
+                                              p="2"
+                                            >
+                                              <Text
+                                                size={SmallThenSm ? "xs" : "sm"}
+                                              >
+                                                Stats
+                                              </Text>
+                                            </Flex>
+                                            <Flex
+                                              direction="column"
+                                              align="center"
+                                            >
+                                              <Image
+                                                src={`/api/team/logo?id=${match.participants.one.id}`}
+                                                alt="league logo"
+                                                fit="contain"
+                                                h={30}
+                                                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                              />
+                                              <Text c="green">5</Text>
+                                            </Flex>
                                           </Flex>
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                            bg="black"
-                                            p="2"
-                                          >
-                                            <Text size={SmallThenSm ? "xs" : "sm"}>Stats</Text>
-                                          </Flex>
-                                          <Flex direction="column" align="center">
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.one.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="green">5</Text>
-                                          </Flex>
-                                        </Flex>
-                                      </SimpleGrid>
-                                    }
+                                        </SimpleGrid>
+                                      )}
                                   </div>
                                 </Card>
                               </>
@@ -1208,26 +1490,23 @@ export default function AppTournamentManagePage({
                         </SimpleGrid>
                       </Stack>
                     </Card>
-                    {
-                      match.status !== "Scheduled" && 
-                      (sport.alias === "cs2" || sport.alias === "valorant") &&
-                      <Stack mt={SmallThenSm ? "10" : "60"}>
-                        <Flex gap="md" px={20}>
-                          <Text c="indigo">Maps</Text>
-                          <Text c="indigo" ml="auto">
-                            Removed
-                          </Text>
-                          <Text c="indigo">Picked</Text>
-                        </Flex>
-                        <Card>
-                          {
-                            match.pbmaps?.pickBan.map((map, index) => (
+                    {match.status !== "Scheduled" &&
+                      (sport.alias === "cs2" || sport.alias === "valorant") && (
+                        <Stack mt={SmallThenSm ? "10" : "60"}>
+                          <Flex gap="md" px={20}>
+                            <Text c="indigo">Maps</Text>
+                            <Text c="indigo" ml="auto">
+                              Removed
+                            </Text>
+                            <Text c="indigo">Picked</Text>
+                          </Flex>
+                          <Card>
+                            {match.maps?.pickBan.map((map, index) => (
                               <>
                                 <Flex key={index} align="center" py="xs">
                                   <Text>{map.mapName}</Text>
                                   <Box miw={100} ta="center" ml="auto">
-                                    {
-                                      map.pickOrBan === "ban" ? 
+                                    {map.pickOrBan === "ban" ? (
                                       <Image
                                         src={`/api/team/logo?id=${map.teamId}`}
                                         alt="league logo"
@@ -1235,12 +1514,13 @@ export default function AppTournamentManagePage({
                                         h={30}
                                         ml="auto"
                                         fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                      /> : <Text>-</Text>
-                                    }
+                                      />
+                                    ) : (
+                                      <Text>-</Text>
+                                    )}
                                   </Box>
                                   <Box miw={60} ta="center">
-                                    {
-                                      map.pickOrBan === "pick" ? 
+                                    {map.pickOrBan === "pick" ? (
                                       <Image
                                         src={`/api/team/logo?id=${map.teamId}`}
                                         alt="league logo"
@@ -1248,281 +1528,324 @@ export default function AppTournamentManagePage({
                                         h={30}
                                         ml="auto"
                                         fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                      /> : <Text>-</Text>
-                                    }
+                                      />
+                                    ) : (
+                                      <Text>-</Text>
+                                    )}
                                   </Box>
                                 </Flex>
                               </>
-                           ))
-                          }
-                        </Card>
-                      </Stack>
-                    }
+                            ))}
+                          </Card>
+                        </Stack>
+                      )}
                   </SimpleGrid>
                 </FadeUpAni>
               )}
 
-            {match.status !== "Scheduled" && sport.alias !== "lol" && sport.alias !== "dota2" &&(
-            <Card p="lg">
-              <Title order={BigThenXs ? 4 : 5} tt="uppercase" mb={10}>
-                ScoreBoard
-              </Title>
-              <Stack gap="xl">
-                <Flex align="center" justify="space-between">
-                  <Stack>
-                    <Flex align="center" gap="xs">
-                      <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
-                        R - 21
-                      </Text>
-                      <Divider orientation="vertical" size="sm" />
-                      <Text size={BigThenXs ? "sm" : "xs"}>MIRAGE</Text>
-                    </Flex>
-                  </Stack>
-
-                  <Flex align="center" gap={rem(5)}>
-                    <Title order={BigThenXs ? 4 : 5}>4</Title>
-                    <Title order={BigThenXs ? 4 : 5}>:</Title>
-                    <Title order={BigThenXs ? 4 : 5}>6</Title>
-                  </Flex>
-
-                  <Flex align="center" gap={rem(5)}>
-                    <Text size={BigThenXs ? "sm" : "xs"}>1:39</Text>
-                    <IconBomb size={BigThenXs ? 20 : 16} />
-                  </Flex>
-                </Flex>
-
-                {sport.alias !== "valorant" &&
-                  sport.alias !== "dota2" &&
-                  sport.alias !== "lol" && <MatchStats />}
-
-                <Stack gap="md">
-                  <ScoreBoardHead
-                    game={sport.alias}
-                    teamId={match.participants.one.id!}
-                    name={match.participants.one.name!}
-                    bg="yellow.5"
-                  />
-                  {
-                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
-                      <ScoreBoardRow
-                        key={index}
+              {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
+              <Card p="lg">
+                <Stack gap="xl">
+                  <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
+                    
+                    <Stack>
+                      <ScoreBoardHead
                         game={sport.alias}
-                        name={player.name}
+                        teamId={match.participants.one.id!}
+                        name={match.participants.one.name!}
+                        bg="yellow.5"
                       />
-                    ))
-                  }
-                  
-                  <Space />
-
-                  <ScoreBoardHead
-                    game={sport.alias}
-                    teamId={match.participants.two.id!}
-                    name={match.participants.two.name!}
-                    bg="blue.5"
-                  />
-
-                  {
-                    match.participants.one.team?.most_recent_lineup?.map((player, index) => (
                       <ScoreBoardRow
-                        key={index}
                         game={sport.alias}
-                        name={player.name}
+                        name={match.participants.one.name!}
                       />
-                    ))
-                  }
-                </Stack>
-              </Stack>
-            </Card> )}
-
-            {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
-            <Card p="lg">
-              <Stack gap="xl">
-                <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
-                  
-                  <Stack>
-                    <ScoreBoardHead
-                      game={sport.alias}
-                      teamId={match.participants.one.id!}
-                      name={match.participants.one.name!}
-                      bg="yellow.5"
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.one.name!}
-                    />
-                  </Stack>
-                  
-                  <Stack>
-                    <ScoreBoardHead
-                      game={sport.alias}
-                      teamId={match.participants.two.id!}
-                      name={match.participants.two.name!}
-                      bg="blue.5"
-                    />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.one.name!}
+                      />
+                    </Stack>
+                    
+                    <Stack>
+                      <ScoreBoardHead
+                        game={sport.alias}
+                        teamId={match.participants.two.id!}
+                        name={match.participants.two.name!}
+                        bg="blue.5"
+                      />
+    
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                      <ScoreBoardRow
+                        game={sport.alias}
+                        name={match.participants.two.name!}
+                      />
+                    </Stack>
   
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                    <ScoreBoardRow
-                      game={sport.alias}
-                      name={match.participants.two.name!}
-                    />
-                  </Stack>
-
-                </SimpleGrid>
-              </Stack>
-            </Card> )}
+                  </SimpleGrid>
+                </Stack>
+              </Card> )}
+  
 
             <FadeUpAni>
               <Grid columns={10}>
                 <Grid.Col span={{ base: 10, md: 7 }}>
-                  <Card p="xs">
-                    <Stack>
-                      <Group>
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.one.id}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={30}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-                        <Title order={5} tt="uppercase">
-                          Lineups
+                  {match.status !== "Scheduled" &&
+                    sport.alias !== "lol" &&
+                    sport.alias !== "dota2" && (
+                      <Card p="lg">
+                        <Title order={BigThenXs ? 4 : 5} tt="uppercase" mb={10}>
+                          ScoreBoard
                         </Title>
-                      </Group>
+                        <Stack gap="xl">
+                          <Flex align="center" justify="space-between">
+                            <Stack>
+                              <Flex align="center" gap="xs">
+                                <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
+                                  R - 21
+                                </Text>
+                                <Divider orientation="vertical" size="sm" />
+                                <Text size={BigThenXs ? "sm" : "xs"}>
+                                  MIRAGE
+                                </Text>
+                              </Flex>
+                            </Stack>
 
-                      {match.participants.one.team?.most_recent_lineup ? (
-                        <SimpleGrid spacing={5} cols={teamLength}>
-                          {Children.toArray(
-                            match.participants.one.team?.most_recent_lineup.map(
-                              (player) => (
-                                <>
-                                  <PlayerCard {...player} />
-                                </>
+                            <Flex align="center" gap={rem(5)}>
+                              <Title order={BigThenXs ? 4 : 5}>4</Title>
+                              <Title order={BigThenXs ? 4 : 5}>:</Title>
+                              <Title order={BigThenXs ? 4 : 5}>6</Title>
+                            </Flex>
+
+                            <Flex align="center" gap={rem(5)}>
+                              <Text size={BigThenXs ? "sm" : "xs"}>1:39</Text>
+                              <IconBomb size={BigThenXs ? 20 : 16} />
+                            </Flex>
+                          </Flex>
+
+                          {sport.alias !== "valorant" &&
+                            sport.alias !== "dota2" &&
+                            sport.alias !== "lol" && <MatchStats />}
+
+                          <Stack gap="md">
+                            <ScoreBoardHead
+                              game={sport.alias}
+                              teamId={match.participants.one.id!}
+                              name={match.participants.one.name!}
+                              bg="yellow.5"
+                            />
+                            {match.participants.one.team?.most_recent_lineup?.map(
+                              (player, index) => (
+                                <ScoreBoardRow
+                                  key={index}
+                                  game={sport.alias}
+                                  name={player.name}
+                                />
                               )
-                            )
-                          )}
-                        </SimpleGrid>
-                      ) : (
-                        <>
-                          <SimpleGrid spacing={5} cols={5}>
-                            {Array.from(Array(5)).map(() => (
-                              <>
-                                <PlayerCard id={0} name="Unknown" />
-                              </>
-                            ))}
-                          </SimpleGrid>
-                        </>
-                      )}
+                            )}
 
-                      <Group>
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.two.id}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={30}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-                        <Title order={5} tt="uppercase">
-                          Lineups
-                        </Title>
-                      </Group>
+                            <Space />
 
-                      {match.participants.two.team?.most_recent_lineup ? (
-                        <SimpleGrid spacing={5} cols={teamLength}>
-                          {Children.toArray(
-                            match.participants.two.team?.most_recent_lineup.map(
-                              (player) => (
-                                <>
-                                  <PlayerCard {...player} />
-                                </>
+                            <ScoreBoardHead
+                              game={sport.alias}
+                              teamId={match.participants.two.id!}
+                              name={match.participants.two.name!}
+                              bg="blue.5"
+                            />
+
+                            {match.participants.one.team?.most_recent_lineup?.map(
+                              (player, index) => (
+                                <ScoreBoardRow
+                                  key={index}
+                                  game={sport.alias}
+                                  name={player.name}
+                                />
                               )
-                            )
-                          )}
-                        </SimpleGrid>
-                      ) : (
+                            )}
+                          </Stack>
+                        </Stack>
+                      </Card>
+                    )}
+
+                   
+              {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && ( 
+            <Card p="xs">
+              <Stack>
+                <Group>
+                  <Image
+                    src={`/api/team/logo?id=${match.participants.one.id}`}
+                    alt="league logo"
+                    fit="contain"
+                    h={30}
+                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  />
+                  <Title order={5} tt="uppercase">
+                    Lineups
+                  </Title>
+                </Group>
+
+                {match.participants.one.team?.most_recent_lineup ? (
+                  <SimpleGrid spacing={5} cols={teamLength}>
+                    {Children.toArray(
+                      match.participants.one.team?.most_recent_lineup.map(
+                        (player) => (
+                          <>
+                            <PlayerCard {...player} />
+                          </>
+                        )
+                      )
+                    )}
+                  </SimpleGrid>
+                ) : (
+                  <>
+                    <SimpleGrid spacing={5} cols={5}>
+                      {Array.from(Array(5)).map(() => (
                         <>
-                          <SimpleGrid spacing={5} cols={5}>
-                            {Array.from(Array(5)).map(() => (
-                              <>
-                                <PlayerCard id={0} name="Unknown" />
-                              </>
-                            ))}
-                          </SimpleGrid>
+                          <PlayerCard id={0} name="Unknown" />
                         </>
-                      )}
+                      ))}
+                    </SimpleGrid>
+                  </>
+                )}
+
+                <Group>
+                  <Image
+                    src={`/api/team/logo?id=${match.participants.two.id}`}
+                    alt="league logo"
+                    fit="contain"
+                    h={30}
+                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  />
+                  <Title order={5} tt="uppercase">
+                    Lineups
+                  </Title>
+                </Group>
+
+                {match.participants.two.team?.most_recent_lineup ? (
+                  <SimpleGrid spacing={5} cols={teamLength}>
+                    {Children.toArray(
+                      match.participants.two.team?.most_recent_lineup.map(
+                        (player) => (
+                          <>
+                            <PlayerCard {...player} />
+                          </>
+                        )
+                      )
+                    )}
+                  </SimpleGrid>
+                ) : (
+                  <>
+                    <SimpleGrid spacing={5} cols={5}>
+                      {Array.from(Array(5)).map(() => (
+                        <>
+                          <PlayerCard id={0} name="Unknown" />
+                        </>
+                      ))}
+                    </SimpleGrid>
+                  </>
+                )}
+              </Stack>
+            </Card>)}
+
+                  {/* {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
+                  <Card p="lg">
+                    <Stack gap="xl">
+                      <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
+                        
+                        <Stack>
+                          <ScoreBoardHead
+                            game={sport.alias}
+                            teamId={match.participants.one.id!}
+                            name={match.participants.one.name!}
+                            bg="yellow.5"
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.one.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.one.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.one.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.one.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.one.name!}
+                          />
+                        </Stack>
+                        
+                        <Stack>
+                          <ScoreBoardHead
+                            game={sport.alias}
+                            teamId={match.participants.two.id!}
+                            name={match.participants.two.name!}
+                            bg="blue.5"
+                          />
+        
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.two.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.two.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.two.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.two.name!}
+                          />
+                          <ScoreBoardRow
+                            game={sport.alias}
+                            name={match.participants.two.name!}
+                          />
+                        </Stack>
+
+                      </SimpleGrid>
                     </Stack>
-                  </Card>
+                  </Card> )} */}
                 </Grid.Col>
+
                 <Grid.Col span={{ base: 10, md: 3 }}>
                   <Stack mt={10}>
                     <Title order={5} tt="uppercase">
                       Match History
                     </Title>
-
-                    {/* <SegmentedControl
-                      maw={200}
-                      size="xs"
-                      color="blue"
-                      radius="xl"
-                      styles={{
-                        root: {
-                          background: "transparent",
-                          border: "1px solid var(--mantine-color-dimmed)",
-                        },
-                      }}
-                      data={[
-                        {
-                          value: "core",
-                          label: (
-                            <>
-                              <Text size="sm" my={3} fw="bold" mx="md">
-                                Core
-                              </Text>
-                            </>
-                          ),
-                        },
-                        {
-                          value: "team",
-                          label: (
-                            <>
-                              <Text size="sm" my={3} fw="bold" mx="md">
-                                Team
-                              </Text>
-                            </>
-                          ),
-                        },
-                      ]}
-                    /> */}
 
                     <Card>
                       <Stack>
@@ -1535,28 +1858,37 @@ export default function AppTournamentManagePage({
                             fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                           />
 
-                          <Text>{match.participants.one.name ?? "Unknown"}</Text>
+                          <Text>
+                            {match.participants.one.name ?? "Unknown"}
+                          </Text>
                         </Group>
                         <Divider />
 
-                        {
-                          match.fmh?.fixtures?.length &&
-                          match.fmh.fixtures.length > 0 &&
-                          <>{
-                            match.fmh.fixtures.map((fixture, index) => (
-                              <Group key={index} justify="space-between">
-                                {fixture.opponentName ?? "Unknown"}
-                                <Badge color="red" variant="light" c="white">
-                                  BO{fixture.score + fixture.opponentScore} {fixture.score}-{fixture.opponentScore}
-                                </Badge>
-                              </Group>
-                            ))
-                          }</>
-                        }
-                        {
-                          !match.fmh?.fixtures?.length &&
+                        {match.participants.one.recent_matches?.fixtures !=
+                          null &&
+                          match.participants.one.recent_matches?.fixtures
+                            ?.length > 0 && (
+                            <>
+                              {match.participants.one.recent_matches?.fixtures.map(
+                                (fixture, index) => (
+                                  <Group key={index} justify="space-between">
+                                    {fixture.opponentName ?? "Unknown"}
+                                    <Badge
+                                      color="red"
+                                      variant="light"
+                                      c="white"
+                                    >
+                                      BO{fixture.score + fixture.opponentScore}{" "}
+                                      {fixture.score}-{fixture.opponentScore}
+                                    </Badge>
+                                  </Group>
+                                )
+                              )}
+                            </>
+                          )}
+                        {!match.participants.one.recent_matches?.fixtures && (
                           <Text>No History</Text>
-                        }
+                        )}
                       </Stack>
                     </Card>
 
@@ -1571,28 +1903,37 @@ export default function AppTournamentManagePage({
                             fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
                           />
 
-                          <Text>{match.participants.two.name ?? "Unknown"}</Text>
+                          <Text>
+                            {match.participants.two.name ?? "Unknown"}
+                          </Text>
                         </Group>
                         <Divider />
 
-                        {
-                          match.tmh?.fixtures?.length &&
-                          match.tmh.fixtures.length > 0 &&
-                          <>{
-                            match.tmh.fixtures.map((fixture, index) => (
-                              <Group key={index} justify="space-between">
-                                {fixture.opponentName ?? "Unknown"}
-                                <Badge color="red" variant="light" c="white">
-                                  BO{fixture.score + fixture.opponentScore} {fixture.score}-{fixture.opponentScore}
-                                </Badge>
-                              </Group>
-                            ))
-                          }</>
-                        }
-                        {
-                          !match.tmh?.fixtures?.length &&
+                        {match.participants.two.recent_matches?.fixtures !=
+                          null &&
+                          match.participants.two.recent_matches?.fixtures
+                            ?.length > 0 && (
+                            <>
+                              {match.participants.two.recent_matches?.fixtures.map(
+                                (fixture, index) => (
+                                  <Group key={index} justify="space-between">
+                                    {fixture.opponentName ?? "Unknown"}
+                                    <Badge
+                                      color="red"
+                                      variant="light"
+                                      c="white"
+                                    >
+                                      BO{fixture.score + fixture.opponentScore}{" "}
+                                      {fixture.score}-{fixture.opponentScore}
+                                    </Badge>
+                                  </Group>
+                                )
+                              )}
+                            </>
+                          )}
+                        {!match.participants.two.recent_matches?.fixtures && (
                           <Text>No History</Text>
-                        }
+                        )}
                       </Stack>
                     </Card>
                   </Stack>
@@ -1600,15 +1941,97 @@ export default function AppTournamentManagePage({
               </Grid>
             </FadeUpAni>
 
+
+            {match.status !== "Scheduled" &&
+                    sport.alias !== "lol" &&
+                    sport.alias !== "dota2" && (
+            <Card p="xs">
+              <Stack>
+                <Group>
+                  <Image
+                    src={`/api/team/logo?id=${match.participants.one.id}`}
+                    alt="league logo"
+                    fit="contain"
+                    h={30}
+                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  />
+                  <Title order={5} tt="uppercase">
+                    Lineups
+                  </Title>
+                </Group>
+
+                {match.participants.one.team?.most_recent_lineup ? (
+                  <SimpleGrid spacing={5} cols={teamLength}>
+                    {Children.toArray(
+                      match.participants.one.team?.most_recent_lineup.map(
+                        (player) => (
+                          <>
+                            <PlayerCard {...player} />
+                          </>
+                        )
+                      )
+                    )}
+                  </SimpleGrid>
+                ) : (
+                  <>
+                    <SimpleGrid spacing={5} cols={5}>
+                      {Array.from(Array(5)).map(() => (
+                        <>
+                          <PlayerCard id={0} name="Unknown" />
+                        </>
+                      ))}
+                    </SimpleGrid>
+                  </>
+                )}
+
+                <Group>
+                  <Image
+                    src={`/api/team/logo?id=${match.participants.two.id}`}
+                    alt="league logo"
+                    fit="contain"
+                    h={30}
+                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  />
+                  <Title order={5} tt="uppercase">
+                    Lineups
+                  </Title>
+                </Group>
+
+                {match.participants.two.team?.most_recent_lineup ? (
+                  <SimpleGrid spacing={5} cols={teamLength}>
+                    {Children.toArray(
+                      match.participants.two.team?.most_recent_lineup.map(
+                        (player) => (
+                          <>
+                            <PlayerCard {...player} />
+                          </>
+                        )
+                      )
+                    )}
+                  </SimpleGrid>
+                ) : (
+                  <>
+                    <SimpleGrid spacing={5} cols={5}>
+                      {Array.from(Array(5)).map(() => (
+                        <>
+                          <PlayerCard id={0} name="Unknown" />
+                        </>
+                      ))}
+                    </SimpleGrid>
+                  </>
+                )}
+              </Stack>
+            </Card> )}
+
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&
               sport.alias !== "rl" &&
               sport.alias !== "codmwiii" &&
-              match.status !== "Ended" && (
+              match.status !== "Scheduled" && (
                 <FadeUpAni>
                   <Grid columns={10}>
                     <Grid.Col span={BigThenXs ? 7 : 10}>
-                      <Card p={BigThenXs ? 'lg' : 'xs'} bg="transparent">
+                      <Card p={BigThenXs ? "lg" : "xs"} bg="transparent">
                         <Stack>
                           <Grid columns={10}>
                             <Grid.Col p={BigThenXs ? 20 : 20} span={5}>
@@ -1685,88 +2108,92 @@ export default function AppTournamentManagePage({
                           <Divider size="sm" />
 
                           {Children.toArray(
-                            Array.from(match.maps ?? []).map((map, index) => (
-                              <Grid key={index} columns={10}>
-                                <Grid.Col
-                                  span={{ base: 3, sm: 5 }}
-                                  m="auto"
-                                  h="100%"
-                                >
-                                  <Card
+                            Array.from(match.maps?.pickBan ?? []).map(
+                              (map, index) => (
+                                <Grid key={index} columns={10}>
+                                  <Grid.Col
+                                    span={{ base: 3, sm: 5 }}
+                                    m="auto"
                                     h="100%"
-                                    style={{
-                                      backgroundImage: SmallThenSm
-                                        ? "none"
-                                        : "url(/map.jpg)",
-                                    }}
                                   >
-                                    <Overlay
+                                    <Card
+                                      h="100%"
                                       style={{
-                                        zIndex: 1,
-                                      }}
-                                    />
-                                    <div
-                                      style={{
-                                        zIndex: 2,
+                                        backgroundImage: SmallThenSm
+                                          ? "none"
+                                          : "url(/map.jpg)",
                                       }}
                                     >
-                                      <Title
-                                        order={SmallThenSm ? 5 : 1}
-                                        ta="center"
+                                      <Overlay
+                                        style={{
+                                          zIndex: 1,
+                                        }}
+                                      />
+                                      <div
+                                        style={{
+                                          zIndex: 2,
+                                        }}
                                       >
-                                        {map.mapName}
-                                      </Title>
-                                    </div>
-                                  </Card>
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 7, sm: 5 }} m="auto">
-                                  <Card>
-                                    <Group justify="space-between">
-                                      <Group gap={0}>
-                                        <Badge
-                                          size="xs"
-                                          visibleFrom="sm"
-                                          color="green"
-                                          style={{
-                                            transform: "rotate(90deg)",
-                                          }}
+                                        <Title
+                                          order={SmallThenSm ? 5 : 1}
+                                          ta="center"
                                         >
-                                          Pick
-                                        </Badge>
+                                          {map.mapName}
+                                        </Title>
+                                      </div>
+                                    </Card>
+                                  </Grid.Col>
+
+                                  <Grid.Col span={{ base: 7, sm: 5 }} m="auto">
+                                    <Card>
+                                      <Group justify="space-between">
+                                        <Group gap={0}>
+                                          <Badge
+                                            size="xs"
+                                            visibleFrom="sm"
+                                            color="green"
+                                            style={{
+                                              transform: "rotate(90deg)",
+                                            }}
+                                          >
+                                            Pick
+                                          </Badge>
+                                          <Stack gap={5}>
+                                            <Group gap="sm" align="center">
+                                              <Title
+                                                order={SmallThenSm ? 5 : 3}
+                                              >
+                                                100%&nbsp;
+                                              </Title>
+                                              <Badge
+                                                color="green"
+                                                c="white"
+                                                size="xs"
+                                              >
+                                                Pick
+                                              </Badge>
+                                            </Group>
+                                            <Text size="xs" c="dimmed">
+                                              11 maps
+                                            </Text>
+                                          </Stack>
+                                        </Group>
+
                                         <Stack gap={5}>
-                                          <Group gap="sm" align="center">
-                                            <Title order={SmallThenSm ? 5 : 3}>
-                                              100%&nbsp;
-                                            </Title>
-                                            <Badge
-                                              color="green"
-                                              c="white"
-                                              size="xs"
-                                            >
-                                              Pick
-                                            </Badge>
-                                          </Group>
+                                          <Title order={SmallThenSm ? 5 : 3}>
+                                            50%
+                                          </Title>
+
                                           <Text size="xs" c="dimmed">
-                                            11 maps
+                                            4 maps
                                           </Text>
                                         </Stack>
                                       </Group>
-
-                                      <Stack gap={5}>
-                                        <Title order={SmallThenSm ? 5 : 3}>
-                                          50%
-                                        </Title>
-
-                                        <Text size="xs" c="dimmed">
-                                          4 maps
-                                        </Text>
-                                      </Stack>
-                                    </Group>
-                                  </Card>
-                                </Grid.Col>
-                              </Grid>
-                            ))
+                                    </Card>
+                                  </Grid.Col>
+                                </Grid>
+                              )
+                            )
                           )}
                         </Stack>
                       </Card>
@@ -1802,7 +2229,10 @@ export default function AppTournamentManagePage({
 
                       <Stack gap={0}>
                         <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
-                          {match.hth?.fixtures?.reduce((totalScore, fixture) => (totalScore + fixture.score), 0)}
+                          {match.opponentMatches?.fixtures?.reduce(
+                            (totalScore, fixture) => totalScore + fixture.score,
+                            0
+                          )}
                         </Text>
                         <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
                           Wins
@@ -1811,7 +2241,13 @@ export default function AppTournamentManagePage({
 
                       <Stack gap={0}>
                         <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
-                          {match.hth?.fixtures?.reduce((totalScore, fixture) => (totalScore + fixture.score + fixture.opponentScore), 0)}
+                          {match.opponentMatches?.fixtures?.reduce(
+                            (totalScore, fixture) =>
+                              totalScore +
+                              fixture.score +
+                              fixture.opponentScore,
+                            0
+                          )}
                         </Text>
                         <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
                           Overview
@@ -1820,7 +2256,11 @@ export default function AppTournamentManagePage({
 
                       <Stack gap={0}>
                         <Text size={BigThenXs ? "sm" : rem(10)} ta="center">
-                        {match.hth?.fixtures?.reduce((totalScore, fixture) => (totalScore + fixture.opponentScore), 0)}
+                          {match.opponentMatches?.fixtures?.reduce(
+                            (totalScore, fixture) =>
+                              totalScore + fixture.opponentScore,
+                            0
+                          )}
                         </Text>
                         <Text size={BigThenXs ? "sm" : rem(8)} ta="center">
                           Wins
@@ -1844,15 +2284,12 @@ export default function AppTournamentManagePage({
                   </Card>
 
                   <Stack gap={0}>
-                    {
-                      match.hth?.fixtures?.length != null &&
-                      match.hth.fixtures.length > 0 &&
-                      match.hth.fixtures.map((data, dindex) => (
+                    {match.opponentMatches?.fixtures?.length != null &&
+                      match.opponentMatches.fixtures.length > 0 &&
+                      match.opponentMatches.fixtures.map((data, dindex) => (
                         <>
                           <Paper
-                            bg={
-                              dindex % 2 === 0 ? "transparent" : "dark.5"
-                            }
+                            bg={dindex % 2 === 0 ? "transparent" : "dark.5"}
                             key={dindex}
                             radius="sm"
                             px={BigThenXs ? "xl" : "xs"}
@@ -1861,13 +2298,12 @@ export default function AppTournamentManagePage({
                             <Flex justify="space-between" align="center">
                               <Group>
                                 <Text size={BigThenXs ? "sm" : rem(10)}>
-                                  {moment(data.fixtureTime).format("DD/MM/YYYY")}
+                                  {moment(data.fixtureTime).format(
+                                    "DD/MM/YYYY"
+                                  )}
                                 </Text>
 
-                                <Divider
-                                  orientation="vertical"
-                                  size="sm"
-                                />
+                                <Divider orientation="vertical" size="sm" />
 
                                 <Image
                                   src={`/api/team/logo?id=${match.participants.one.id}`}
@@ -1928,10 +2364,7 @@ export default function AppTournamentManagePage({
                                       {data.mapName ?? "Unknown"}
                                     </Text>
 
-                                    <Divider
-                                      orientation="vertical"
-                                      size="sm"
-                                    />
+                                    <Divider orientation="vertical" size="sm" />
                                   </>
                                 )}
 
@@ -1948,12 +2381,10 @@ export default function AppTournamentManagePage({
                             </Flex>
                           </Paper>
                         </>
-                      ))
-                    }
-                    {
-                      !match.hth?.fixtures?.length &&
+                      ))}
+                    {!match.opponentMatches?.fixtures?.length && (
                       <Text ta="center">No data available</Text>
-                    }
+                    )}
                   </Stack>
                 </Stack>
               </Card>

@@ -2,9 +2,8 @@ import { z } from "zod";
 import { SportApiLogger } from "../core";
 import { FixtureGet } from "../fixture/get";
 import { TeamGet } from "../team/get";
-import { FixtureStream } from "../fixture/stream";
-import { FixtureOdd } from "../fixture/odds";
 import { TeamForm } from "../team/form";
+import { FixtureStream } from "../fixture/stream";
 import { MapPBGet } from "../map/pbget";
 
 export class CustomMatch {
@@ -23,7 +22,7 @@ export class CustomMatch {
       return null;
     }
 
-    // throw error if more then 2 parti
+    // throw error if more then 2 teams
     if (fixture.participants.length !== 2) {
       SportApiLogger.fatal(
         {
@@ -37,18 +36,22 @@ export class CustomMatch {
       throw new Error("Error while fetching match");
     }
 
-    // const teamOne =
-
-    const completeTeams = await Promise.all(
+    const CompleteTeamsPromise = Promise.all(
       fixture.participants.map(async (parti) => {
         if (!parti.id) {
           return {
             ...parti,
             team: null,
+            recent_matches: null,
           };
         }
 
-        const team = await TeamGet.Call({ id: parti.id });
+        const [team, recent_matches] = await Promise.all([
+          TeamGet.Call({ id: parti.id }),
+          TeamForm.Call({
+            id: parti.id,
+          }),
+        ]);
 
         if (!team) {
           SportApiLogger.fatal({
@@ -60,123 +63,96 @@ export class CustomMatch {
           throw new Error("Error while fetching team");
         }
 
+        if (recent_matches?.fixtures) {
+          const AllHistoryFixture = await Promise.all(
+            recent_matches.fixtures.map(async (fixture) => {
+              return await FixtureGet.Call({ id: fixture.fixtureId });
+            })
+          );
+
+          const result = recent_matches.fixtures.map((fixture) => {
+            const HistoryFixture = AllHistoryFixture.find(
+              (f) => f?.id === fixture.fixtureId
+            );
+
+            if (!HistoryFixture) {
+              return {
+                ...fixture,
+                fixture: null,
+              };
+            }
+
+            return {
+              ...fixture,
+              fixture: HistoryFixture,
+            };
+          });
+
+          recent_matches.fixtures = result;
+        }
+
         return {
           ...parti,
           team,
+          recent_matches,
         };
-
-        // if (!team.most_recent_lineup) {
-        //   return {
-        //     ...parti,
-        //     team,
-        //   };
-        // }
-
-        // const completeMembers = await Promise.all(
-        //   team.most_recent_lineup.map(async (member) => {
-        //     const player = await PlayerGet.Call({ id: member.id });
-
-        //     if (!player) {
-        //       SportApiLogger.fatal({
-        //         member,
-        //         params: {
-        //           matchId: params.id,
-        //           playerId: member.id,
-        //           teamId: parti.id,
-        //         },
-        //         route: this.Route,
-        //       });
-
-        //       throw new Error("Error while fetching player");
-        //     }
-
-        //     return player;
-        //   })
-        // );
-
-        // return {
-        //   ...parti,
-        //   team: {
-        //     ...team,
-        //     most_recent_lineup: completeMembers,
-        //   },
-        // };
       })
     );
 
-    const TeamOne = completeTeams[0]!;
-    const TeamTwo = completeTeams[1]!;
+    const OpponentMatchesPromise = async () => {
+      const opponentMatches = await TeamForm.Call({
+        id: fixture.participants[0]!.id!,
+        opponentId: fixture.participants[1]!.id!,
+      });
 
-    // const [TeamOneFixture, TeamTwoFixture] = await Promise.all([
-    //   ParticipantRecent.Call(
-    //     {
-    //       teamId: TeamOne.id!,
-    //     },
-    //     {
-    //       opponentTeamId: TeamTwo.id!,
-    //       count: 5,
-    //     }
-    //   ),
-    //   ParticipantRecent.Call(
-    //     {
-    //       teamId: TeamTwo.id!,
-    //     },
-    //     {
-    //       opponentTeamId: TeamOne.id!,
-    //       count: 5,
-    //     }
-    //   ),
-    // ]);
+      if (!opponentMatches?.fixtures) {
+        return null;
+      }
 
-    // const CompleteTeamOneFixtures = await Promise.all(
-    //   TeamOneFixture!.fixtures.map(async (fixture) => {
-    //     const completeFixture = await FixtureGet.Call({
-    //       id: fixture.fixtureId,
-    //     });
+      const AllHistoryFixture = await Promise.all(
+        opponentMatches.fixtures.map(async (fixture) => {
+          return await FixtureGet.Call({ id: fixture.fixtureId });
+        })
+      );
 
-    //     if (!completeFixture) {
-    //       SportApiLogger.fatal({
-    //         fixture,
-    //         params,
-    //         route: this.Route,
-    //       });
+      const result = opponentMatches.fixtures.map((fixture) => {
+        const HistoryFixture = AllHistoryFixture.find(
+          (f) => f?.id === fixture.fixtureId
+        );
 
-    //       throw new Error("Error while fetching fixture");
-    //     }
+        if (!HistoryFixture) {
+          return {
+            ...fixture,
+            fixture: null,
+          };
+        }
 
-    //     return {
-    //       ...fixture,
-    //       detail: completeFixture,
-    //     };
-    //   })
-    // );
+        return {
+          ...fixture,
+          fixture: HistoryFixture,
+        };
+      });
 
-    const [stream, odds, hth, fmh, tmh] = await Promise.all([
-      FixtureStream.Call({ id: params.id }),
-      FixtureOdd.Call({ id: params.id }),
-      TeamForm.Call({
-        id: TeamOne.id ?? 0,
-        opponentId: TeamTwo.id ?? 0,
-      }),
-      TeamForm.Call({ id: TeamOne.id ?? 0 }),
-      TeamForm.Call({ id: TeamTwo.id ?? 0 }),
+      opponentMatches.fixtures = result;
+
+      return opponentMatches;
+    };
+
+    const StreamsPromise = FixtureStream.Call({ id: params.id });
+
+    const MapsPromise = MapPBGet.Call({
+      id: params.id,
+    });
+
+    const [CompleteTeams, Streams, OpponentMatches, Maps] = await Promise.all([
+      CompleteTeamsPromise,
+      StreamsPromise,
+      OpponentMatchesPromise(),
+      MapsPromise,
     ]);
 
-    const pbmaps = await MapPBGet.Call({ id: params.id });
-
-    if(hth?.fixtures?.length && hth.fixtures.length > 0) {
-      const fixtures = await Promise.all(hth.fixtures.map(async (fixture) => {
-        return await FixtureGet.Call({ id: fixture.fixtureId });
-      }));
-
-      hth.fixtures.map((fixture, index) => {
-        fixture.competitionName = fixtures[index]?.competition.name ?? null;
-        fixture.mapName = fixtures[index]?.maps?.[0]?.mapName ?? null;
-      });
-    }
-
-    const TeamOneOdds = odds?.map_total_rounds_over_under ?? [];
-    const TeamTwoOdds = odds?.map_total_rounds_over_under ?? [];
+    const TeamOne = CompleteTeams[0]!;
+    const TeamTwo = CompleteTeams[1]!;
 
     return {
       ...fixture,
@@ -184,15 +160,9 @@ export class CustomMatch {
         one: TeamOne,
         two: TeamTwo,
       },
-      odds: {
-        one: TeamOneOdds,
-        two: TeamTwoOdds,
-      },
-      hth,
-      fmh,
-      tmh,
-      pbmaps,
-      streams: stream?.streams,
+      streams: Streams,
+      opponentMatches: OpponentMatches,
+      maps: Maps,
     };
   };
 }

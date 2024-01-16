@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { SportApiCore, SportApiLogger } from "../core";
-import { SportApiZod } from "../zod";
 
-export class FixtureOdd {
-  public static readonly Route = "FixtureOdd";
-  public static readonly Path = "/v2/odds";
+export class PlayerCSState {
+  public static readonly Route = "PlayerCSState";
+  public static readonly Path = "/v1/players";
 
   public static readonly Zod = {
     Params: z.object({
@@ -13,13 +12,19 @@ export class FixtureOdd {
 
     Response: z
       .object({
-        map_total_rounds_over_under: z.array(z.object({
-          decimalOdd: z.number(),
-          overround: z.number(),
-          probability: z.number(),
-          roundsPlayed: z.number()
-        }))
-        // maps: z.array(SportApiZod.Map.Base).optional(),
+        payload: z.object({
+          timestamp: z.number(),
+          name: z.string(),
+          mapNumber: z.number(),
+          halfNumber: z.number(),
+          roundNumber: z.number(),
+          players: z.array(z.object({
+            name: z.string(),
+            teamId: z.number(),
+            playerId: z.number(),
+            money: z.number(),
+          }))
+        })
       })
       .nullable(),
   };
@@ -27,7 +32,7 @@ export class FixtureOdd {
   public static Call = async (
     params: z.infer<typeof this.Zod.Params>
   ): Promise<z.infer<typeof this.Zod.Response>> => {
-    const url = SportApiCore.URL(`${this.Path}/${params.id}?fields=map_total_rounds_over_under`);
+    const url = SportApiCore.URL(`${this.Path}/${params.id}`);
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),
@@ -49,7 +54,7 @@ export class FixtureOdd {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching fixture");
+      throw new Error("Error while fetching player");
     }
 
     const rawData: unknown = await rawRes.json();
@@ -64,7 +69,7 @@ export class FixtureOdd {
         route: this.Route,
       });
 
-      throw new Error("Error while validating response");
+      throw new Error("Error while validating player");
     }
 
     return validatedRes.data;

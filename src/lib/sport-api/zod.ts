@@ -11,27 +11,6 @@ class MapZod {
   public static Base = z.object({
     status: this.$Status,
     mapNumber: z.number(),
-    mapName: z.string(),
-    teamStats: z
-      .array(
-        z.object({
-          kills: z.number().optional(),
-          deaths: z.number().optional(),
-          teamId: z.number().optional(),
-          assists: z.number().optional(),
-          suicides: z.number().optional(),
-          headshots: z.number().optional(),
-          entryKills: z.number().optional(),
-        })
-      )
-      .optional(),
-    roundScores: z.array(
-      z.object({
-        id: z.number(),
-        roundsWon: z.number(),
-        halfScores: z.array(z.number())
-      })
-    ),
   });
 
   public static CSGO = z.object({
@@ -42,7 +21,7 @@ class MapZod {
   public static VALORANT = z.object({
     status: this.$Status,
     mapNumber: z.number(),
-  })
+  });
 
   public static DOTA2 = z.object({
     mapNumber: z.number(),
