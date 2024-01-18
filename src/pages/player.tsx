@@ -38,7 +38,7 @@ import PlayerMatchHistory from "~/components/player-page/match-history";
 import HitRate from "~/components/player-page/hit-rate";
 import { useState } from "react";
 
-export default function () {
+export default function App() {
   const [value, setValue] = useState(50);
 
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)
