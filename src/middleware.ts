@@ -7,6 +7,7 @@ export default authMiddleware({
     "/api/team/logo",
     "/matches",
     "/matches/:id",
+    "/player",
   ],
 });
 
