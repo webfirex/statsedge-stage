@@ -4,7 +4,6 @@ import {
   Image,
   Box,
   Card,
-  Table,
   Center,
   Container,
   Flex,
@@ -14,6 +13,7 @@ import {
   Text,
   Title,
   Select,
+  Slider,
 } from "@mantine/core";
 import { FadeUpAni } from "~/components/animation/fade-up";
 import { LayoutComp } from "~/components/layout";
@@ -35,9 +35,14 @@ import { performance } from "./api/charts/perform-chart";
 import OverallStats from "~/components/player-page/overall-stats";
 import MatchStats from "~/components/player-page/match-stats";
 import PlayerMatchHistory from "~/components/player-page/match-history";
+import HitRate from "~/components/player-page/hit-rate";
+import { useState } from "react";
 
 export default function () {
+  const [value, setValue] = useState(50);
+
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`)
   
     const sport = SportInfo("lol");
 
@@ -134,18 +139,110 @@ export default function () {
 
             <Space />
 
-            {/* <Grid columns={10}>
+            <Grid columns={10}>
               <Grid.Col span={{ base: 10, md: 7 }}>
-                <Card p={"20px"} style={{ backgroundImage: "url(/map-blur.png)" }}>
-                  <Flex justify={"space-between"}>
-                    <Box style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-
+                <FadeUpAni>
+                <HitRate />
+                </FadeUpAni>
+              </Grid.Col>
+              <Grid.Col span={{ base: 10, md: 3 }}>
+                <FadeUpAni>
+                <Flex gap={"15px"} justify={"space-between"}>
+                  <Flex gap={"10px"} direction={"column"} align={"center"} w={"100%"}>
+                    <Text fz={"md"} fw={"bold"} c={"blue"}>VS</Text>
+                    <Text fz={"xs"}>18.5</Text>
+                    <Box bg={"green"} style={{ padding: "10px 25px", borderRadius: "10px", display: "flex", flexDirection: "column", alignItems: "center" }} w={"90%"}>
+                      <Text fz={"xs"}>18.5</Text>
+                      <Text fz={"xs"}>18.5</Text>
                     </Box>
                   </Flex>
-                </Card>
+                  <Flex gap={"10px"} direction={"column"} align={"center"} w={"100%"}>
+                    <Text fz={"md"} fw={"bold"} c={"blue"}>L10</Text>
+                    <Text fz={"xs"}>18.5</Text>
+                    <Box bg={"red"} style={{ padding: "10px 25px", borderRadius: "10px", display: "flex", flexDirection: "column", alignItems: "center" }} w={"90%"}>
+                      <Text fz={"xs"}>18.5</Text>
+                      <Text fz={"xs"}>18.5</Text>
+                    </Box>
+                  </Flex>
+                  <Flex gap={"10px"} direction={"column"} align={"center"} w={"100%"}>
+                    <Text fz={"md"} fw={"bold"} c={"blue"}>L5</Text>
+                    <Text fz={"xs"}>18.5</Text>
+                    <Box bg={"green"} style={{ padding: "10px 25px", borderRadius: "10px", display: "flex", flexDirection: "column", alignItems: "center" }} w={"90%"}>
+                      <Text fz={"xs"}>18.5</Text>
+                      <Text fz={"xs"}>18.5</Text>
+                    </Box>
+                  </Flex>
+                </Flex>
+                </FadeUpAni>
+
+                <FadeUpAni>
+                  <Flex w={"100%"} gap={"md"} mt={"lg"} justify={"center"} align={"center"} direction={"column"}>
+                    <Text w={"100%"} fz={"md"} ta={"center"}>Line</Text>
+                    <Box w={"100%"} bg={"blue"} style={{ borderRadius: "15px" }}>
+                      <Card w={"100%"} display={"flex"} style={{ gap: "10px",  justifyContent:"center", flexDirection: "row", padding: "20px 10px" }}>
+                          <Text size="sm" w={"15%"} ta={"center"}>
+                            <b>{value}</b>
+                          </Text>
+                          <Slider label={null} size={"sm"} thumbSize={"15px"} w={"85%"} value={value} onChange={setValue} />
+                      </Card>
+                      <Text w={"100%"} p={"sm"} ta={"center"}>Line: 18.5 - 8/10 (80%)</Text>
+                    </Box>
+                  </Flex>
+                </FadeUpAni>
+
+                <FadeUpAni>
+                  <Box bg={"#161515"} mt={"lg"} style={{ borderRadius: "20px" }}>
+                    <Flex justify={"space-between"} bg={"#101010"} style={{ borderBottom: "1px solid #1d1d1d", borderTopLeftRadius: "20px", borderTopRighttRadius: "20px", }} p={"md"}>
+                      <Text fz={"sm"}><b>Next Match:</b></Text>
+                      <Text fz={"xs"}>6:00pm 15th January, 2024</Text>
+                    </Flex>
+                    <Flex direction={"column"} p={"sm"} gap={"sm"}>
+                      <Flex justify={"space-between"} align={"center"}>
+                        <Box display={"flex"} style={{ gap: "15px" }}>
+                          <Image
+                            src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 15}
+                          />
+                          <Text fz={"sm"}>Team Name</Text>
+                        </Box>
+                        <Box display={"flex"} style={{ gap: "10px", border: "1px solid #1d1d1d", padding: "5px", borderRadius: "5px" }} bg={"#071225"}>
+                          <Image
+                            src={"/icon-2.png"}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 15}
+                          />
+                          <Text fz={"sm"}>+250</Text>
+                        </Box>
+                      </Flex>
+                      <Flex justify={"space-between"} align={"center"}>
+                        <Box display={"flex"} style={{ gap: "15px" }}>
+                          <Image
+                            src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 15}
+                          />
+                          <Text fz={"sm"}>Team Name</Text>
+                        </Box>
+                        <Box display={"flex"} style={{ gap: "10px", border: "1px solid #1d1d1d", padding: "5px", borderRadius: "5px" }} bg={"#071225"}>
+                          <Image
+                            src={"/icon-2.png"}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 15}
+                          />
+                          <Text fz={"sm"}>+250</Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                  </Box>
+                </FadeUpAni>
+
               </Grid.Col>
-              <Grid.Col span={{ base: 10, md: 3 }}></Grid.Col>
-            </Grid> */}
+            </Grid>
 
             <Space />
 

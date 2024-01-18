@@ -3,6 +3,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { elements } from "~/pages/api/charts/match-history";
 import { Flex, Table, Image, Card, Title, Text, Select } from "@mantine/core";
 
+PlayerMatchHistory.displayName = 'PlayerMatchHistory';
+
 export default function PlayerMatchHistory () {
     const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)
     const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`)
@@ -56,7 +58,6 @@ export default function PlayerMatchHistory () {
                 Rows
               </Text>
               <Select
-                mt="md"
                 comboboxProps={{ withinPortal: true }}
                 data={['React', 'Angular', 'Svelte', 'Vue']}
                 placeholder="Rows"
@@ -69,7 +70,6 @@ export default function PlayerMatchHistory () {
                 Maps
               </Text>
               <Select
-                mt="md"
                 comboboxProps={{ withinPortal: true }}
                 data={['React', 'Angular', 'Svelte', 'Vue']}
                 placeholder="All Maps"
