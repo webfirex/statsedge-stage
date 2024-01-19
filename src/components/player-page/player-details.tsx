@@ -10,16 +10,19 @@ import { useMediaQuery } from "@mantine/hooks";
 import { BREAKPOINTS } from "~/styles/globals";
 import { CircleFlag } from "react-circle-flags";
 
+interface PlayerDetailsProps {
+    sport: string | undefined;
+    logo: string | undefined;
+}
 
-
-export function PlayerDetails() {
+export function PlayerDetails(props: PlayerDetailsProps) {
 
     const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)
     const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`)
 
     return (
         <>
-            <Card p={"md"} radius={"md"} w={"300px"} style={{ 
+            <Card p={"md"} radius={"md"} miw={"300px"} maw={"100%"} style={{ 
                 backgroundColor: "transparent",
                 border: "1px solid #fff",
             }}>
@@ -41,11 +44,11 @@ export function PlayerDetails() {
                         </Box>
                     </Grid.Col>
                     <Grid.Col span={{ base: 3, md: 3 }}>
-                        <Card display={"flex"} p={"5"} pl={"10"} style={{ flexDirection: "row", gap: "10px", }}>
-                            <Text fz={"xs"}>LOL</Text>
+                        <Card display={"flex"} p={"5"} pl={"10"} style={{ flexDirection: "row", gap: "10px", justifyContent: "center", alignItems: "center" }}>
+                            <Text fz={"10"} tt={"uppercase"}>{props.sport}</Text>
                             <Image
-                              src={"/lol.svg"}
-                              mah={BigThenMd ? 20 : 15}
+                              src={props.logo}
+                              maw={BigThenMd ? 20 : 15}
                               alt={""}
                               fit="contain"
                             />

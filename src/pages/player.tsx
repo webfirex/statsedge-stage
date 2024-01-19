@@ -1,4 +1,5 @@
 // import dynamic from "next/dynamic";
+'use client'
 import {
   // Badge,
   Image,
@@ -37,6 +38,7 @@ import MatchStats from "~/components/player-page/match-stats";
 import PlayerMatchHistory from "~/components/player-page/match-history";
 import HitRate from "~/components/player-page/hit-rate";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function App() {
   const [value, setValue] = useState(50);
@@ -44,7 +46,15 @@ export default function App() {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`)
   
-    const sport = SportInfo("lol");
+  const searchParams = useSearchParams();
+ 
+  let sportQ = searchParams.get('m')?.toString();
+
+  if (sportQ === undefined) {
+    sportQ = 'lol';
+  }
+  
+    const sport = SportInfo(sportQ);
 
     if (!sport) {
         return (
@@ -100,12 +110,14 @@ export default function App() {
                   justifyContent: "space-between",
                   flexDirection: BigThenMd ? "row" : "column",
                 }}>
-                  <PlayerDetails />
+                  <PlayerDetails sport={SportInfo(sportQ)?.alias} logo={SportInfo(sportQ)?.logo} />
                   <Achievements />
                 </Box>
 
                 <RoleRow />
 
+                
+                {SportInfo(sportQ)?.alias != "rl" && SportInfo(sportQ)?.alias != "dota2" && (
                 <BarChart
                   display={BigThenMd ? "block" : "none"}
                   h={300}
@@ -128,6 +140,7 @@ export default function App() {
                     { name: 'Laptops', color: 'blue.6' },
                   ]}
                 />
+                )}
 
               </Grid.Col>
             </Grid>
@@ -142,7 +155,7 @@ export default function App() {
             <Grid columns={10}>
               <Grid.Col span={{ base: 10, md: 7 }}>
                 <FadeUpAni>
-                <HitRate />
+                <HitRate sport={SportInfo(sportQ)?.alias} />
                 </FadeUpAni>
               </Grid.Col>
               <Grid.Col span={{ base: 10, md: 3 }}>
@@ -248,14 +261,35 @@ export default function App() {
 
             <Grid columns={10} mt={"md"}>
               <Grid.Col span={{ base: 10, md: 5 }}>
+                {SportInfo(sportQ)?.alias != "rl" && SportInfo(sportQ)?.alias != "codmwiii" && (
                 <FadeUpAni>
                 <OverallStats />
                 </FadeUpAni>
+                )}
+                {SportInfo(sportQ)?.alias != "lol" && SportInfo(sportQ)?.alias != "cs2" && SportInfo(sportQ)?.alias != "valorant" && SportInfo(sportQ)?.alias != "dota2" && (
+                <FadeUpAni>
+                <Card p={"20px"}>
+                  <Title order={4} tt={"uppercase"} pb={"md"}>Performance Chart</Title>
+                  <LineChart
+                    h={300}
+                    data={performance}
+                    dataKey="key"
+                    series={[
+                      { name: 'Apples', color: 'blue.6' },
+                    ]}
+                    curveType="natural"
+                    gridAxis="xy"
+                  />
+                </Card>
+                </FadeUpAni>
+                )}
               </Grid.Col>
               <Grid.Col span={{ base: 10, md: 5 }}>
                 <FadeUpAni>
-                <MatchStats />
+                <MatchStats sport={SportInfo(sportQ)?.alias} />
                 </FadeUpAni>
+
+                {SportInfo(sportQ)?.alias != "lol" && SportInfo(sportQ)?.alias != "dota2" && SportInfo(sportQ)?.alias != "rl" && SportInfo(sportQ)?.alias != "codmwiii" && (
                 <FadeUpAni>
                 <Card p={"20px"} mt={"md"}>
                   <Title order={4} tt={"uppercase"} pb={"md"}>Performance Chart</Title>
@@ -271,6 +305,8 @@ export default function App() {
                   />
                 </Card>
                 </FadeUpAni>
+                )}
+
               </Grid.Col>
             </Grid>
 

@@ -4,11 +4,15 @@ import { BarChart } from '@mantine/charts';
 import { BREAKPOINTS } from "~/styles/globals";
 import { useMediaQuery } from "@mantine/hooks";
 
-export default function HitRate() {
+interface HitRateProps {
+  sport: string | undefined;
+}
+
+export default function HitRate(props: HitRateProps) {
     const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)
 
     return (
-        <Card p={"20px"} style={{ backgroundImage: "url(/map-blur.png)", display: "flex", flexDirection: "column"}}>
+        <Card p={"20px"} style={{ backgroundImage: props.sport === 'cs2' ? "url(/map-blur.png)" : "none", display: "flex", flexDirection: "column"}}>
           <Flex justify={"space-between"} direction={BigThenMd ? "row" : "column"} gap={"15px"}>
             <Box style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <Title tt={"uppercase"} order={4}>Hit Rate</Title>
@@ -23,7 +27,7 @@ export default function HitRate() {
                 radius={"lg"}
                 // classNames={classes}
               />
-              <Box miw={BigThenMd ? "300" : "200"} p={BigThenMd ? "sm" : "xs"} display={"flex"} style={{ justifyContent: BigThenMd ? "end" : "start", backgroundImage: "url(/map.png)", backgroundPosition: "center left", borderRadius: "30px" }}>Map 1</Box>
+              <Box miw={BigThenMd ? "300" : "200"} p={BigThenMd ? "sm" : "xs"} display={props.sport === 'cs2' ? "flex" : "none"} style={{ justifyContent: BigThenMd ? "end" : "start", backgroundImage: "url(/map.png)", backgroundPosition: "center left", borderRadius: "30px" }}>Map 1</Box>
             </Box>
           </Flex>
           <BarChart
