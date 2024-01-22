@@ -8,6 +8,7 @@ export default authMiddleware({
     "/matches",
     "/matches/:id",
     "/player",
+    "/team",
   ],
 });
 

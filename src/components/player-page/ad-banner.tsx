@@ -12,7 +12,8 @@ export function AdBanner() {
     return (
         <>
             <Card h={BigThenMd ? "100" : "70"} p={"md"} radius={"md"} style={{
-                backgroundImage: "url(./pro-hero.png)"
+                backgroundImage: "url(./pro-hero.png)",
+                backgroundPosition: "center",
             }}></Card>
         </>
     )
