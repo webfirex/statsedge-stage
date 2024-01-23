@@ -140,6 +140,7 @@ export function CommonHeader() {
                   <Anchor
                     c="green"
                     td="underline"
+                    href="/bonuses"
                     size={BigThenMd ? "md" : "xs"}
                     style={{
                       position: "relative",

@@ -99,8 +99,8 @@ export default function App() {
               <PathDisplay
                 path={[
                   {
-                    text: `Player Profile`,
-                    link: `/player`,
+                    text: `Team Profile`,
+                    link: `/team`,
                   }
                 ]}
               />
