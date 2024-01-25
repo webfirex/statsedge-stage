@@ -75,7 +75,9 @@ export function CommonHeader() {
                   Matches
                 </Anchor>
 
-                <Anchor c="white" td="none" size={BigThenMd ? "md" : "xs"}>
+                <Anchor 
+                  c={router.pathname === "/props" ? "blue" : "white"}
+                  td={router.pathname === "/props" ? "underline" : "none"} size={BigThenMd ? "md" : "xs"} href="/props">
                   Props
                 </Anchor>
 

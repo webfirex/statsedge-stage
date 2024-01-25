@@ -10,6 +10,7 @@ export default authMiddleware({
     "/player",
     "/team",
     "/bonuses",
+    "/props",
   ],
 });
 
