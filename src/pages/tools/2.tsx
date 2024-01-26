@@ -38,7 +38,6 @@ import { RoleRow } from "~/components/player-page/role-row";
 import MainFilters from "~/components/player-page/main-filter";
 import { BarChart, LineChart } from '@mantine/charts';
 import { data } from '~/pages/api/charts/vbar';
-import { performance } from "./api/charts/perform-chart";
 import OverallStats from "~/components/player-page/overall-stats";
 import MatchStats from "~/components/player-page/match-stats";
 import PlayerMatchHistory from "~/components/player-page/match-history";
@@ -48,6 +47,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { TeamDetails } from "~/components/team-page/team-details";
 import PropsTable from "~/components/props-page/table";
+import ToolsTable2 from "~/components/tools-page/2";
 
 export default function App() {
   const [value, setValue] = useState(50);
@@ -95,15 +95,21 @@ export default function App() {
             </FadeUpAni> */}
 
             <FadeUpAni>
-                <AdBanner />
+              <SportSelector
+                sport={sport}
+                disabled
+                setSport={(sport) => {
+                  console.log(sport);
+                }}
+              />
             </FadeUpAni>
 
             <FadeUpAni>
               <PathDisplay
                 path={[
                   {
-                    text: `Props`,
-                    link: `/props`,
+                    text: `Tools`,
+                    link: `/tools/2`,
                   }
                 ]}
               />
@@ -177,7 +183,7 @@ export default function App() {
             <Space />
 
             <FadeUpAni>
-                <PropsTable />
+                <ToolsTable2 />
             </FadeUpAni>
 
           </Stack>

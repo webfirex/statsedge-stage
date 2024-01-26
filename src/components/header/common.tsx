@@ -103,13 +103,21 @@ export function CommonHeader() {
                   </Menu.Target>
 
                   <Menu.Dropdown>
-                    <Menu.Item>DFS Optimizer</Menu.Item>
+                    <Menu.Item><Anchor c="white" td="none" href="/tools/1" fz={"xs"}>
+                    DFS Optimizer
+                    </Anchor></Menu.Item>
 
-                    <Menu.Item>DFS Middling</Menu.Item>
+                    <Menu.Item><Anchor c="white" td="none" href="/tools/2" fz={"xs"}>
+                    DFS Middling
+                    </Anchor></Menu.Item>
 
-                    <Menu.Item>DFS Correlations</Menu.Item>
+                    <Menu.Item><Anchor c="white" td="none" href="/href" fz={"xs"}>
+                    DFS Correlations
+                    </Anchor></Menu.Item>
 
-                    <Menu.Item>DFS Ownership</Menu.Item>
+                    <Menu.Item><Anchor c="white" td="none" href="/href" fz={"xs"}>
+                    DFS Ownership
+                    </Anchor></Menu.Item>
                   </Menu.Dropdown>
                 </Menu>
 
