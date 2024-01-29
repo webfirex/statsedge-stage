@@ -27,7 +27,7 @@ import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import { Children } from "react";
+import { Children, useEffect, useRef } from "react";
 import { z } from "zod";
 import { FadeUpAni } from "~/components/animation/fade-up";
 import { LayoutComp } from "~/components/layout";
@@ -50,6 +50,7 @@ import {
   IconShieldFilled,
 } from "@tabler/icons-react";
 import moment from "moment";
+import { io } from "socket.io-client";
 
 const ReactTwitchEmbedVideo = dynamic(
   () => import("react-twitch-embed-video"),
@@ -455,12 +456,48 @@ const MatchStats = () => {
 export default function AppTournamentManagePage({
   match,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const SocketRef = useRef(
+    io(`wss://api.gamescorekeeper.com/v2/live/${match.id}`, {
+      autoConnect: false,
+    })
+  );
+
   const sport = SportInfo(match.sport.alias);
 
   const timeLeft = useTimeLeft(UTCToLocalTime(match.scheduledStartTime));
 
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
+
+  useEffect(() => {
+    SocketRef.current.connect();
+
+    const HandleConnect = () => {
+      console.log("Connected");
+    };
+
+    const HandleDisconnect = () => {
+      console.log("Disconnected");
+    };
+
+    const HandleError = (err: unknown) => {
+      console.log(err);
+    };
+
+    SocketRef.current.on("connect", HandleConnect);
+    SocketRef.current.on("disconnect", HandleDisconnect);
+    SocketRef.current.on("error", HandleError);
+
+    const tempRef = SocketRef.current;
+
+    return () => {
+      tempRef.off("connect", HandleConnect);
+      tempRef.off("disconnect", HandleDisconnect);
+      tempRef.off("error", HandleError);
+
+      tempRef.disconnect();
+    };
+  }, []);
 
   if (!sport) {
     return (
@@ -1543,74 +1580,76 @@ export default function AppTournamentManagePage({
                 </FadeUpAni>
               )}
 
-              {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
-              <Card p="lg">
-                <Stack gap="xl">
-                  <SimpleGrid cols={{base: 1, md: 2}} spacing="lg">
-                    
-                    <Stack>
-                      <ScoreBoardHead
-                        game={sport.alias}
-                        teamId={match.participants.one.id!}
-                        name={match.participants.one.name!}
-                        bg="yellow.5"
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.one.name!}
-                      />
-                    </Stack>
-                    
-                    <Stack>
-                      <ScoreBoardHead
-                        game={sport.alias}
-                        teamId={match.participants.two.id!}
-                        name={match.participants.two.name!}
-                        bg="blue.5"
-                      />
-    
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                      <ScoreBoardRow
-                        game={sport.alias}
-                        name={match.participants.two.name!}
-                      />
-                    </Stack>
-  
-                  </SimpleGrid>
-                </Stack>
-              </Card> )}
-  
+            {match.status !== "Scheduled" &&
+              sport.alias !== "cs2" &&
+              sport.alias !== "rl" &&
+              sport.alias !== "val" &&
+              sport.alias !== "codmwiii" && (
+                <Card p="lg">
+                  <Stack gap="xl">
+                    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
+                      <Stack>
+                        <ScoreBoardHead
+                          game={sport.alias}
+                          teamId={match.participants.one.id!}
+                          name={match.participants.one.name!}
+                          bg="yellow.5"
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.one.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.one.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.one.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.one.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.one.name!}
+                        />
+                      </Stack>
+
+                      <Stack>
+                        <ScoreBoardHead
+                          game={sport.alias}
+                          teamId={match.participants.two.id!}
+                          name={match.participants.two.name!}
+                          bg="blue.5"
+                        />
+
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.two.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.two.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.two.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.two.name!}
+                        />
+                        <ScoreBoardRow
+                          game={sport.alias}
+                          name={match.participants.two.name!}
+                        />
+                      </Stack>
+                    </SimpleGrid>
+                  </Stack>
+                </Card>
+              )}
 
             <FadeUpAni>
               <Grid columns={10}>
@@ -1692,85 +1731,89 @@ export default function AppTournamentManagePage({
                       </Card>
                     )}
 
-                   
-              {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && ( 
-            <Card p="xs">
-              <Stack>
-                <Group>
-                  <Image
-                    src={`/api/team/logo?id=${match.participants.one.id}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={30}
-                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                  />
-                  <Title order={5} tt="uppercase">
-                    Lineups
-                  </Title>
-                </Group>
+                  {match.status !== "Scheduled" &&
+                    sport.alias !== "cs2" &&
+                    sport.alias !== "rl" &&
+                    sport.alias !== "val" &&
+                    sport.alias !== "codmwiii" && (
+                      <Card p="xs">
+                        <Stack>
+                          <Group>
+                            <Image
+                              src={`/api/team/logo?id=${match.participants.one.id}`}
+                              alt="league logo"
+                              fit="contain"
+                              h={30}
+                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                            />
+                            <Title order={5} tt="uppercase">
+                              Lineups
+                            </Title>
+                          </Group>
 
-                {match.participants.one.team?.most_recent_lineup ? (
-                  <SimpleGrid spacing={5} cols={teamLength}>
-                    {Children.toArray(
-                      match.participants.one.team?.most_recent_lineup.map(
-                        (player) => (
-                          <>
-                            <PlayerCard {...player} />
-                          </>
-                        )
-                      )
+                          {match.participants.one.team?.most_recent_lineup ? (
+                            <SimpleGrid spacing={5} cols={teamLength}>
+                              {Children.toArray(
+                                match.participants.one.team?.most_recent_lineup.map(
+                                  (player) => (
+                                    <>
+                                      <PlayerCard {...player} />
+                                    </>
+                                  )
+                                )
+                              )}
+                            </SimpleGrid>
+                          ) : (
+                            <>
+                              <SimpleGrid spacing={5} cols={5}>
+                                {Array.from(Array(5)).map(() => (
+                                  <>
+                                    <PlayerCard id={0} name="Unknown" />
+                                  </>
+                                ))}
+                              </SimpleGrid>
+                            </>
+                          )}
+
+                          <Group>
+                            <Image
+                              src={`/api/team/logo?id=${match.participants.two.id}`}
+                              alt="league logo"
+                              fit="contain"
+                              h={30}
+                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                            />
+                            <Title order={5} tt="uppercase">
+                              Lineups
+                            </Title>
+                          </Group>
+
+                          {match.participants.two.team?.most_recent_lineup ? (
+                            <SimpleGrid spacing={5} cols={teamLength}>
+                              {Children.toArray(
+                                match.participants.two.team?.most_recent_lineup.map(
+                                  (player) => (
+                                    <>
+                                      <PlayerCard {...player} />
+                                    </>
+                                  )
+                                )
+                              )}
+                            </SimpleGrid>
+                          ) : (
+                            <>
+                              <SimpleGrid spacing={5} cols={5}>
+                                {Array.from(Array(5)).map(() => (
+                                  <>
+                                    <PlayerCard id={0} name="Unknown" />
+                                  </>
+                                ))}
+                              </SimpleGrid>
+                            </>
+                          )}
+                        </Stack>
+                      </Card>
                     )}
-                  </SimpleGrid>
-                ) : (
-                  <>
-                    <SimpleGrid spacing={5} cols={5}>
-                      {Array.from(Array(5)).map(() => (
-                        <>
-                          <PlayerCard id={0} name="Unknown" />
-                        </>
-                      ))}
-                    </SimpleGrid>
-                  </>
-                )}
-
-                <Group>
-                  <Image
-                    src={`/api/team/logo?id=${match.participants.two.id}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={30}
-                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                  />
-                  <Title order={5} tt="uppercase">
-                    Lineups
-                  </Title>
-                </Group>
-
-                {match.participants.two.team?.most_recent_lineup ? (
-                  <SimpleGrid spacing={5} cols={teamLength}>
-                    {Children.toArray(
-                      match.participants.two.team?.most_recent_lineup.map(
-                        (player) => (
-                          <>
-                            <PlayerCard {...player} />
-                          </>
-                        )
-                      )
-                    )}
-                  </SimpleGrid>
-                ) : (
-                  <>
-                    <SimpleGrid spacing={5} cols={5}>
-                      {Array.from(Array(5)).map(() => (
-                        <>
-                          <PlayerCard id={0} name="Unknown" />
-                        </>
-                      ))}
-                    </SimpleGrid>
-                  </>
-                )}
-              </Stack>
-            </Card>)}
 
                   {/* {match.status !== "Scheduled" && sport.alias !== "cs2" && sport.alias !== "rl" && sport.alias !== "val" && sport.alias !== "codmwiii" && (
                   <Card p="lg">
@@ -1941,87 +1984,87 @@ export default function AppTournamentManagePage({
               </Grid>
             </FadeUpAni>
 
-
             {match.status !== "Scheduled" &&
-                    sport.alias !== "lol" &&
-                    sport.alias !== "dota2" && (
-            <Card p="xs">
-              <Stack>
-                <Group>
-                  <Image
-                    src={`/api/team/logo?id=${match.participants.one.id}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={30}
-                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                  />
-                  <Title order={5} tt="uppercase">
-                    Lineups
-                  </Title>
-                </Group>
+              sport.alias !== "lol" &&
+              sport.alias !== "dota2" && (
+                <Card p="xs">
+                  <Stack>
+                    <Group>
+                      <Image
+                        src={`/api/team/logo?id=${match.participants.one.id}`}
+                        alt="league logo"
+                        fit="contain"
+                        h={30}
+                        fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                      />
+                      <Title order={5} tt="uppercase">
+                        Lineups
+                      </Title>
+                    </Group>
 
-                {match.participants.one.team?.most_recent_lineup ? (
-                  <SimpleGrid spacing={5} cols={teamLength}>
-                    {Children.toArray(
-                      match.participants.one.team?.most_recent_lineup.map(
-                        (player) => (
-                          <>
-                            <PlayerCard {...player} />
-                          </>
-                        )
-                      )
+                    {match.participants.one.team?.most_recent_lineup ? (
+                      <SimpleGrid spacing={5} cols={teamLength}>
+                        {Children.toArray(
+                          match.participants.one.team?.most_recent_lineup.map(
+                            (player) => (
+                              <>
+                                <PlayerCard {...player} />
+                              </>
+                            )
+                          )
+                        )}
+                      </SimpleGrid>
+                    ) : (
+                      <>
+                        <SimpleGrid spacing={5} cols={5}>
+                          {Array.from(Array(5)).map(() => (
+                            <>
+                              <PlayerCard id={0} name="Unknown" />
+                            </>
+                          ))}
+                        </SimpleGrid>
+                      </>
                     )}
-                  </SimpleGrid>
-                ) : (
-                  <>
-                    <SimpleGrid spacing={5} cols={5}>
-                      {Array.from(Array(5)).map(() => (
-                        <>
-                          <PlayerCard id={0} name="Unknown" />
-                        </>
-                      ))}
-                    </SimpleGrid>
-                  </>
-                )}
 
-                <Group>
-                  <Image
-                    src={`/api/team/logo?id=${match.participants.two.id}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={30}
-                    fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                  />
-                  <Title order={5} tt="uppercase">
-                    Lineups
-                  </Title>
-                </Group>
+                    <Group>
+                      <Image
+                        src={`/api/team/logo?id=${match.participants.two.id}`}
+                        alt="league logo"
+                        fit="contain"
+                        h={30}
+                        fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                      />
+                      <Title order={5} tt="uppercase">
+                        Lineups
+                      </Title>
+                    </Group>
 
-                {match.participants.two.team?.most_recent_lineup ? (
-                  <SimpleGrid spacing={5} cols={teamLength}>
-                    {Children.toArray(
-                      match.participants.two.team?.most_recent_lineup.map(
-                        (player) => (
-                          <>
-                            <PlayerCard {...player} />
-                          </>
-                        )
-                      )
+                    {match.participants.two.team?.most_recent_lineup ? (
+                      <SimpleGrid spacing={5} cols={teamLength}>
+                        {Children.toArray(
+                          match.participants.two.team?.most_recent_lineup.map(
+                            (player) => (
+                              <>
+                                <PlayerCard {...player} />
+                              </>
+                            )
+                          )
+                        )}
+                      </SimpleGrid>
+                    ) : (
+                      <>
+                        <SimpleGrid spacing={5} cols={5}>
+                          {Array.from(Array(5)).map(() => (
+                            <>
+                              <PlayerCard id={0} name="Unknown" />
+                            </>
+                          ))}
+                        </SimpleGrid>
+                      </>
                     )}
-                  </SimpleGrid>
-                ) : (
-                  <>
-                    <SimpleGrid spacing={5} cols={5}>
-                      {Array.from(Array(5)).map(() => (
-                        <>
-                          <PlayerCard id={0} name="Unknown" />
-                        </>
-                      ))}
-                    </SimpleGrid>
-                  </>
-                )}
-              </Stack>
-            </Card> )}
+                  </Stack>
+                </Card>
+              )}
 
             {sport.alias !== "lol" &&
               sport.alias !== "dota2" &&

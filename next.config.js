@@ -17,6 +17,15 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  // gameapi -> https://api.gamescorekeeper.com
+
+  rewrites: async () => [
+    {
+      source: "/v2/:path*",
+      destination: `${process.env.SPORT_BASE_URL}/:path*`,
+    },
+  ],
 };
 
 export default config;
