@@ -51,6 +51,7 @@ import {
 } from "@tabler/icons-react";
 import moment from "moment";
 import { io } from "socket.io-client";
+import Link from "next/link";
 
 const ReactTwitchEmbedVideo = dynamic(
   () => import("react-twitch-embed-video"),
@@ -103,6 +104,8 @@ const PlayerCard = (props: { id: number; name: string }) => {
         style={{
           backgroundImage: "url(/player.jpg)",
         }}
+        component={Link}
+        href={`/player/${props.id}`}
       >
         <Stack gap={5} mb={BigThenXs ? 0 : rem(10)}>
           <Image
@@ -469,24 +472,29 @@ export default function AppTournamentManagePage({
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
   const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
 
+  const HandleConnect = () => {
+    console.log("Connected");
+  };
+
+  const HandleDisconnect = () => {
+    console.log("Disconnected");
+  };
+
+  const HandleError = (err: unknown) => {
+    console.log(err);
+  };
+
+  const HandelMatchUpdate = (data: unknown) => {
+    console.log(data);
+  }
+
   useEffect(() => {
     SocketRef.current.connect();
-
-    const HandleConnect = () => {
-      console.log("Connected");
-    };
-
-    const HandleDisconnect = () => {
-      console.log("Disconnected");
-    };
-
-    const HandleError = (err: unknown) => {
-      console.log(err);
-    };
 
     SocketRef.current.on("connect", HandleConnect);
     SocketRef.current.on("disconnect", HandleDisconnect);
     SocketRef.current.on("error", HandleError);
+    SocketRef.current.on("match", HandelMatchUpdate);
 
     const tempRef = SocketRef.current;
 
@@ -494,6 +502,7 @@ export default function AppTournamentManagePage({
       tempRef.off("connect", HandleConnect);
       tempRef.off("disconnect", HandleDisconnect);
       tempRef.off("error", HandleError);
+      tempRef.off("match", HandelMatchUpdate);
 
       tempRef.disconnect();
     };

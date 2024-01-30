@@ -4,6 +4,7 @@ import { FixtureList } from "./fixture/list";
 import { FixtureStream } from "./fixture/stream";
 import { ParticipantRecent } from "./participant/recent";
 import { PlayerGet } from "./player/get";
+import { PlayerStats } from "./player/stats";
 import { TeamGet } from "./team/get";
 import { TeamLogo } from "./team/logo";
 
@@ -24,6 +25,7 @@ class Participant {
 
 class Player {
   public static Get = PlayerGet;
+  public static Stats = PlayerStats;
 }
 
 class Custom {

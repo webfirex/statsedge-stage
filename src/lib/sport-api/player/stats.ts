@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { SportApiCore, SportApiLogger } from "../core";
 
-export class PlayerCSState {
-  public static readonly Route = "PlayerCSState";
-  public static readonly Path = "/v1/players";
+export class PlayerStats {
+  public static readonly Route = "PlayerStats";
+  public static readonly Path = "/v1/stats/player";
 
   public static readonly Zod = {
     Params: z.object({
@@ -12,19 +12,28 @@ export class PlayerCSState {
 
     Response: z
       .object({
-        payload: z.object({
-          timestamp: z.number(),
-          name: z.string(),
-          mapNumber: z.number(),
-          halfNumber: z.number(),
-          roundNumber: z.number(),
-          players: z.array(z.object({
-            name: z.string(),
-            teamId: z.number(),
-            playerId: z.number(),
-            money: z.number(),
-          }))
-        })
+        playerId: z.number().int(),
+        playerName: z.string(),
+        fixtureCount: z.number().int(),
+        mapsCount: z.number().int(),
+        roundCount: z.number().int(),
+
+        // CSGO Player Stats
+        averagePerRound: z.object({
+          kills: z.number().int(),
+          deaths: z.number().int(),
+          assists: z.number().int(),
+          flash_stats: z.number().int(),
+          headshots: z.number().int(),
+          entryKills: z.number().int(),
+          suicides: z.number().int(),
+          adr: z.number().int(),
+          kast: z.number().int(),
+        }),
+
+        meta: z.object({
+          ask_rating: z.number().int(),
+        }),
       })
       .nullable(),
   };
