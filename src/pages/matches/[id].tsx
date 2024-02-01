@@ -486,7 +486,7 @@ export default function AppTournamentManagePage({
 
   const HandelMatchUpdate = (data: unknown) => {
     console.log(data);
-  }
+  };
 
   useEffect(() => {
     SocketRef.current.connect();
@@ -2395,7 +2395,7 @@ export default function AppTournamentManagePage({
                                   size={BigThenXs ? "sm" : rem(10)}
                                   visibleFrom="sm"
                                 >
-                                  {data.competitionName ?? "Unknown"}
+                                  {"Unknown"}
                                 </Text>
                               </Group>
 
@@ -2406,14 +2406,14 @@ export default function AppTournamentManagePage({
                                       size={BigThenXs ? "sm" : rem(8)}
                                       hiddenFrom="sm"
                                     >
-                                      {data.mapName ?? "Unknown"}
+                                      {"Unknown"}
                                     </Text>
                                     <Text
                                       size={BigThenXs ? "sm" : rem(8)}
                                       tt="uppercase"
                                       c="dimmed"
                                     >
-                                      {data.mapName ?? "Unknown"}
+                                      {"Unknown"}
                                     </Text>
 
                                     <Divider orientation="vertical" size="sm" />

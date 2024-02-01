@@ -15,19 +15,16 @@ export class TeamForm {
       .object({
         teamName: z.string(),
         fixtureCount: z.number(),
-        fixtures: z
-          .array(
-            z.object({
-              opponentName: z.string().nullable(),
-              score: z.number(),
-              opponentScore: z.number(),
-              fixtureTime: z.number(),
-              fixtureId: z.number(),
-              competitionName: z.string().optional().nullable(),
-              mapName: z.string().optional().nullable(),
-            })
-          )
-          .nullable(),
+        fixtures: z.array(
+          z.object({
+            fixtureId: z.number(),
+            opponentId: z.number(),
+            opponentName: z.string(),
+            score: z.number(),
+            opponentScore: z.number(),
+            fixtureTime: z.number(),
+          })
+        ),
       })
       .nullable(),
   };
@@ -67,8 +64,6 @@ export class TeamForm {
     }
 
     const rawData: unknown = await rawRes.json();
-
-    console.log(JSON.stringify(rawData));
 
     const validatedRes = this.Zod.Response.safeParse(rawData);
 

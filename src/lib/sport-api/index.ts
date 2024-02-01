@@ -5,6 +5,7 @@ import { FixtureStream } from "./fixture/stream";
 import { ParticipantRecent } from "./participant/recent";
 import { PlayerGet } from "./player/get";
 import { PlayerStats } from "./player/stats";
+import { TeamForm } from "./team/form";
 import { TeamGet } from "./team/get";
 import { TeamLogo } from "./team/logo";
 
@@ -17,6 +18,7 @@ class Fixtures {
 class Team {
   public static Logo = TeamLogo;
   public static Get = TeamGet;
+  public static Form = TeamForm;
 }
 
 class Participant {
