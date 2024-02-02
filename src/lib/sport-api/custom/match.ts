@@ -3,8 +3,8 @@ import { SportApiLogger } from "../core";
 import { FixtureGet } from "../fixture/get";
 import { TeamGet } from "../team/get";
 import { TeamForm } from "../team/form";
-import { FixtureStream } from "../fixture/stream";
 import { MapPBGet } from "../map/pbget";
+import { FixtureMetadata } from "../fixture/metadata";
 
 export class CustomMatch {
   public static readonly Route = "CustomMatch";
@@ -138,7 +138,10 @@ export class CustomMatch {
       return opponentMatches;
     };
 
-    const StreamsPromise = FixtureStream.Call({ id: params.id });
+    const StreamsPromise = FixtureMetadata.Call({
+      id: params.id,
+      attribute: "streamUrl",
+    });
 
     const MapsPromise = MapPBGet.Call({
       id: params.id,

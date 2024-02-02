@@ -1,30 +1,21 @@
 import { z } from "zod";
 import { SportApiCore, SportApiLogger } from "../core";
 
-export class TeamForm {
-  public static readonly Route = "TeamForm";
-  public static readonly Path = "/v1/participants/{}/form";
+export class FixtureMetadata {
+  public static readonly Route = "FixtureMetadata";
+  public static readonly Path = "/v1/fixtures/{id}/metadata/{attribute}";
 
   public static readonly Zod = {
     Params: z.object({
       id: z.number(),
-      opponentId: z.number().optional(),
+      attribute: z.enum(["streamUrl", "hltvMatchUrl"]),
     }),
 
     Response: z
       .object({
-        teamName: z.string(),
-        fixtureCount: z.number(),
-        fixtures: z.array(
-          z.object({
-            fixtureId: z.number(),
-            opponentId: z.number(),
-            opponentName: z.string(),
-            score: z.number(),
-            opponentScore: z.number(),
-            fixtureTime: z.number(),
-          })
-        ),
+        fixtureId: z.number().int(),
+        attribute: z.string(),
+        value: z.string(),
       })
       .nullable(),
   };
@@ -32,13 +23,11 @@ export class TeamForm {
   public static Call = async (
     params: z.infer<typeof this.Zod.Params>
   ): Promise<z.infer<typeof this.Zod.Response>> => {
-    const url = SportApiCore.URL(this.Path.replace("{}", params.id.toString()));
+    let path = this.Path.replace("{id}", params.id.toString());
 
-    url.searchParams.append("count", "5");
+    path = path.replace("{attribute}", params.attribute);
 
-    if (params.opponentId) {
-      url.searchParams.append("opponent", params.opponentId.toString());
-    }
+    const url = SportApiCore.URL(path);
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),
@@ -60,7 +49,7 @@ export class TeamForm {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching team form");
+      throw new Error("Error while fetching fixture metadata");
     }
 
     const rawData: unknown = await rawRes.json();
@@ -75,7 +64,7 @@ export class TeamForm {
         route: this.Route,
       });
 
-      throw new Error("Error while validating team form");
+      throw new Error("Error while validating response");
     }
 
     return validatedRes.data;

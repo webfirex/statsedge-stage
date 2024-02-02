@@ -900,21 +900,34 @@ export default function AppTournamentManagePage({
                       />
                     </Group>
 
-                    {(match.streams?.streams.length ?? 0) >= 0 ? (
-                      <ReactTwitchEmbedVideo
-                        width="100%"
-                        channel="talk2megooseman"
-                        layout="video"
-                        height={BigThenXs ? "500px" : "250px"}
-                      />
-                    ) : (
-                      <Center h="500px">
-                        <Title maw={500} order={4} ta="center">
-                          No stream available for this match. Please check back
-                          later.
-                        </Title>
-                      </Center>
-                    )}
+                    {(() => {
+                      if (match.streams) {
+                        const streamURL = new URL(match.streams.value);
+
+                        const streamChannel =
+                          streamURL.searchParams.get("channel");
+
+                        if (streamChannel) {
+                          return (
+                            <ReactTwitchEmbedVideo
+                              width="100%"
+                              channel={streamChannel}
+                              layout="video"
+                              height={BigThenXs ? "500px" : "250px"}
+                            />
+                          );
+                        }
+                      }
+
+                      return (
+                        <Center h="500px">
+                          <Title maw={500} order={4} ta="center">
+                            No stream available for this match. Please check
+                            back later.
+                          </Title>
+                        </Center>
+                      );
+                    })()}
                   </Stack>
                 </Card>
               </>
