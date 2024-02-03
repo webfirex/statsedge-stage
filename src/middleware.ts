@@ -4,6 +4,7 @@ export default authMiddleware({
   publicRoutes: [
     "/",
     "/api/trpc/fixture.list",
+    "/api/trpc/fixture.get",
     "/api/team/logo",
     "/matches",
     "/matches/:id",

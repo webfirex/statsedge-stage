@@ -14,6 +14,7 @@ export class TeamGet {
       .object({
         id: z.number().int(),
         name: z.string(),
+        sport: z.string(),
         country: z.string().nullable(),
         countryISO: z.string().length(2).nullable(),
         region: z.string().nullable(),
@@ -33,8 +34,6 @@ export class TeamGet {
     params: z.infer<typeof this.Zod.Params>
   ): Promise<z.infer<typeof this.Zod.Response>> => {
     const url = SportApiCore.URL(`${this.Path}/${params.id}`);
-
-    console.log("Teamurl:", url.toString());
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),

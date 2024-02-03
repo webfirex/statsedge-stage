@@ -16,6 +16,50 @@ class MapZod {
   public static CSGO = z.object({
     status: this.$Status,
     mapNumber: z.number(),
+    mapDataStatus: z.enum(["live", "verified"]),
+    endTime: z.number().optional(),
+    winnerId: z.string().optional(),
+    startTime: z.number().optional(),
+    roundScores: z.array(
+      z.object({
+        id: z.number(),
+        roundsWon: z.number(),
+        halfScores: z.array(z.number()),
+      })
+    ),
+    teamStats: z.array(
+      z.object({
+        teamId: z.number(),
+        kills: z.number(),
+        headshots: z.number(),
+        assists: z.number(),
+        flash_assists: z.number(),
+        deaths: z.number(),
+        suicides: z.number(),
+        entryKills: z.number(),
+        startSide: z.enum(["CT", "Terrorist"]),
+        players: z.array(
+          z.object({
+            kills: z.number(),
+            headshots: z.number(),
+            assists: z.number(),
+            flash_assists: z.number(),
+            deaths: z.number(),
+            suicides: z.number(),
+            entryKills: z.number(),
+            kpr: z.number(),
+            dpr: z.number(),
+            adr: z.number(),
+            clutches: z.array(
+              z.object({
+                round: z.number(),
+                type: z.enum(["1v2", "1v3", "1v4", "1v5"]),
+              })
+            ),
+          })
+        ),
+      })
+    ),
   });
 
   public static VALORANT = z.object({

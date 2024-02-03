@@ -30,7 +30,6 @@ import { data } from "~/pages/api/charts/vbar";
 import { performance } from "../api/charts/perform-chart";
 import OverallStats from "~/components/player-page/overall-stats";
 import MatchStats from "~/components/player-page/match-stats";
-import PlayerMatchHistory from "~/components/player-page/match-history";
 import HitRate from "~/components/player-page/hit-rate";
 import { useState } from "react";
 import {
@@ -39,6 +38,7 @@ import {
 } from "next";
 import { z } from "zod";
 import { SportApi } from "~/lib/sport-api";
+import { PlayerMatchHistory } from "~/components/player-page/player-match-history";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -75,7 +75,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     "public, s-maxage=30, stale-while-revalidate=30"
   );
 
-  console.log(PlayerInfo, PlayerStats);
+  console.log({ PlayerInfo, PlayerStats });
 
   return {
     props: {
@@ -166,7 +166,7 @@ export default function Player({
                     <BarChart
                       display={BigThenMd ? "block" : "none"}
                       h={300}
-                      maw={500}
+                      // maw={500}
                       data={data}
                       dataKey="key"
                       type="stacked"

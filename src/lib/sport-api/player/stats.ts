@@ -20,19 +20,19 @@ export class PlayerStats {
 
         // CSGO Player Stats
         averagePerRound: z.object({
-          kills: z.number().int(),
-          deaths: z.number().int(),
-          assists: z.number().int(),
-          flash_stats: z.number().int(),
-          headshots: z.number().int(),
-          entryKills: z.number().int(),
-          suicides: z.number().int(),
-          adr: z.number().int(),
-          kast: z.number().int(),
+          kills: z.number(),
+          deaths: z.number(),
+          assists: z.number(),
+          flash_assists: z.number(),
+          headshots: z.number(),
+          entryKills: z.number(),
+          suicides: z.number(),
+          adr: z.number(),
+          kast: z.number(),
         }),
 
         meta: z.object({
-          ask_rating: z.number().int(),
+          gsk_rating: z.number(),
         }),
       })
       .nullable(),
@@ -63,7 +63,7 @@ export class PlayerStats {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching player");
+      throw new Error("Error while fetching player stats");
     }
 
     const rawData: unknown = await rawRes.json();
@@ -78,7 +78,7 @@ export class PlayerStats {
         route: this.Route,
       });
 
-      throw new Error("Error while validating player");
+      throw new Error("Error while validating player stats");
     }
 
     return validatedRes.data;

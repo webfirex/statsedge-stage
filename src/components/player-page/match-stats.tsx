@@ -3,7 +3,7 @@ import { BREAKPOINTS } from "~/styles/globals";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface MatchStatsProps {
-  sport: string | undefined;
+  sport: string;
 }
 
 export default function MatchStats(props: MatchStatsProps) {

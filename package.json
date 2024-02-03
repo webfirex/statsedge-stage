@@ -40,6 +40,8 @@
     "jotai-immer": "^0.3.0",
     "moment": "^2.30.1",
     "next": "^14.0.4",
+    "next-superjson-plugin": "^0.6.1",
+    "node-cache": "^5.1.2",
     "node-fetch": "2",
     "pino": "^8.17.2",
     "react": "18.2.0",

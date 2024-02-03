@@ -1,11 +1,11 @@
 import { SportApi } from "~/lib/sport-api";
 
 const main = async () => {
-  const match = await SportApi.Team.Form.Call({
-    id: 742839,
+  const match = await SportApi.Fixtures.Get.Call({
+    id: 742804,
   });
 
-  console.log(JSON.stringify(match, null, 2));
+  console.log(match?.maps.csgo);
 };
 
 void main().then(() => {

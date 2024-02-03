@@ -3,7 +3,7 @@ import { SportApiCore, SportApiLogger } from "../core";
 
 export class MapPBGet {
   public static readonly Route = "MapPBGet";
-  public static readonly Path = "/v1/pickban/{}/maps";
+  public static readonly Path = "/v1/pickban/{id}/maps";
 
   public static readonly Zod = {
     Params: z.object({
@@ -28,9 +28,9 @@ export class MapPBGet {
   public static Call = async (
     params: z.infer<typeof this.Zod.Params>
   ): Promise<z.infer<typeof this.Zod.Response>> => {
-    const url = SportApiCore.URL(this.Path.replace("{}", params.id.toString()));
-
-    console.log("+++++", url.toString());
+    const url = SportApiCore.URL(
+      this.Path.replace("{id}", params.id.toString())
+    );
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),
@@ -52,12 +52,10 @@ export class MapPBGet {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching team");
+      throw new Error("Error while fetching Map Pick Ban");
     }
 
     const rawData: unknown = await rawRes.json();
-
-    console.log(JSON.stringify(rawData));
 
     const validatedRes = this.Zod.Response.safeParse(rawData);
 
@@ -69,7 +67,7 @@ export class MapPBGet {
         route: this.Route,
       });
 
-      throw new Error("Error while validating team");
+      throw new Error("Error while validating Map Pick Ban");
     }
 
     return validatedRes.data;

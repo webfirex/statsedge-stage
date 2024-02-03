@@ -25,9 +25,36 @@ export class FixtureGet {
         sport: SportApiZod.Sport,
         participants: z.array(SportApiZod.Participants),
         links: z.array(SportApiZod.Links),
-        maps: z.array(SportApiZod.Map.Base).optional(),
+        maps: z.array(z.unknown()).optional(),
       })
-      .nullable(),
+      .nullable()
+      .transform((data, ctx) => {
+        if (!data) {
+          return null;
+        }
+
+        if (data.sport.alias === "cs2" && data.maps) {
+          const safeParse = z.array(SportApiZod.Map.CSGO).safeParse(data.maps);
+
+          if (!safeParse.success) {
+            return ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Failed to parse maps for CS:GO`,
+              path: ["maps"],
+              params: { error: safeParse.error },
+            });
+          }
+
+          return {
+            ...data,
+            maps: {
+              csgo: safeParse.data,
+            },
+          };
+        }
+
+        return { ...data, maps: {} };
+      }),
   };
 
   public static Call = async (
@@ -59,8 +86,6 @@ export class FixtureGet {
     }
 
     const rawData: unknown = await rawRes.json();
-
-    console.log("rawData:", rawData);
 
     const validatedRes = this.Zod.Response.safeParse(rawData);
 

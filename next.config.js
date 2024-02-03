@@ -26,6 +26,17 @@ const config = {
       destination: `${process.env.SPORT_BASE_URL}/:path*`,
     },
   ],
+
+  experimental: {
+    swcPlugins: [
+      [
+        "next-superjson-plugin",
+        {
+          excluded: [],
+        },
+      ],
+    ],
+  },
 };
 
 export default config;
