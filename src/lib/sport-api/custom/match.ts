@@ -3,12 +3,24 @@ import { SportApiLogger } from "../core";
 import { FixtureGet } from "../fixture/get";
 import { TeamGet } from "../team/get";
 import { TeamForm } from "../team/form";
-import { MapPBGet } from "../map/pbget";
 import { FixtureMetadata } from "../fixture/metadata";
 import { SportInfo } from "~/lib/functions";
 import { type UnwrapPromise } from "next/dist/lib/coalesced-function";
 import { LocalCache } from "~/server/cache";
 import { PlayerGet } from "../player/get";
+import { FixtureStatsDOTA } from "../fixture/stats-dota";
+import { PickBanMaps } from "../pickban/maps";
+import { PickBanHeroes } from "../pickban/heroes";
+
+type HalfFixture = Exclude<
+  UnwrapPromise<ReturnType<typeof TeamForm.Call>>,
+  null
+>["fixtures"][0];
+
+type PickBanHeroType = Exclude<
+  UnwrapPromise<ReturnType<typeof PickBanHeroes.Call>>,
+  null
+>["pickBan"];
 
 export class CustomMatch {
   public static readonly Route = "CustomMatch";
@@ -17,6 +29,92 @@ export class CustomMatch {
     Params: z.object({
       id: z.number(),
     }),
+  };
+
+  private static Fixture = async (id: number) => {
+    const FixtureDB = await FixtureGet.Call({ id });
+
+    if (!FixtureDB) {
+      return null;
+    }
+
+    const sportInfo = SportInfo(FixtureDB.sport.alias);
+
+    if (!sportInfo) {
+      return null;
+    }
+
+    if (
+      ["dota2", "lol"].includes(FixtureDB.sport.alias) &&
+      FixtureDB.status !== "Scheduled"
+    ) {
+      const Match = await FixtureStatsDOTA.Call({ id });
+
+      if (FixtureDB.sport.alias === "dota2") {
+        return {
+          ...FixtureDB,
+          sport: sportInfo,
+          stats: {
+            dota: Match,
+          },
+        };
+      }
+
+      return {
+        ...FixtureDB,
+        sport: sportInfo,
+        stats: {
+          lol: Match,
+        },
+      };
+    }
+
+    return { ...FixtureDB, sport: sportInfo };
+  };
+
+  private static ParseHeroPickBan = (params: {
+    pickBan: PickBanHeroType;
+    teamOneId: number;
+    teamTwoId: number;
+  }) => {
+    const DividedByTeam = params.pickBan.reduce(
+      (acc, curr) => {
+        if (curr.teamId === params.teamOneId) {
+          acc.one.push(curr);
+        } else {
+          acc.two.push(curr);
+        }
+
+        return acc;
+      },
+      {
+        one: [] as typeof params.pickBan,
+        two: [] as typeof params.pickBan,
+      }
+    );
+
+    const _DividedByType = (team: typeof DividedByTeam.one) => {
+      return team.reduce(
+        (acc, curr) => {
+          if (curr.type === "pick") {
+            acc.pick.push(curr);
+          } else {
+            acc.ban.push(curr);
+          }
+
+          return acc;
+        },
+        {
+          pick: [] as typeof DividedByTeam.one,
+          ban: [] as typeof DividedByTeam.one,
+        }
+      );
+    };
+
+    return {
+      one: _DividedByType(DividedByTeam.one),
+      two: _DividedByType(DividedByTeam.two),
+    };
   };
 
   public static Call = async (params: z.infer<typeof this.Zod.Params>) => {
@@ -37,29 +135,15 @@ export class CustomMatch {
       return CachedMatch;
     }
 
-    const fixture = await FixtureGet.Call({ id: params.id });
+    const fixture = await this.Fixture(params.id);
 
     if (!fixture) {
       return null;
     }
 
-    if (fixture.participants.length !== 2) {
-      SportApiLogger.fatal(
-        {
-          fixture,
-          params,
-          route: this.Route,
-        },
-        "More then 2 participants"
-      );
-
-      throw new Error("Error while fetching match");
+    if (!fixture.participants.one && !fixture.participants.two) {
+      return null;
     }
-
-    type HalfFixture = Exclude<
-      UnwrapPromise<ReturnType<typeof TeamForm.Call>>,
-      null
-    >["fixtures"][0];
 
     const _DetailedFixture = async (halfFixture: HalfFixture[]) => {
       const DetailedFixture = await Promise.all(
@@ -71,20 +155,7 @@ export class CustomMatch {
       return halfFixture.map((fixture) => {
         const HistoryFixture = DetailedFixture.find(
           (f) => f?.id === fixture.fixtureId
-        );
-
-        if (!HistoryFixture) {
-          SportApiLogger.fatal(
-            {
-              fixture,
-              params,
-              route: this.Route,
-            },
-            "Error while fetching detailed fixture"
-          );
-
-          throw new Error("Error while fetching detailed fixture");
-        }
+        )!;
 
         return {
           ...fixture,
@@ -93,13 +164,9 @@ export class CustomMatch {
       });
     };
 
-    const _DetailedParti = async (parti: (typeof fixture.participants)[0]) => {
-      if (!parti.id) {
-        return {
-          ...parti,
-          team: null,
-          recent_matches: null,
-        };
+    const _DetailedParti = async (parti: typeof fixture.participants.one) => {
+      if (!parti) {
+        return null;
       }
 
       const [team, recent_matches] = await Promise.all([
@@ -160,10 +227,14 @@ export class CustomMatch {
       };
     };
 
-    const _OpponentMatches = async (teams: typeof fixture.participants) => {
+    const _OpponentMatches = async (parti: typeof fixture.participants) => {
+      if (!parti.one || !parti.two) {
+        return null;
+      }
+
       const OpponentMatches = await TeamForm.Call({
-        id: teams[0]!.id!,
-        opponentId: teams[1]!.id!,
+        id: parti.one.id,
+        opponentId: parti.two.id,
       });
 
       if (!OpponentMatches) {
@@ -180,10 +251,6 @@ export class CustomMatch {
       };
     };
 
-    const DetailPartiPromise = Promise.all(
-      fixture.participants.map(_DetailedParti)
-    );
-
     const OpponentMatchesPromise = _OpponentMatches(fixture.participants);
 
     const StreamsPromise = FixtureMetadata.Call({
@@ -191,26 +258,29 @@ export class CustomMatch {
       attribute: "streamUrl",
     });
 
-    const PickBanPromise = MapPBGet.Call({
+    const PickBanMapPromise = PickBanMaps.Call({
       id: params.id,
     });
 
-    const [CompleteTeams, Streams, OpponentMatches, PickBan] =
-      await Promise.all([
-        DetailPartiPromise,
-        StreamsPromise,
-        OpponentMatchesPromise,
-        PickBanPromise,
-      ]);
+    const PickBanHeroesPromise = PickBanHeroes.Call({
+      id: params.id,
+    });
 
-    const TeamOne = CompleteTeams[0]!;
-    const TeamTwo = CompleteTeams[1]!;
-
-    const Sportinfo = SportInfo(fixture.sport.alias);
-
-    if (!Sportinfo) {
-      return null;
-    }
+    const [
+      TeamOne,
+      TeamTwo,
+      Streams,
+      OpponentMatches,
+      PickBanMap,
+      PickBanHeros,
+    ] = await Promise.all([
+      _DetailedParti(fixture.participants.one),
+      _DetailedParti(fixture.participants.two),
+      StreamsPromise,
+      OpponentMatchesPromise,
+      PickBanMapPromise,
+      PickBanHeroesPromise,
+    ]);
 
     const Result = {
       ...fixture,
@@ -220,8 +290,14 @@ export class CustomMatch {
       },
       stream: Streams,
       opponentMatches: OpponentMatches,
-      pickBan: PickBan?.pickBan ?? null,
-      sportInfo: Sportinfo,
+      pickBanMap: PickBanMap?.pickBan ?? undefined,
+      pickBanHero: PickBanHeros?.pickBan
+        ? this.ParseHeroPickBan({
+            pickBan: PickBanHeros.pickBan,
+            teamOneId: TeamOne?.id ?? 0,
+            teamTwoId: TeamTwo?.id ?? 0,
+          })
+        : undefined,
     };
 
     LocalCache.set(CacheKey, Result, 10);

@@ -14,7 +14,7 @@ export class PlayerGet {
       .object({
         id: z.number().int(),
         firstName: z.string(),
-        lastName: z.string(),
+        lastName: z.string().nullable(),
         nickname: z.string().optional(),
         age: z.number().int().nullable(),
         country: z.string().nullable(),

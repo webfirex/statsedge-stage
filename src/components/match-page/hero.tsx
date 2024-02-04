@@ -60,7 +60,7 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
               tt="uppercase"
               ff="STNO"
             >
-              {match.participants.one.name}
+              {match.participants.one?.name ?? "Unknown"}
             </Text>
 
             <Image
@@ -83,7 +83,7 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
               tt="uppercase"
               ff="STNO"
             >
-              {match.participants.two.name}
+              {match.participants.two?.name ?? "Unknown"}
             </Text>
           </Group>
 
@@ -101,17 +101,17 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
               <Group mx="auto" gap={BigThenXs ? "md" : 10}>
                 <Stack gap={5}>
                   <Text size={BigThenXs ? "xl" : rem(10)} ta="right">
-                    {match.participants.one.name}
+                    {match.participants.one?.name}
                   </Text>
 
                   <Group justify="end" gap={rem(5)}>
                     <Text size={BigThenXs ? "xs" : rem(10)} ta="right">
-                      {match.participants.one.team?.country ?? "Unknown"}
+                      {match.participants.one?.team?.country ?? "Unknown"}
                     </Text>
 
                     <CircleFlag
                       countryCode={
-                        match.participants.one.team?.countryISO?.toLowerCase() ??
+                        match.participants.one?.team?.countryISO?.toLowerCase() ??
                         ""
                       }
                       height={BigThenXs ? 16 : 10}
@@ -120,11 +120,11 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
                 </Stack>
 
                 <Image
-                  src={`/api/team/logo?id=${match.participants.one.id}`}
+                  src={`/api/team/logo?id=${match.participants.one?.id}`}
                   alt="league logo"
                   fit="contain"
                   h={BigThenXs ? rem(30) : rem(10)}
-                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  fallbackSrc="/place.svg"
                 />
               </Group>
               <Image
@@ -137,13 +137,13 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
                   zIndex: 1,
                   opacity: 0.3,
                 }}
-                src={`/api/team/logo?id=${match.participants.one.id}`}
+                src={`/api/team/logo?id=${match.participants.one?.id}`}
                 alt="as"
               />
             </Card>
 
             <Title order={BigThenXs ? 3 : 5}>
-              {match.participants.one.score}:{match.participants.two.score}
+              {match.participants.one?.score ?? 0}:{match.participants.two?.score ?? 0}
             </Title>
 
             <Card
@@ -156,27 +156,27 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
             >
               <Group mx="auto" gap={10}>
                 <Image
-                  src={`/api/team/logo?id=${match.participants.two.id}`}
+                  src={`/api/team/logo?id=${match.participants.two?.id}`}
                   alt="league logo"
                   fit="contain"
                   h={BigThenXs ? rem(30) : rem(10)}
-                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  fallbackSrc="/place.svg"
                 />
                 <Stack gap={rem(5)}>
                   <Text size={BigThenXs ? "xl" : rem(10)} ta="left">
-                    {match.participants.two.name}
+                    {match.participants.two?.name}
                   </Text>
 
                   <Group justify="start" gap={rem(5)}>
                     <CircleFlag
                       countryCode={
-                        match.participants.two.team?.countryISO?.toLowerCase() ??
+                        match.participants.two?.team?.countryISO?.toLowerCase() ??
                         ""
                       }
                       height={BigThenXs ? 16 : 10}
                     />
                     <Text size={rem(10)} ta="left">
-                      {match.participants.two.team?.country ?? "Unknown"}
+                      {match.participants.two?.team?.country ?? "Unknown"}
                     </Text>
                   </Group>
                 </Stack>
@@ -191,7 +191,7 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
                   zIndex: 1,
                   opacity: 0.3,
                 }}
-                src={`/api/team/logo?id=${match.participants.two.id}`}
+                src={`/api/team/logo?id=${match.participants.two?.id}`}
                 alt="as"
               />
             </Card>

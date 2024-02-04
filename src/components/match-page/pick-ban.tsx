@@ -27,14 +27,14 @@ export function MatchMapPickBanComp({ match }: MatchMapPickBanProps) {
         </Paper>
 
         {Children.toArray(
-          match.pickBan?.map((map, index) => (
+          match.pickBanMap?.map((map, index) => (
             <Paper
               px="xs"
               radius={0}
               bg="dark.5"
               style={{
                 borderBottom:
-                  index === (match.pickBan?.length ?? 0) - 1
+                  index === (match.pickBanMap?.length ?? 0) - 1
                     ? "none"
                     : "1px solid var(--mantine-color-dark-4)",
               }}
@@ -49,7 +49,7 @@ export function MatchMapPickBanComp({ match }: MatchMapPickBanProps) {
                       fit="contain"
                       h={30}
                       ml="auto"
-                      fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                      fallbackSrc="/place.svg"
                     />
                   ) : (
                     <Text>-</Text>
@@ -63,7 +63,7 @@ export function MatchMapPickBanComp({ match }: MatchMapPickBanProps) {
                       fit="contain"
                       h={30}
                       ml="auto"
-                      fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                      fallbackSrc="/place.svg"
                     />
                   ) : (
                     <Text>-</Text>

@@ -14,7 +14,7 @@ export function PlayerMatchHistory() {
         <Flex>
           <Image
             src={
-              "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+              "/place.svg"
             }
             alt="league logo"
             fit="contain"
@@ -27,7 +27,7 @@ export function PlayerMatchHistory() {
         <Flex display={BigThenMd ? "flex" : "none"}>
           <Image
             src={
-              "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+              "/place.svg"
             }
             alt="league logo"
             fit="contain"
@@ -38,7 +38,7 @@ export function PlayerMatchHistory() {
         <Flex display={BigThenMd ? "none" : "flex"}>
           <Image
             src={
-              "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+              "/place.svg"
             }
             alt="league logo"
             fit="contain"

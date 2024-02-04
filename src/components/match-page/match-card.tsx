@@ -67,7 +67,7 @@ export function MatchCard(props: MatchCardProps) {
                   alt="league logo"
                   fit="contain"
                   mah={rem(15)}
-                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  fallbackSrc="/place.svg"
                 />
                 <Text size={rem(10)} maw={100} truncate="end" tt="capitalize">
                   {props.match.participants[0]!.name ?? "Unknown"}
@@ -80,7 +80,7 @@ export function MatchCard(props: MatchCardProps) {
                   alt="league logo"
                   fit="contain"
                   mah={rem(15)}
-                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  fallbackSrc="/place.svg"
                 />
                 <Text size={rem(10)} maw={100} truncate="end" tt="capitalize">
                   {props.match.participants[1]!.name ?? "Unknown"}
@@ -198,7 +198,7 @@ export function MatchCard(props: MatchCardProps) {
                 alt="league logo"
                 fit="contain"
                 mah={20}
-                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                fallbackSrc="/place.svg"
               />
               <Text size="xs" w={120} tt="capitalize">
                 {props.match.participants[0]!.name ?? "Unknown"}
@@ -211,7 +211,7 @@ export function MatchCard(props: MatchCardProps) {
                 alt="league logo"
                 fit="contain"
                 mah={20}
-                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                fallbackSrc="/place.svg"
               />
               <Text size="xs" w={120} tt="capitalize">
                 {props.match.participants[1]!.name ?? "Unknown"}

@@ -33,6 +33,39 @@ export class FixtureGet {
           return null;
         }
 
+        if (data.participants.length !== 2) {
+          return ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `Expected 2 participants, got ${data.participants.length}`,
+            path: ["participants"],
+          });
+        }
+
+        const NotNullParti = (parti: (typeof data.participants)[0]) => {
+          return {
+            ...parti,
+            id: parti.id ?? 0,
+            name: parti.name ?? "",
+          };
+        };
+
+        return {
+          ...data,
+          participants: {
+            one: data.participants[0]!.id
+              ? NotNullParti(data.participants[0]!)
+              : null,
+            two: data.participants[1]!.id
+              ? NotNullParti(data.participants[1]!)
+              : null,
+          },
+        };
+      })
+      .transform((data, ctx) => {
+        if (!data) {
+          return null;
+        }
+
         if (data.sport.alias === "cs2" && data.maps) {
           const safeParse = z.array(SportApiZod.Map.CSGO).safeParse(data.maps);
 
@@ -53,7 +86,30 @@ export class FixtureGet {
           };
         }
 
-        return { ...data, maps: {} };
+        if (data.sport.alias === "codmwiii" && data.maps) {
+          const safeParse = z.array(SportApiZod.Map.COD).safeParse(data.maps);
+
+          if (!safeParse.success) {
+            return ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Failed to parse maps for Dota 2`,
+              path: ["maps"],
+              params: { error: safeParse.error },
+            });
+          }
+
+          return {
+            ...data,
+            maps: {
+              cod: safeParse.data,
+            },
+          };
+        }
+
+        return {
+          ...data,
+          maps: undefined,
+        };
       }),
   };
 

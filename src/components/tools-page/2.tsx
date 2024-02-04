@@ -1,9 +1,7 @@
 import { BREAKPOINTS } from "~/styles/globals";
 import { useMediaQuery } from "@mantine/hooks";
 import { tools } from "~/pages/api/charts/tools/2";
-import { Flex, Table, Image, Card, Title, Text, Select, Box } from "@mantine/core";
-
-ToolsTable2.displayName = 'ToolsTable2';
+import { Flex, Table, Image, Card, Text, Box } from "@mantine/core";
 
 export default function ToolsTable2 () {
     const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`)

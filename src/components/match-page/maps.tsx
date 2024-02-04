@@ -20,9 +20,230 @@ interface MatchMapsProps {
   match: MatchType;
 }
 
-export function MatchMapsComp({ match }: MatchMapsProps) {
+export function MatchMapCSGOComp({ match }: MatchMapsProps) {
   const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
 
+  if (!match?.maps?.csgo) {
+    return (
+      <Center>
+        <Text>No CSGO maps found</Text>
+      </Center>
+    );
+  }
+
+  return (
+    <SimpleGrid
+      cols={{
+        base: match.sport.alias === "codmwiii" ? 3 : 1,
+        md: match.sport.alias === "codmwiii" ? 4 : 1,
+      }}
+    >
+      {Children.toArray(
+        match.maps.csgo.map((map) => (
+          <>
+            <Card
+              style={{
+                backgroundImage: "url(/map.jpg)",
+              }}
+            >
+              <Overlay
+                style={{
+                  zIndex: 1,
+                }}
+              />
+              <div
+                style={{
+                  zIndex: 2,
+                }}
+              >
+                {match.status === "Scheduled" && (
+                  <Flex align="center" justify="center">
+                    <Title order={3} ta="center">
+                      {map.mapName}
+                    </Title>
+                  </Flex>
+                )}
+
+                {match?.status !== "Scheduled" &&
+                  ["cs2", "valorant"].includes(match.sport.alias) && (
+                    <Flex align="center" justify="space-between">
+                      <Title order={3}>{map.mapName}</Title>
+                      <Flex
+                        justify="space-between"
+                        align="center"
+                        gap={SmallThenSm ? "sm" : "xl"}
+                      >
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Image
+                            src={`/api/team/logo?id=${map.roundScores[0]?.id}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={30}
+                            fallbackSrc="/place.svg"
+                          />
+                          <Text
+                            c={
+                              (map.roundScores[0]?.roundsWon ?? 0) >
+                              (map.roundScores[1]?.roundsWon ?? 0)
+                                ? "green"
+                                : "red"
+                            }
+                          >
+                            {map.roundScores[0]?.roundsWon ?? 0}
+                          </Text>
+                        </Flex>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          bg="black"
+                          p="sm"
+                        >
+                          <Text size="sm">Stats</Text>
+                          <Text>s</Text>
+                        </Flex>
+                        <Flex direction="column" align="center">
+                          <Image
+                            src={`/api/team/logo?id=${map.roundScores[1]?.id}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={30}
+                            fallbackSrc="/place.svg"
+                          />
+                          <Text
+                            c={
+                              (map.roundScores[1]?.roundsWon ?? 0) >
+                              (map.roundScores[0]?.roundsWon ?? 0)
+                                ? "green"
+                                : "red"
+                            }
+                          >
+                            {map.roundScores[1]?.roundsWon ?? 0}
+                          </Text>
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  )}
+              </div>
+            </Card>
+          </>
+        ))
+      )}
+    </SimpleGrid>
+  );
+}
+
+export function MatchMapCODComp({ match }: MatchMapsProps) {
+  const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
+
+  if (!match?.maps?.cod) {
+    return (
+      <Center>
+        <Text>No COD maps found</Text>
+      </Center>
+    );
+  }
+
+  return (
+    <SimpleGrid
+      cols={{
+        base: match.sport.alias === "codmwiii" ? 3 : 1,
+        md: match.sport.alias === "codmwiii" ? 5 : 1,
+      }}
+    >
+      {Children.toArray(
+        match.maps.cod.map((map) => (
+          <>
+            <Card
+              style={{
+                backgroundImage: "url(/map.jpg)",
+              }}
+            >
+              <Overlay
+                style={{
+                  zIndex: 1,
+                }}
+              />
+              <div
+                style={{
+                  zIndex: 2,
+                }}
+              >
+                {match.status === "Scheduled" && (
+                  <Flex align="center" justify="center">
+                    <Title order={3} ta="center">
+                      {map.mapName}
+                    </Title>
+                  </Flex>
+                )}
+
+                {match.status !== "Scheduled" && (
+                  <SimpleGrid cols={{ base: 1, md: 1 }}>
+                    <Title ta="center" order={5}>
+                      {map.mapName}
+                    </Title>
+                    <Divider />
+                    <Text size="sm" ta="center">
+                      {map.mode}
+                    </Text>
+                    <Flex justify="space-between" align="center" gap="xs">
+                      <Flex direction="column" align="center" justify="center">
+                        <Image
+                          src={`/api/team/logo?id=${map.mapScores[0]?.teamId}`}
+                          alt="league logo"
+                          fit="contain"
+                          h={30}
+                          fallbackSrc="/place.svg"
+                        />
+                        <Text
+                          c={
+                            (map.mapScores[0]?.score ?? 0) >
+                            (map.mapScores[1]?.score ?? 0)
+                              ? "green"
+                              : "red"
+                          }
+                        >
+                          {map.mapScores[0]?.score ?? 0}
+                        </Text>
+                      </Flex>
+                      <Flex direction="column" align="center" bg="black" p="2">
+                        <Text size={SmallThenSm ? "xs" : "sm"}>Stats</Text>
+                      </Flex>
+                      <Flex direction="column" align="center">
+                        <Image
+                          src={`/api/team/logo?id=${map.mapScores[1]?.teamId}`}
+                          alt="league logo"
+                          fit="contain"
+                          h={30}
+                          fallbackSrc="/place.svg"
+                        />
+                        <Text
+                          c={
+                            (map.mapScores[1]?.score ?? 0) >
+                            (map.mapScores[0]?.score ?? 0)
+                              ? "green"
+                              : "red"
+                          }
+                        >
+                          {map.mapScores[1]?.score ?? 0}
+                        </Text>
+                      </Flex>
+                    </Flex>
+                  </SimpleGrid>
+                )}
+              </div>
+            </Card>
+          </>
+        ))
+      )}
+    </SimpleGrid>
+  );
+}
+
+export function MatchMapsComp({ match }: MatchMapsProps) {
   return (
     <>
       <SimpleGrid
@@ -41,9 +262,9 @@ export function MatchMapsComp({ match }: MatchMapsProps) {
                 md:
                   match.status === "Scheduled"
                     ? 1
-                    : match.sportInfo.alias === "codmwiii"
-                    ? 2
-                    : 1,
+                    : match.sport.alias === "codmwiii"
+                    ? 1
+                    : 2,
               }}
               spacing="xl"
             >
@@ -51,195 +272,28 @@ export function MatchMapsComp({ match }: MatchMapsProps) {
                 <Divider />
 
                 {(() => {
-                  if (!match?.pickBan) {
+                  if (match.sport.alias === "codmwiii") {
                     return (
-                      <Center>
-                        <Text>No maps found</Text>
-                      </Center>
+                      <>
+                        <MatchMapCODComp match={match} />
+                      </>
                     );
                   }
 
-                  return (
-                    <>
-                      <SimpleGrid
-                        cols={{
-                          base: match.sportInfo.alias === "codmwiii" ? 3 : 1,
-                          md: match.sportInfo.alias === "codmwiii" ? 4 : 1,
-                        }}
-                      >
-                        {Children.toArray(
-                          match.pickBan.map((map) => (
-                            <>
-                              <Card
-                                style={{
-                                  backgroundImage: "url(/map.jpg)",
-                                }}
-                              >
-                                <Overlay
-                                  style={{
-                                    zIndex: 1,
-                                  }}
-                                />
-                                <div
-                                  style={{
-                                    zIndex: 2,
-                                  }}
-                                >
-                                  {match.status === "Scheduled" && (
-                                    <Flex align="center" justify="center">
-                                      <Title order={3} ta="center">
-                                        {map.mapName}
-                                      </Title>
-                                    </Flex>
-                                  )}
+                  if (["cs2", "valorant"].includes(match.sport.alias)) {
+                    return (
+                      <>
+                        <MatchMapCSGOComp match={match} />
+                      </>
+                    );
+                  }
 
-                                  {match?.status !== "Scheduled" &&
-                                    ["cs2", "valorant"].includes(
-                                      match.sportInfo.alias
-                                    ) && (
-                                      <Flex
-                                        align="center"
-                                        justify="space-between"
-                                      >
-                                        <Title order={3}>{map.mapName}</Title>
-                                        <Flex
-                                          justify="space-between"
-                                          align="center"
-                                          gap={SmallThenSm ? "sm" : "xl"}
-                                        >
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                            justify="center"
-                                          >
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.one.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="red">
-                                              {/* {map.[0]?.roundsWon} */}
-                                              as
-                                            </Text>
-                                          </Flex>
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                            bg="black"
-                                            p="sm"
-                                          >
-                                            <Text size="sm">Stats</Text>
-                                            <Text>
-                                              {/* {
-                                                    map.roundScores[0]
-                                                      ?.halfScores[0]
-                                                  }
-                                                  :
-                                                  {
-                                                    map.roundScores[1]
-                                                      ?.halfScores[0]
-                                                  }
-                                                  &nbsp;|&nbsp;
-                                                  {
-                                                    map.roundScores[0]
-                                                      ?.halfScores[1]
-                                                  }
-                                                  :
-                                                  {
-                                                    map.roundScores[1]
-                                                      ?.halfScores[1]
-                                                  } */}
-                                              s
-                                            </Text>
-                                          </Flex>
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                          >
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.two.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="green">
-                                              {/* {map.roundScores[1]?.roundsWon} */}
-                                              s
-                                            </Text>
-                                          </Flex>
-                                        </Flex>
-                                      </Flex>
-                                    )}
-
-                                  {match.status !== "Scheduled" &&
-                                    match?.sportInfo?.alias === "codmwiii" && (
-                                      <SimpleGrid cols={{ base: 1, md: 1 }}>
-                                        <Title order={5}>TBA</Title>
-                                        <Divider />
-                                        <Text size="sm">Terminal</Text>
-                                        <Flex
-                                          justify="space-between"
-                                          align="center"
-                                          gap="xs"
-                                        >
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                            justify="center"
-                                          >
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.one.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="red">5</Text>
-                                          </Flex>
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                            bg="black"
-                                            p="2"
-                                          >
-                                            <Text
-                                              size={SmallThenSm ? "xs" : "sm"}
-                                            >
-                                              Stats
-                                            </Text>
-                                          </Flex>
-                                          <Flex
-                                            direction="column"
-                                            align="center"
-                                          >
-                                            <Image
-                                              src={`/api/team/logo?id=${match.participants.one.id}`}
-                                              alt="league logo"
-                                              fit="contain"
-                                              h={30}
-                                              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                                            />
-                                            <Text c="green">5</Text>
-                                          </Flex>
-                                        </Flex>
-                                      </SimpleGrid>
-                                    )}
-                                </div>
-                              </Card>
-                            </>
-                          ))
-                        )}
-                      </SimpleGrid>
-                    </>
-                  );
+                  return <>Sport not supported</>;
                 })()}
               </Stack>
 
               {match.status !== "Scheduled" &&
-                ["cs2", "valorant"].includes(match.sportInfo.alias) && (
+                ["cs2", "valorant"].includes(match.sport.alias) && (
                   <MatchMapPickBanComp match={match} />
                 )}
             </SimpleGrid>

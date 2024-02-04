@@ -1,18 +1,20 @@
 import { Card, Flex, Image, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { CircleFlag } from "react-circle-flags";
+import { type PlayerStatsType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
 interface TeamPlayerCardProps {
   player: {
     id: number;
     firstName: string;
-    lastName: string;
+    lastName: string | null;
     nickname?: string;
     country: string | null;
     countryISO: string | null;
     sport: string;
   };
+  stats: PlayerStatsType | null;
 }
 
 export const TeamPlayerCard = (props: TeamPlayerCardProps) => {
@@ -91,7 +93,19 @@ export const TeamPlayerCard = (props: TeamPlayerCardProps) => {
           display={BigThenMd ? "flex" : "none"}
         >
           <Text fz={"xs"} style={{ borderBottom: "1px solid #1f1f1f" }}>
-            K/D 1.31
+            {(() => {
+              if (!props.stats) {
+                return `K/D N/A`;
+              }
+
+              return `K/D ${
+                Math.round(
+                  (props.stats.averagePerRound.kills /
+                    props.stats.averagePerRound.deaths) *
+                    100
+                ) / 100
+              }`;
+            })()}
           </Text>
           <Text fz={"xs"} style={{ borderBottom: "1px solid #1f1f1f" }}>
             Most Played Champion : AATROX

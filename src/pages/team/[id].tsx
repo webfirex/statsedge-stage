@@ -188,7 +188,10 @@ export default function Team({
                       return (
                         <>
                           <Grid.Col span={{ base: 2, md: 2 }}>
-                            <TeamPlayerCard player={player} />
+                            <TeamPlayerCard
+                              player={player}
+                              stats={player.stats}
+                            />
                           </Grid.Col>
                         </>
                       );
@@ -215,7 +218,7 @@ export default function Team({
                           alt="league logo"
                           fit="contain"
                           h={BigThenXs ? 50 : 15}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          fallbackSrc="/place.svg"
                         />
 
                         <Text size={BigThenXs ? "md" : rem(8)}>
@@ -269,7 +272,7 @@ export default function Team({
                                   alt="league logo"
                                   fit="contain"
                                   h={BigThenXs ? 20 : 10}
-                                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                  fallbackSrc="/place.svg"
                                 />
 
                                 {BigThenXs && (
@@ -279,7 +282,7 @@ export default function Team({
                                 <Image
                                   src={`/api/team/logo?id=${fixture.opponentId}`}
                                   fallbackSrc={
-                                    "https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                                    "/place.svg"
                                   }
                                   alt="league logo"
                                   fit="contain"

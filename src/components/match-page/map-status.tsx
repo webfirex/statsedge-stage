@@ -51,11 +51,11 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
                     >
                       <Group gap="xs">
                         <Image
-                          src={`/api/team/logo?id=${match.participants.one.id}`}
+                          src={`/api/team/logo?id=${match.participants.one?.id}`}
                           alt="league logo"
                           fit="contain"
                           h={20}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          fallbackSrc="/place.svg"
                         />
                         <Text
                           size="xs"
@@ -64,7 +64,7 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
                           truncate="end"
                           maw={100}
                         >
-                          {match.participants.one.team?.name}
+                          {match.participants.one?.team?.name}
                         </Text>
                       </Group>
                     </Card>
@@ -81,11 +81,11 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
                     >
                       <Group gap="xs">
                         <Image
-                          src={`/api/team/logo?id=${match.participants.two.id}`}
+                          src={`/api/team/logo?id=${match.participants.two?.id}`}
                           alt="league logo"
                           fit="contain"
                           h={20}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                          fallbackSrc="/place.svg"
                         />
                         <Text
                           size="xs"
@@ -94,7 +94,7 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
                           truncate="end"
                           maw={100}
                         >
-                          {match.participants.two.team?.name}
+                          {match.participants.two?.team?.name}
                         </Text>
                       </Group>
                     </Card>
@@ -105,7 +105,7 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
               <Divider size="sm" />
 
               {(() => {
-                if (!match.pickBan) {
+                if (!match.pickBanMap) {
                   return (
                     <>
                       <Center>
@@ -118,7 +118,7 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
                 }
 
                 return Children.toArray(
-                  match.pickBan.map((map, index) => (
+                  match.pickBanMap.map((map, index) => (
                     <Grid key={index} columns={10}>
                       <Grid.Col span={{ base: 3, sm: 5 }} m="auto" h="100%">
                         <Card

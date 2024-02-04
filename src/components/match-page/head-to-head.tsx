@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import moment from "moment";
+import { Children } from "react";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
@@ -38,15 +39,15 @@ export function MatchHeadToHeadComp({ match }: MatchStreamProps) {
             <Flex justify="space-evenly" align="center" wrap="nowrap">
               <Flex align="center" gap={BigThenXs ? "md" : rem(5)}>
                 <Image
-                  src={`/api/team/logo?id=${match.participants.one.id}`}
+                  src={`/api/team/logo?id=${match.participants.one?.id}`}
                   alt="league logo"
                   fit="contain"
                   h={BigThenXs ? 50 : 15}
-                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  fallbackSrc="/place.svg"
                 />
 
                 <Text size={BigThenXs ? "md" : rem(8)}>
-                  {match.participants.one.name ?? "Unknown"}
+                  {match.participants.one?.name ?? "Unknown"}
                 </Text>
               </Flex>
 
@@ -89,15 +90,15 @@ export function MatchHeadToHeadComp({ match }: MatchStreamProps) {
 
               <Flex align="center" gap={BigThenXs ? "md" : rem(5)}>
                 <Text size={BigThenXs ? "md" : rem(8)}>
-                  {match.participants.two.name ?? "Unknown"}
+                  {match.participants.two?.name ?? "Unknown"}
                 </Text>
 
                 <Image
-                  src={`/api/team/logo?id=${match.participants.two.id}`}
+                  src={`/api/team/logo?id=${match.participants.two?.id}`}
                   alt="league logo"
                   fit="contain"
                   h={BigThenXs ? 50 : 15}
-                  fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                  fallbackSrc="/place.svg"
                 />
               </Flex>
             </Flex>
@@ -106,98 +107,100 @@ export function MatchHeadToHeadComp({ match }: MatchStreamProps) {
           <Stack gap={0}>
             {match.opponentMatches?.fixtures?.length != null &&
               match.opponentMatches.fixtures.length > 0 &&
-              match.opponentMatches.fixtures.map((data, dindex) => (
-                <>
-                  <Paper
-                    bg={dindex % 2 === 0 ? "transparent" : "dark.5"}
-                    key={dindex}
-                    radius="sm"
-                    px={BigThenXs ? "xl" : "xs"}
-                    py="xs"
-                  >
-                    <Flex justify="space-between" align="center">
-                      <Group>
-                        <Text size={BigThenXs ? "sm" : rem(10)}>
-                          {moment(data.fixtureTime).format("DD/MM/YYYY")}
-                        </Text>
-
-                        <Divider orientation="vertical" size="sm" />
-
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.one.id}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={BigThenXs ? 20 : 10}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-
-                        {BigThenXs && (
-                          <Text size="sm">{match.participants.one.name}</Text>
-                        )}
-
-                        <Image
-                          src={`/api/team/logo?id=${match.participants.two.id}`}
-                          alt="league logo"
-                          fit="contain"
-                          h={20}
-                          fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-                        />
-
-                        {BigThenXs && (
-                          <Text size="sm">
-                            {match.participants.two.name ?? "Unknown"}
+              Children.toArray(
+                match.opponentMatches.fixtures.map((data, dindex) => (
+                  <>
+                    <Paper
+                      bg={dindex % 2 === 0 ? "transparent" : "dark.5"}
+                      key={dindex}
+                      radius="sm"
+                      px={BigThenXs ? "xl" : "xs"}
+                      py="xs"
+                    >
+                      <Flex justify="space-between" align="center">
+                        <Group>
+                          <Text size={BigThenXs ? "sm" : rem(10)}>
+                            {moment(data.fixtureTime).format("DD/MM/YYYY")}
                           </Text>
-                        )}
 
-                        <Divider
-                          orientation="vertical"
-                          size="sm"
-                          color="blue"
-                        />
+                          <Divider orientation="vertical" size="sm" />
 
-                        <Text
-                          size={BigThenXs ? "sm" : rem(10)}
-                          visibleFrom="sm"
-                        >
-                          {data.detail.competition.name ?? "Unknown"}
-                        </Text>
-                      </Group>
+                          <Image
+                            src={`/api/team/logo?id=${match.participants.one?.id}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={BigThenXs ? 20 : 10}
+                            fallbackSrc="/place.svg"
+                          />
 
-                      <Group gap={SmallThenSm ? rem(7) : "md"}>
-                        {match.sportInfo?.alias !== "lol" && (
-                          <>
-                            <Text
-                              size={BigThenXs ? "sm" : rem(8)}
-                              hiddenFrom="sm"
-                            >
-                              {"Unknown"}
+                          {BigThenXs && (
+                            <Text size="sm">{match.participants.one?.name}</Text>
+                          )}
+
+                          <Image
+                            src={`/api/team/logo?id=${match.participants.two?.id}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={20}
+                            fallbackSrc="/place.svg"
+                          />
+
+                          {BigThenXs && (
+                            <Text size="sm">
+                              {match.participants.two?.name ?? "Unknown"}
                             </Text>
-                            <Text
-                              size={BigThenXs ? "sm" : rem(8)}
-                              tt="uppercase"
-                              c="dimmed"
-                            >
-                              {"Unknown"}
-                            </Text>
+                          )}
 
-                            <Divider orientation="vertical" size="sm" />
-                          </>
-                        )}
+                          <Divider
+                            orientation="vertical"
+                            size="sm"
+                            color="blue"
+                          />
 
-                        <Text size={BigThenXs ? "sm" : rem(10)}>
-                          <Text inherit span c="red">
-                            {data.score ?? "NA"}
-                          </Text>{" "}
-                          -{" "}
-                          <Text inherit span c="green">
-                            {data.opponentScore ?? "NA"}
+                          <Text
+                            size={BigThenXs ? "sm" : rem(10)}
+                            visibleFrom="sm"
+                          >
+                            {data.detail.competition.name ?? "Unknown"}
                           </Text>
-                        </Text>
-                      </Group>
-                    </Flex>
-                  </Paper>
-                </>
-              ))}
+                        </Group>
+
+                        <Group gap={SmallThenSm ? rem(7) : "md"}>
+                          {match.sport?.alias !== "lol" && (
+                            <>
+                              <Text
+                                size={BigThenXs ? "sm" : rem(8)}
+                                hiddenFrom="sm"
+                              >
+                                {"Unknown"}
+                              </Text>
+                              <Text
+                                size={BigThenXs ? "sm" : rem(8)}
+                                tt="uppercase"
+                                c="dimmed"
+                              >
+                                {"Unknown"}
+                              </Text>
+
+                              <Divider orientation="vertical" size="sm" />
+                            </>
+                          )}
+
+                          <Text size={BigThenXs ? "sm" : rem(10)}>
+                            <Text inherit span c="red">
+                              {data.score ?? "NA"}
+                            </Text>{" "}
+                            -{" "}
+                            <Text inherit span c="green">
+                              {data.opponentScore ?? "NA"}
+                            </Text>
+                          </Text>
+                        </Group>
+                      </Flex>
+                    </Paper>
+                  </>
+                ))
+              )}
             {!match.opponentMatches?.fixtures?.length && (
               <Text ta="center">No data available</Text>
             )}

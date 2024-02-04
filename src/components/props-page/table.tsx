@@ -1,7 +1,7 @@
 import { BREAKPOINTS } from "~/styles/globals";
 import { useMediaQuery } from "@mantine/hooks";
 import { props } from "~/pages/api/charts/props";
-import { Flex, Table, Image, Card, Title, Text, Select, Box } from "@mantine/core";
+import { Flex, Table, Image, Card, Text, Box } from "@mantine/core";
 
 PropsTable.displayName = 'PropsTable';
 

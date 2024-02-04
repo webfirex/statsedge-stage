@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { SportApiCore, SportApiLogger } from "../core";
 
-export class PlayerStats {
-  public static readonly Route = "PlayerStats";
-  public static readonly Path = "/v1/stats/player";
+export class PickBanMaps {
+  public static readonly Route = "PickBanMaps";
+  public static readonly Path = "/v1/pickban/{id}/maps";
 
   public static readonly Zod = {
     Params: z.object({
@@ -12,28 +12,15 @@ export class PlayerStats {
 
     Response: z
       .object({
-        playerId: z.number().int(),
-        playerName: z.string(),
-        fixtureCount: z.number().int(),
-        mapsCount: z.number().int(),
-        roundCount: z.number().int(),
-
-        // CSGO Player Stats
-        averagePerRound: z.object({
-          kills: z.number(),
-          deaths: z.number(),
-          assists: z.number(),
-          flash_assists: z.number().optional(),
-          headshots: z.number().optional(),
-          entryKills: z.number().optional(),
-          suicides: z.number().optional(),
-          adr: z.number().optional(),
-          kast: z.number().optional(),
-        }),
-
-        meta: z.object({
-          gsk_rating: z.number().optional(),
-        }),
+        fixtureId: z.number(),
+        pickBan: z.array(
+          z.object({
+            mapName: z.string(),
+            order: z.number(),
+            teamId: z.number().nullable(),
+            pickOrBan: z.enum(["pick", "ban"]),
+          })
+        ),
       })
       .nullable(),
   };
@@ -41,7 +28,9 @@ export class PlayerStats {
   public static Call = async (
     params: z.infer<typeof this.Zod.Params>
   ): Promise<z.infer<typeof this.Zod.Response>> => {
-    const url = SportApiCore.URL(`${this.Path}/${params.id}`);
+    const url = SportApiCore.URL(
+      this.Path.replace("{id}", params.id.toString())
+    );
 
     const rawRes = await SportApiCore.Request({
       url: url.toString(),
@@ -63,7 +52,7 @@ export class PlayerStats {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching player stats");
+      throw new Error(`${this.Route}: Error while fetching`);
     }
 
     const rawData: unknown = await rawRes.json();
@@ -78,7 +67,7 @@ export class PlayerStats {
         route: this.Route,
       });
 
-      throw new Error("Error while validating player stats");
+      throw new Error(`${this.Route}: Error while validating response`);
     }
 
     return validatedRes.data;

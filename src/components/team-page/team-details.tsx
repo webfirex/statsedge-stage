@@ -34,7 +34,7 @@ export function TeamDetails(props: TeamDetailsProps) {
               alt="league logo"
               fit="contain"
               h={BigThenXs ? 150 : 100}
-              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+              fallbackSrc="/place.svg"
             />
           </Grid.Col>
           <Grid.Col span={{ base: 8, md: 8 }}>

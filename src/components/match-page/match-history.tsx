@@ -8,11 +8,12 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import Link from "next/link";
 import { Children } from "react";
 import { type MatchType } from "~/lib/type";
 
 interface MatchHistoryCardProps {
-  participant: MatchType["participants"]["one"];
+  participant: Exclude<MatchType["participants"]["one"], null>;
 }
 
 export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
@@ -20,17 +21,25 @@ export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
     <>
       <Card>
         <Stack>
-          <Group>
-            <Image
-              src={`/api/team/logo?id=${participant.id}`}
-              alt="league logo"
-              fit="contain"
-              h={25}
-              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
-            />
+          <Link
+            href={`/team/${participant.id}`}
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            <Group>
+              <Image
+                src={`/api/team/logo?id=${participant.id}`}
+                alt="league logo"
+                fit="contain"
+                h={25}
+                fallbackSrc="/place.svg"
+              />
 
-            <Text>{participant.name ?? "Unknown"}</Text>
-          </Group>
+              <Text>{participant.name ?? "Unknown"}</Text>
+            </Group>
+          </Link>
 
           <Divider />
 
@@ -38,20 +47,28 @@ export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
             if (!participant.recent_matches) return <Text>No History</Text>;
 
             return Children.toArray(
-              participant.recent_matches.fixtures.map((fixture, index) => (
-                <Group key={index} justify="space-between">
-                  {fixture.opponentName ?? "Unknown"}
-                  <Badge
-                    color={
-                      fixture.score > fixture.opponentScore ? "green" : "red"
-                    }
-                    variant="light"
-                    c="white"
-                  >
-                    BO{fixture.detail.format.value} {fixture.score}-
-                    {fixture.opponentScore}
-                  </Badge>
-                </Group>
+              participant.recent_matches.fixtures.map((fixture) => (
+                <Link
+                  href={`/team/${fixture.opponentId}`}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  <Group justify="space-between">
+                    {fixture.opponentName ?? "Unknown"}
+                    <Badge
+                      color={
+                        fixture.score > fixture.opponentScore ? "green" : "red"
+                      }
+                      variant="light"
+                      c="white"
+                    >
+                      BO{fixture.detail.format.value} {fixture.score}-
+                      {fixture.opponentScore}
+                    </Badge>
+                  </Group>
+                </Link>
               ))
             );
           })()}
@@ -73,9 +90,13 @@ export function MatchHistoryComp({ match }: MatchHistoryProps) {
           Match History
         </Title>
 
-        <MatchHistoryCard participant={match.participants.one} />
+        {match.participants.one && (
+          <MatchHistoryCard participant={match.participants.one} />
+        )}
 
-        <MatchHistoryCard participant={match.participants.two} />
+        {match.participants.two && (
+          <MatchHistoryCard participant={match.participants.two} />
+        )}
       </Stack>
     </>
   );

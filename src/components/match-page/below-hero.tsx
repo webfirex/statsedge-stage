@@ -50,16 +50,16 @@ export function MatchBelowHeroComp({ match }: MatchBelowHeroProps) {
               gap={BigThenXs ? "md" : rem(5)}
             >
               <Image
-                src={`/api/team/logo?id=${match.participants.one.id}`}
+                src={`/api/team/logo?id=${match.participants.one?.id}`}
                 alt="league logo"
                 fit="contain"
                 h={BigThenXs ? 30 : 15}
                 w={BigThenXs ? 30 : 15}
-                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                fallbackSrc="/place.svg"
               />
 
               <Text size={BigThenXs ? "lg" : rem(10)}>
-                {match.participants.one.name}
+                {match.participants.one?.name}
               </Text>
 
               <Paper
@@ -95,16 +95,16 @@ export function MatchBelowHeroComp({ match }: MatchBelowHeroProps) {
               </Paper>
 
               <Text size={BigThenXs ? "lg" : rem(10)}>
-                {match.participants.one.name}
+                {match.participants.two?.name}
               </Text>
 
               <Image
-                src={`/api/team/logo?id=${match.participants.one.id}`}
+                src={`/api/team/logo?id=${match.participants.two?.id}`}
                 alt="league logo"
                 fit="contain"
                 h={BigThenXs ? 30 : 15}
                 w={BigThenXs ? 30 : 15}
-                fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+                fallbackSrc="/place.svg"
               />
             </Flex>
           </Flex>

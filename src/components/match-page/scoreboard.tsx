@@ -51,7 +51,7 @@ export function ScoreBoardHead(props: {
               alt="league logo"
               fit="contain"
               h={BigThenXs ? 20 : 15}
-              fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+              fallbackSrc="/place.svg"
             />
             <Text size={BigThenXs ? "sm" : rem(10)} c="black">
               {props.name}
@@ -378,22 +378,22 @@ export function MatchScoreboardComp({ match }: MatchScoreboardProps) {
             </Flex>
           </Flex>
 
-          {["lol", "dota2", "valorant"].includes(match.sportInfo.alias) && (
-            <MatchStats sport={match.sportInfo.alias} />
+          {["lol", "dota2", "valorant"].includes(match.sport.alias) && (
+            <MatchStats sport={match.sport.alias} />
           )}
 
           <Stack gap="md">
             <ScoreBoardHead
-              game={match.sportInfo.alias}
-              teamId={match.participants.one.id!}
-              name={match.participants.one.name!}
+              game={match.sport.alias}
+              teamId={match.participants.one?.id ?? 0}
+              name={match.participants.one?.name ?? "Team 1"}
               bg="yellow.5"
             />
-            {match.participants.one.team?.most_recent_lineup?.map(
+            {match.participants.one?.team?.most_recent_lineup?.map(
               (player, index) => (
                 <ScoreBoardRow
                   key={index}
-                  game={match?.sportInfo?.alias ?? "lol"}
+                  game={match?.sport?.alias ?? "lol"}
                   name={player.name}
                 />
               )
@@ -402,17 +402,17 @@ export function MatchScoreboardComp({ match }: MatchScoreboardProps) {
             <Space />
 
             <ScoreBoardHead
-              game={match.sportInfo.alias}
-              teamId={match.participants.two.id!}
-              name={match.participants.two.name!}
+              game={match.sport.alias}
+              teamId={match.participants.two?.id ?? 0}
+              name={match.participants.two?.name ?? "Team 2"}
               bg="blue.5"
             />
 
-            {match.participants.one.team?.most_recent_lineup?.map(
+            {match.participants.one?.team?.most_recent_lineup?.map(
               (player, index) => (
                 <ScoreBoardRow
                   key={index}
-                  game={match?.sportInfo?.alias ?? "lol"}
+                  game={match?.sport?.alias ?? "lol"}
                   name={player.name}
                 />
               )

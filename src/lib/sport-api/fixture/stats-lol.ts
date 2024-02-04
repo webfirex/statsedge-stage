@@ -1,24 +1,46 @@
 import { z } from "zod";
 import { SportApiCore, SportApiLogger } from "../core";
 
-export class MapPBGet {
-  public static readonly Route = "MapPBGet";
-  public static readonly Path = "/v1/pickban/{id}/maps";
+export class FixtureStatsLOL {
+  public static readonly Route = "FixtureStatsLOL";
+  public static readonly Path = "/v1/fixtures/{id}/stats";
 
   public static readonly Zod = {
     Params: z.object({
       id: z.number(),
-      opponentId: z.number().optional(),
     }),
 
     Response: z
       .object({
-        pickBan: z.array(
+        maps: z.array(
           z.object({
-            order: z.number(),
-            teamId: z.number().nullable(),
-            pickOrBan: z.string(),
-            mapName: z.string(),
+            mapNumber: z.number(),
+            teamStats: z.array(
+              z.object({
+                teamId: z.number(),
+                players: z.array(
+                  z.object({
+                    name: z.string(),
+                    playerId: z.number(),
+                    items: z.array(z.number()),
+                    level: z.number(),
+                    trinket: z.number(),
+                    position: z.enum([
+                      "Top",
+                      "Jungle",
+                      "Middle",
+                      "Bottom",
+                      "Support",
+                    ]),
+                    championId: z.number(),
+                    visionScore: z.number(),
+                    wardsKilled: z.number(),
+                    wardsPlaced: z.number(),
+                    controlWardsPurchased: z.number(),
+                  })
+                ),
+              })
+            ),
           })
         ),
       })
@@ -52,7 +74,7 @@ export class MapPBGet {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching Map Pick Ban");
+      throw new Error(`${this.Route}: Error while fetching`);
     }
 
     const rawData: unknown = await rawRes.json();
@@ -67,7 +89,7 @@ export class MapPBGet {
         route: this.Route,
       });
 
-      throw new Error("Error while validating Map Pick Ban");
+      throw new Error(`${this.Route}: Error while validating response`);
     }
 
     return validatedRes.data;

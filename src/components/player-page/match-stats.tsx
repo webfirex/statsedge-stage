@@ -33,7 +33,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -45,7 +45,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -77,7 +77,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -89,7 +89,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -121,7 +121,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -133,7 +133,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -165,7 +165,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -177,7 +177,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -209,7 +209,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -221,7 +221,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -253,7 +253,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -265,7 +265,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -297,7 +297,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -309,7 +309,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -341,7 +341,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}
@@ -353,7 +353,7 @@ export default function MatchStats(props: MatchStatsProps) {
                 <Flex justify={"space-between"} w={"100%"}>
                   <Box display={"flex"} style={{ gap: "5px" }}>
                     <Image
-                      src={"https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"}
+                      src={"/place.svg"}
                       alt="league logo"
                       fit="contain"
                       h={BigThenXs ? 20 : 15}

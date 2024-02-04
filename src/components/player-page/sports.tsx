@@ -1,4 +1,4 @@
-import { Card, Group, Image, SimpleGrid, Text } from "@mantine/core";
+import { Card, Group, Image, SimpleGrid } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Children } from "react";
 import { SPORT_INFO } from "~/lib/data";

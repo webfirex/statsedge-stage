@@ -16,15 +16,16 @@ class MapZod {
   public static CSGO = z.object({
     status: this.$Status,
     mapNumber: z.number(),
+    mapName: z.string(),
     mapDataStatus: z.enum(["live", "verified"]),
-    endTime: z.number().optional(),
-    winnerId: z.string().optional(),
-    startTime: z.number().optional(),
+    endTime: z.number().optional().nullable(),
+    winnerId: z.string().optional().nullable(),
+    startTime: z.number().optional().nullable(),
     roundScores: z.array(
       z.object({
         id: z.number(),
         roundsWon: z.number(),
-        halfScores: z.array(z.number()),
+        halfScores: z.array(z.number()).optional(),
       })
     ),
     teamStats: z.array(
@@ -32,30 +33,33 @@ class MapZod {
         teamId: z.number(),
         kills: z.number(),
         headshots: z.number(),
-        assists: z.number(),
-        flash_assists: z.number(),
+        assists: z.number().optional(),
+        flash_assists: z.number().optional(),
         deaths: z.number(),
         suicides: z.number(),
-        entryKills: z.number(),
-        startSide: z.enum(["CT", "Terrorist"]),
+        entryKills: z.number().optional(),
+        startSide: z.enum(["CT", "Terrorist"]).optional(),
         players: z.array(
           z.object({
             kills: z.number(),
             headshots: z.number(),
-            assists: z.number(),
-            flash_assists: z.number(),
+            assists: z.number().optional(),
+            flash_assists: z.number().optional(),
             deaths: z.number(),
             suicides: z.number(),
-            entryKills: z.number(),
-            kpr: z.number(),
-            dpr: z.number(),
-            adr: z.number(),
-            clutches: z.array(
-              z.object({
-                round: z.number(),
-                type: z.enum(["1v2", "1v3", "1v4", "1v5"]),
-              })
-            ),
+            entryKills: z.number().optional(),
+            kpr: z.number().optional(),
+            dpr: z.number().optional(),
+            adr: z.number().optional(),
+            name: z.string(),
+            clutches: z
+              .array(
+                z.object({
+                  round: z.number(),
+                  type: z.enum(["1v2", "1v3", "1v4", "1v5"]),
+                })
+              )
+              .optional(),
           })
         ),
       })
@@ -85,6 +89,75 @@ class MapZod {
   public static COD = z.object({
     mapNumber: z.number(),
     status: this.$Status,
+    winnerId: z.number().optional().nullable(),
+    mode: z.enum(["Hardpoint", "Search & Destroy", "Control"]),
+    mapName: z.string(),
+    mapScores: z.array(
+      z.object({
+        teamId: z.number(),
+        score: z.number(),
+      })
+    ),
+    teamStats: z.array(
+      z.object({
+        teamId: z.number(),
+        players: z.array(
+          z.object({
+            playerId: z.number(),
+            name: z.string(),
+            kills: z.number(),
+            assists: z.number(),
+            deaths: z.number(),
+            score: z.number(),
+            timeAlive: z.number(),
+            distanceTraveled: z.number(),
+            movementPercentage: z.number(),
+            averageSpeed: z.number(),
+            objectives: z.object({
+              hillTime: z.number().optional(),
+              contestedHillTime: z.number().optional(),
+              bombsDefused: z.number().optional(),
+              bombsPlanted: z.number().optional(),
+              sneakDefuses: z.number().optional(),
+              objectivesCaptured: z.number().optional(),
+              objectiveTiersContributed: z.number().optional(),
+            }),
+
+            combatStats: z.object({
+              aces: z.number(),
+              shotsHit: z.number(),
+              headshots: z.number(),
+              shotsFired: z.number(),
+              damageDealt: z.number(),
+              damageTaken: z.number(),
+              lethalsUsed: z.number(),
+              tradedKills: z.number(),
+              damageHealed: z.number(),
+              tradedDeaths: z.number(),
+              tacticalsUsed: z.number(),
+              untradedKills: z.number(),
+              untradedDeaths: z.number(),
+              highestMultikill: z.number(),
+              highestKillStreak: z.number(),
+              friendlyFireDamage: z.number(),
+            }),
+
+            specialKills: z.object({
+              wallbangs: z.number(),
+              firstBloods: z.number(),
+              defuserKills: z.number(),
+              planterKills: z.number(),
+              revengeKills: z.number(),
+              longshotKills: z.number(),
+              rotationKills: z.number(),
+              pointblankKills: z.number(),
+              inVictimFoVKills: z.number(),
+              inAttackerFoVKills: z.number(),
+            }),
+          })
+        ),
+      })
+    ),
   });
 }
 

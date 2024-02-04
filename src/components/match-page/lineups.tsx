@@ -16,7 +16,7 @@ import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
 type PlayerType = Exclude<
-  MatchType["participants"]["one"]["team"],
+  Exclude<MatchType["participants"]["one"], null>["team"],
   null
 >["most_recent_lineup"][0];
 
@@ -62,7 +62,7 @@ function PlayerCard(props: PlayerType) {
   );
 }
 
-function LineupCard(props: MatchType["participants"]["one"]) {
+function LineupCard(props: Exclude<MatchType["participants"]["one"], null>) {
   return (
     <>
       <Stack>
@@ -72,40 +72,42 @@ function LineupCard(props: MatchType["participants"]["one"]) {
             alt="league logo"
             fit="contain"
             h={30}
-            fallbackSrc="https://assets-global.website-files.com/622606ef3eafab51dbfa178d/6238793e742015185a0d4095_Gold.svg"
+            fallbackSrc="/place.svg"
           />
           <Title order={5} tt="uppercase">
             Lineups
           </Title>
         </Group>
 
-        {props.team?.most_recent_lineup ? (
-          <SimpleGrid spacing={5} cols={props.team?.most_recent_lineup.length}>
-            {Children.toArray(
-              props.team?.most_recent_lineup.map((player) => (
-                <>
-                  <PlayerCard {...player} />
-                </>
-              ))
-            )}
-          </SimpleGrid>
-        ) : (
-          <>
-            <Text>No Lineup Found</Text>
-          </>
-        )}
+        <SimpleGrid spacing={5} cols={props.team?.most_recent_lineup.length}>
+          {Children.toArray(
+            props.team?.most_recent_lineup.map((player) => (
+              <>
+                <PlayerCard {...player} />
+              </>
+            ))
+          )}
+        </SimpleGrid>
       </Stack>
     </>
   );
 }
 
 export function MatchLineupComp({ match }: MatchLineupProps) {
+  const teamOne = match.participants.one?.team?.most_recent_lineup.length ?? 0;
+
+  const teamTwo = match.participants.two?.team?.most_recent_lineup.length ?? 0;
+
+  if (teamOne === 0 && teamTwo === 0) {
+    return null;
+  }
+
   return (
     <>
       <Card p="xs">
         <Stack>
-          <LineupCard {...match.participants.one} />
-          <LineupCard {...match.participants.two} />
+          {teamOne > 0 && <LineupCard {...match.participants.one!} />}
+          {teamTwo > 0 && <LineupCard {...match.participants.two!} />}
         </Stack>
       </Card>
     </>
