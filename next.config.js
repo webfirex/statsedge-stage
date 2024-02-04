@@ -17,6 +17,9 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  
+  // Add this line to enable serverless deployment
+  target: 'serverless',
 
   // gameapi -> https://api.gamescorekeeper.com
 
