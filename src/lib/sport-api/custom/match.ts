@@ -54,17 +54,68 @@ export class CustomMatch {
         return {
           ...FixtureDB,
           sport: sportInfo,
-          stats: {
-            dota: Match,
-          },
         };
       }
+
+      const MergeStatsInMap = (params: {
+        maps: Exclude<
+          Exclude<typeof FixtureDB.maps, undefined>["lol"],
+          undefined
+        >;
+        stats: typeof Match;
+      }) => {
+        return params.maps.map((map) => {
+          const _Map = params.stats?.maps.find(
+            (s) => s.mapNumber === map.mapNumber
+          );
+
+          if (!_Map) {
+            return map;
+          }
+
+          const newTeamStats = map.teamStats.map((team) => {
+            const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId);
+
+            if (!_Team) {
+              return team;
+            }
+
+            const newPlayerStats = team.players.map((player) => {
+              const _Player = _Team.players.find(
+                (s) => s.playerId === player.playerId
+              );
+
+              if (!_Player) {
+                return player;
+              }
+
+              return {
+                ...player,
+                ..._Player,
+              };
+            });
+
+            return {
+              ...team,
+              players: newPlayerStats,
+            };
+          });
+
+          return {
+            ...map,
+            teamStats: newTeamStats,
+          };
+        });
+      };
 
       return {
         ...FixtureDB,
         sport: sportInfo,
-        stats: {
-          lol: Match,
+        maps: {
+          lol: MergeStatsInMap({
+            maps: FixtureDB.maps?.lol ?? [],
+            stats: Match,
+          }),
         },
       };
     }

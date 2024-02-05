@@ -106,6 +106,26 @@ export class FixtureGet {
           };
         }
 
+        if (data.sport.alias === "lol" && data.maps) {
+          const safeParse = z.array(SportApiZod.Map.LOL).safeParse(data.maps);
+
+          if (!safeParse.success) {
+            return ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Failed to parse maps for LoL`,
+              path: ["maps"],
+              params: { error: safeParse.error },
+            });
+          }
+
+          return {
+            ...data,
+            maps: {
+              lol: safeParse.data,
+            },
+          };
+        }
+
         return {
           ...data,
           maps: undefined,

@@ -2,7 +2,7 @@ import { SportApi } from "~/lib/sport-api";
 
 const main = async () => {
   const match = await SportApi.Custom.Match.Call({
-    id: 736503,
+    id: 732265,
   });
 
   console.log(match);

@@ -79,6 +79,76 @@ class MapZod {
   public static LOL = z.object({
     mapNumber: z.number(),
     status: this.$Status,
+    mapDataStatus: z.enum(["live", "verified"]),
+    winnerId: z.unknown().transform((data) => {
+      if (data === null) {
+        return null;
+      }
+      return Number(data);
+    }),
+    duration: z.number().nullable(),
+    teamStats: z.array(
+      z.object({
+        side: z.enum(["blue", "red"]),
+        teamId: z.number(),
+        towersDestroyed: z.number(),
+        inhibitorsDestroyed: z.number(),
+        dragonKills: z.number(),
+        riftHeraldKills: z.number().nullable(),
+        baronKills: z.number(),
+        elderDragonKills: z.number(),
+        players: z.array(
+          z.object({
+            playerId: z.number(),
+            name: z.string(),
+            kills: z.number(),
+            deaths: z.number(),
+            assists: z.number(),
+            championDamage: z.number().nullable(),
+            cs: z.number(),
+            gold: z.number().nullable(),
+            goldSpent: z.number().nullable(),
+            towersDestroyed: z.number().nullable(),
+            dragonKills: z.number().nullable(),
+            baronKills: z.number().nullable(),
+          })
+        ),
+      })
+    ),
+
+    firsts: z.object({
+      firstBaron: z
+        .object({
+          teamId: z.number().nullable(),
+        })
+        .optional(),
+      firstBlood: z
+        .object({
+          teamId: z.number(),
+          playerId: z.number().nullable(),
+        })
+        .optional(),
+      firstTower: z
+        .object({
+          teamId: z.number(),
+        })
+        .optional(),
+      firstDragon: z
+        .object({
+          teamId: z.number(),
+        })
+        .optional(),
+      firstInhibitor: z
+        .object({
+          teamId: z.number(),
+        })
+        .optional(),
+      firstRiftHerald: z
+        .object({
+          teamId: z.number(),
+        })
+        .optional(),
+    }),
   });
 
   public static HOK = z.object({

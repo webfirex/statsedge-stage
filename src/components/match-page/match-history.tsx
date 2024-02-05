@@ -37,7 +37,7 @@ export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
                 fallbackSrc="/place.svg"
               />
 
-              <Text>{participant.name ?? "Unknown"}</Text>
+              <Text maw={300} truncate="end">{participant.name ?? "Unknown"}</Text>
             </Group>
           </Link>
 
@@ -56,7 +56,10 @@ export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
                   }}
                 >
                   <Group justify="space-between">
-                    {fixture.opponentName ?? "Unknown"}
+                    <Text maw={225} truncate="end">
+                      {fixture.opponentName ?? "Unknown"}
+                    </Text>
+
                     <Badge
                       color={
                         fixture.score > fixture.opponentScore ? "green" : "red"
