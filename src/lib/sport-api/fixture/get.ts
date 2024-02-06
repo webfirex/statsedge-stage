@@ -126,6 +126,26 @@ export class FixtureGet {
           };
         }
 
+        if (data.sport.alias === "dota2" && data.maps) {
+          const safeParse = z.array(SportApiZod.Map.DOTA2).safeParse(data.maps);
+
+          if (!safeParse.success) {
+            return ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Failed to parse maps for Dota 2`,
+              path: ["maps"],
+              params: { error: safeParse.error },
+            });
+          }
+
+          return {
+            ...data,
+            maps: {
+              dota2: safeParse.data,
+            },
+          };
+        }
+
         return {
           ...data,
           maps: undefined,

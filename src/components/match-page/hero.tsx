@@ -139,6 +139,7 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
                 }}
                 src={`/api/team/logo?id=${match.participants.one?.id}`}
                 alt="as"
+                fallbackSrc="/place.svg"
               />
             </Card>
 
@@ -193,6 +194,7 @@ export function MatchHeroComp({ match }: MatchHeroProps) {
                 }}
                 src={`/api/team/logo?id=${match.participants.two?.id}`}
                 alt="as"
+                fallbackSrc="/place.svg"
               />
             </Card>
           </Group>

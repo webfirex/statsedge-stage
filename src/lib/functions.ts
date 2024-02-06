@@ -128,3 +128,7 @@ export const ArrayPagination = <T>(params: {
 
   return array.slice(start, end);
 };
+
+export const MoneyToThousands = (params: number): string => {
+  return (params / 1000).toFixed(1);
+};

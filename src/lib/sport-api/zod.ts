@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MoneyToThousands } from "../functions";
 
 /**
  * TODO: Complete this
@@ -71,85 +72,149 @@ class MapZod {
     mapNumber: z.number(),
   });
 
-  public static DOTA2 = z.object({
-    mapNumber: z.number(),
-    status: this.$Status,
-  });
+  public static DOTA2 = z
+    .object({
+      mapNumber: z.number(),
+      status: this.$Status,
+      winnerId: z.number().nullable(),
+      mapDataStatus: z.enum(["live", "verified"]),
+      teamStats: z.array(
+        z.object({
+          teamId: z.number(),
+          towersDestroyed: z.number(),
+          players: z.array(
+            z.object({
+              playerId: z.number(),
+              name: z.string(),
+              kills: z.number(),
+              deaths: z.number(),
+              assists: z.number(),
+              heroDamage: z.number(),
+              cs: z.number(),
+              denies: z.number(),
+              gold: z.number(),
+              towersDestroyed: z.number(),
+            })
+          ),
+        })
+      ),
+    })
+    .transform((data) => {
+      return {
+        ...data,
+        teamStats: data.teamStats.map((team) => {
+          let _gold = 0;
+          let _kills = 0;
 
-  public static LOL = z.object({
-    mapNumber: z.number(),
-    status: this.$Status,
-    mapDataStatus: z.enum(["live", "verified"]),
-    winnerId: z.unknown().transform((data) => {
-      if (data === null) {
-        return null;
-      }
-      return Number(data);
-    }),
-    duration: z.number().nullable(),
-    teamStats: z.array(
-      z.object({
-        side: z.enum(["blue", "red"]),
-        teamId: z.number(),
-        towersDestroyed: z.number(),
-        inhibitorsDestroyed: z.number(),
-        dragonKills: z.number(),
-        riftHeraldKills: z.number().nullable(),
-        baronKills: z.number(),
-        elderDragonKills: z.number(),
-        players: z.array(
-          z.object({
-            playerId: z.number(),
-            name: z.string(),
-            kills: z.number(),
-            deaths: z.number(),
-            assists: z.number(),
-            championDamage: z.number().nullable(),
-            cs: z.number(),
-            gold: z.number().nullable(),
-            goldSpent: z.number().nullable(),
-            towersDestroyed: z.number().nullable(),
-            dragonKills: z.number().nullable(),
-            baronKills: z.number().nullable(),
+          for (const player of team.players) {
+            _gold += player.gold;
+            _kills += player.kills;
+          }
+
+          return {
+            ...team,
+            gold: MoneyToThousands(_gold),
+            kills: _kills,
+          };
+        }),
+      };
+    });
+
+  public static LOL = z
+    .object({
+      mapNumber: z.number(),
+      status: this.$Status,
+      mapDataStatus: z.enum(["live", "verified"]),
+      winnerId: z.unknown().transform((data) => {
+        if (data === null) {
+          return null;
+        }
+        return Number(data);
+      }),
+      duration: z.number().nullable(),
+      teamStats: z.array(
+        z.object({
+          side: z.enum(["blue", "red"]),
+          teamId: z.number(),
+          towersDestroyed: z.number(),
+          inhibitorsDestroyed: z.number(),
+          dragonKills: z.number(),
+          riftHeraldKills: z.number().nullable(),
+          baronKills: z.number(),
+          elderDragonKills: z.number(),
+          players: z.array(
+            z.object({
+              playerId: z.number(),
+              name: z.string(),
+              kills: z.number(),
+              deaths: z.number(),
+              assists: z.number(),
+              championDamage: z.number().nullable(),
+              cs: z.number(),
+              gold: z.number().nullable(),
+              goldSpent: z.number().nullable(),
+              towersDestroyed: z.number().nullable(),
+              dragonKills: z.number().nullable(),
+              baronKills: z.number().nullable(),
+            })
+          ),
+        })
+      ),
+
+      firsts: z.object({
+        firstBaron: z
+          .object({
+            teamId: z.number().nullable(),
           })
-        ),
-      })
-    ),
+          .optional(),
+        firstBlood: z
+          .object({
+            teamId: z.number().nullable(),
+            playerId: z.number().nullable(),
+          })
+          .optional(),
+        firstTower: z
+          .object({
+            teamId: z.number().nullable(),
+          })
+          .optional(),
+        firstDragon: z
+          .object({
+            teamId: z.number().nullable(),
+          })
+          .optional(),
+        firstInhibitor: z
+          .object({
+            teamId: z.number().nullable(),
+          })
+          .optional(),
+        firstRiftHerald: z
+          .object({
+            teamId: z.number().nullable(),
+          })
+          .optional(),
+      }),
+    })
+    .transform((data) => {
+      return {
+        ...data,
+        teamStats: data.teamStats.map((team) => {
+          let _gold = 0;
+          let _kills = 0;
 
-    firsts: z.object({
-      firstBaron: z
-        .object({
-          teamId: z.number().nullable(),
-        })
-        .optional(),
-      firstBlood: z
-        .object({
-          teamId: z.number(),
-          playerId: z.number().nullable(),
-        })
-        .optional(),
-      firstTower: z
-        .object({
-          teamId: z.number(),
-        })
-        .optional(),
-      firstDragon: z
-        .object({
-          teamId: z.number(),
-        })
-        .optional(),
-      firstInhibitor: z
-        .object({
-          teamId: z.number(),
-        })
-        .optional(),
-      firstRiftHerald: z
-        .object({
-          teamId: z.number(),
-        })
-        .optional(),
-    }),
-  });
+          for (const player of team.players) {
+            _gold += player.gold ?? 0;
+            _kills += player.kills;
+          }
+
+          return {
+            ...team,
+            gold: MoneyToThousands(_gold),
+            kills: _kills,
+          };
+        }),
+      };
+    });
 
   public static HOK = z.object({
     mapNumber: z.number(),

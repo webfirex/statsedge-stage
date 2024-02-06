@@ -11,6 +11,7 @@ import { PlayerGet } from "../player/get";
 import { FixtureStatsDOTA } from "../fixture/stats-dota";
 import { PickBanMaps } from "../pickban/maps";
 import { PickBanHeroes } from "../pickban/heroes";
+import { FixtureStatsLOL } from "../fixture/stats-lol";
 
 type HalfFixture = Exclude<
   UnwrapPromise<ReturnType<typeof TeamForm.Call>>,
@@ -44,83 +45,127 @@ export class CustomMatch {
       return null;
     }
 
-    if (
-      ["dota2", "lol"].includes(FixtureDB.sport.alias) &&
-      FixtureDB.status !== "Scheduled"
-    ) {
-      const Match = await FixtureStatsDOTA.Call({ id });
+    const MergeDOTAStatsInMap = async (params: {
+      maps: Exclude<
+        Exclude<typeof FixtureDB.maps, undefined>["dota2"],
+        undefined
+      >;
+    }) => {
+      const stats = await FixtureStatsDOTA.Call({ id });
 
-      if (FixtureDB.sport.alias === "dota2") {
-        return {
-          ...FixtureDB,
-          sport: sportInfo,
-        };
-      }
+      return params.maps.map((map) => {
+        const _Map = stats?.maps.find((s) => s.mapNumber === map.mapNumber);
 
-      const MergeStatsInMap = (params: {
-        maps: Exclude<
-          Exclude<typeof FixtureDB.maps, undefined>["lol"],
-          undefined
-        >;
-        stats: typeof Match;
-      }) => {
-        return params.maps.map((map) => {
-          const _Map = params.stats?.maps.find(
-            (s) => s.mapNumber === map.mapNumber
-          );
+        if (!_Map) {
+          return map;
+        }
 
-          if (!_Map) {
-            return map;
+        const newTeamStats = map.teamStats.map((team) => {
+          const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId);
+
+          if (!_Team) {
+            return team;
           }
 
-          const newTeamStats = map.teamStats.map((team) => {
-            const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId);
+          const newPlayerStats = team.players.map((player) => {
+            const _Player = _Team.players.find(
+              (s) => s.playerId === player.playerId
+            );
 
-            if (!_Team) {
-              return team;
+            if (!_Player) {
+              return player;
             }
 
-            const newPlayerStats = team.players.map((player) => {
-              const _Player = _Team.players.find(
-                (s) => s.playerId === player.playerId
-              );
-
-              if (!_Player) {
-                return player;
-              }
-
-              return {
-                ...player,
-                ..._Player,
-              };
-            });
-
             return {
-              ...team,
-              players: newPlayerStats,
+              ...player,
+              ..._Player,
             };
           });
 
           return {
-            ...map,
-            teamStats: newTeamStats,
+            ...team,
+            players: newPlayerStats,
           };
         });
-      };
 
-      return {
-        ...FixtureDB,
-        sport: sportInfo,
-        maps: {
-          lol: MergeStatsInMap({
-            maps: FixtureDB.maps?.lol ?? [],
-            stats: Match,
-          }),
-        },
-      };
-    }
+        return {
+          ...map,
+          teamStats: newTeamStats,
+        };
+      });
+    };
 
-    return { ...FixtureDB, sport: sportInfo };
+    const MergeLOLStatsInMap = async (params: {
+      maps: Exclude<
+        Exclude<typeof FixtureDB.maps, undefined>["lol"],
+        undefined
+      >;
+    }) => {
+      const stats = await FixtureStatsLOL.Call({ id });
+
+      return params.maps.map((map) => {
+        const _Map = stats?.maps.find((s) => s.mapNumber === map.mapNumber);
+
+        if (!_Map) {
+          return map;
+        }
+
+        const newTeamStats = map.teamStats.map((team) => {
+          const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId);
+
+          if (!_Team) {
+            return team;
+          }
+
+          const newPlayerStats = team.players.map((player) => {
+            const _Player = _Team.players.find(
+              (s) => s.playerId === player.playerId
+            );
+
+            if (!_Player) {
+              return player;
+            }
+
+            return {
+              ...player,
+              ..._Player,
+            };
+          });
+
+          return {
+            ...team,
+            players: newPlayerStats,
+          };
+        });
+
+        return {
+          ...map,
+          teamStats: newTeamStats,
+        };
+      });
+    };
+
+    return {
+      ...FixtureDB,
+      sport: sportInfo,
+      maps: {
+        ...FixtureDB.maps,
+        csgo: FixtureDB.maps?.csgo,
+        cod: FixtureDB.maps?.cod,
+        dota2:
+          FixtureDB.sport.alias === "dota2"
+            ? await MergeDOTAStatsInMap({
+                maps: FixtureDB.maps?.dota2 ?? [],
+              })
+            : undefined,
+        lol:
+          FixtureDB.sport.alias === "lol"
+            ? await MergeLOLStatsInMap({
+                maps: FixtureDB.maps?.lol ?? [],
+              })
+            : undefined,
+      },
+    };
   };
 
   private static ParseHeroPickBan = (params: {

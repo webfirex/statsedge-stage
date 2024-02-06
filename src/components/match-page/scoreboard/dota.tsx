@@ -26,7 +26,6 @@ import {
   IconTrophyFilled,
 } from "@tabler/icons-react";
 import { Children, useMemo, useState } from "react";
-import { NumTimeFormat } from "~/lib/functions";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
@@ -35,7 +34,7 @@ interface MatchScoreboardProps {
 }
 
 type PlayerStatsType = Exclude<
-  Exclude<MatchType["maps"], undefined>["lol"],
+  Exclude<MatchType["maps"], undefined>["dota2"],
   undefined
 >[0]["teamStats"][0]["players"];
 
@@ -175,10 +174,10 @@ const Trophy = () => {
   );
 };
 
-export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
+export function MatchScoreboardDOTA2Comp({ match }: MatchScoreboardProps) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const [SelectedMap, setSelectedMap] = useState(match.maps?.lol?.[0]);
+  const [SelectedMap, setSelectedMap] = useState(match.maps?.dota2?.[0]);
 
   const [TeamOne, TeamTwo] = useMemo(() => {
     const _teamone = SelectedMap?.teamStats.find(
@@ -207,14 +206,14 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
               <Stack>
                 <SegmentedControl
                   onChange={(value) => {
-                    const map = match.maps?.lol?.find(
+                    const map = match.maps?.dota2?.find(
                       (map) => map.mapNumber === Number(value)
                     );
 
                     setSelectedMap(map);
                   }}
                   data={[
-                    ...(match.maps?.lol ?? []).map((map) => ({
+                    ...(match.maps?.dota2 ?? []).map((map) => ({
                       label: `Match ${map.mapNumber}`,
                       value: String(map.mapNumber),
                     })),
@@ -252,32 +251,18 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
                     )}
 
                     <Flex justify="space-between">
-                      <Title
-                        ta="center"
-                        miw={45}
-                        order={2}
-                        c={`${TeamOne?.side}.9`}
-                      >
+                      <Title ta="center" miw={45} order={2} c="blue.9">
                         {TeamOne?.kills}
                       </Title>
 
                       <Stack gap={0} align="center">
-                        <Text size="lg">
-                          {SelectedMap?.duration
-                            ? NumTimeFormat(SelectedMap?.duration, "14:00")
-                            : "Unknown"}
-                        </Text>
+                        <Text size="lg">00:00</Text>
                         <Text c="dimmed" size="xs">
                           Duration
                         </Text>
                       </Stack>
 
-                      <Title
-                        ta="center"
-                        miw={45}
-                        order={2}
-                        c={`${TeamTwo?.side}.9`}
-                      >
+                      <Title ta="center" miw={45} order={2} c="red.9">
                         {TeamTwo?.kills}
                       </Title>
                     </Flex>
@@ -313,53 +298,14 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
 
                 <Stack gap={5}>
                   <Flex justify="space-between">
-                    <Text c={`${TeamOne?.side}.9`} size="sm" miw={30}>
+                    <Text c="blue.9" size="sm" miw={30}>
                       {TeamOne?.towersDestroyed}
                     </Text>
 
                     <Text>Turrets</Text>
 
-                    <Text c={`${TeamTwo?.side}.9`} size="sm" miw={30}>
+                    <Text c="red.9" size="sm" miw={30}>
                       {TeamTwo?.towersDestroyed}
-                    </Text>
-                  </Flex>
-
-                  <Divider />
-                  <Flex justify="space-between">
-                    <Text c={`${TeamOne?.side}.9`} size="sm" miw={30}>
-                      {TeamOne?.inhibitorsDestroyed}
-                    </Text>
-
-                    <Text>Inhibitors</Text>
-
-                    <Text c={`${TeamTwo?.side}.9`} size="sm" miw={30}>
-                      {TeamTwo?.inhibitorsDestroyed}
-                    </Text>
-                  </Flex>
-
-                  <Divider />
-                  <Flex justify="space-between">
-                    <Text c={`${TeamOne?.side}.9`} size="sm" miw={30}>
-                      {TeamOne?.baronKills}
-                    </Text>
-
-                    <Text>Barons</Text>
-
-                    <Text c={`${TeamTwo?.side}.9`} size="sm" miw={30}>
-                      {TeamTwo?.baronKills}
-                    </Text>
-                  </Flex>
-
-                  <Divider />
-                  <Flex justify="space-between">
-                    <Text c={`${TeamOne?.side}.9`} size="sm" miw={30}>
-                      {TeamOne?.dragonKills}
-                    </Text>
-
-                    <Text>Dragons</Text>
-
-                    <Text c={`${TeamTwo?.side}.9`} size="sm" miw={30}>
-                      {TeamTwo?.dragonKills}
                     </Text>
                   </Flex>
 
