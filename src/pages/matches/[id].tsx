@@ -21,6 +21,7 @@ import { MatchMapsComp } from "~/components/match-page/maps";
 import { MatchScoreboardCSGOComp } from "~/components/match-page/scoreboard/csgo";
 import { MatchScoreboardLOLComp } from "~/components/match-page/scoreboard/lol";
 import { MatchScoreboardDOTA2Comp } from "~/components/match-page/scoreboard/dota";
+import { MatchScoreboardCODComp } from "~/components/match-page/scoreboard/cod";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -39,9 +40,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     id: parsedId.data,
   });
 
-  console.log({
-    match,
-  });
+  // console.log({
+  //   match: match.maps.cod,
+  // });
 
   if (!match) {
     return { notFound: true };
@@ -201,6 +202,12 @@ export default function AppTournamentManagePage({
                           if (GetApi.data?.sport.alias === "cs2") {
                             return (
                               <MatchScoreboardCSGOComp match={GetApi.data} />
+                            );
+                          }
+
+                          if (GetApi.data?.sport.alias === "codmwiii") {
+                            return (
+                              <MatchScoreboardCODComp match={GetApi.data} />
                             );
                           }
 

@@ -401,9 +401,9 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.one.ban.map(() => (
+                      match.pickBanHero?.one.ban.map((data) => (
                         <Image
-                          src="https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/riki.png?"
+                          src={`/api/lol/hero?id=${data.heroId}`}
                           alt="champion icon"
                           fit="contain"
                           h={25}
@@ -419,9 +419,9 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.one.pick.map(() => (
+                      match.pickBanHero?.one.pick.map((data) => (
                         <Image
-                          src="https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/riki.png?"
+                        src={`/api/lol/hero?id=${data.heroId}`}
                           alt="champion icon"
                           fit="contain"
                           h={25}
@@ -451,9 +451,9 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.two.ban.map(() => (
+                      match.pickBanHero?.two.ban.map((data) => (
                         <Image
-                          src="https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/riki.png?"
+                        src={`/api/lol/hero?id=${data.heroId}`}
                           alt="champion icon"
                           fit="contain"
                           h={25}
@@ -469,9 +469,9 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.two.pick.map(() => (
+                      match.pickBanHero?.two.pick.map((data) => (
                         <Image
-                          src="https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/riki.png?"
+                        src={`/api/lol/hero?id=${data.heroId}`}
                           alt="champion icon"
                           fit="contain"
                           h={25}

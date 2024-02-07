@@ -1,9 +1,7 @@
-import { SportApi } from "~/lib/sport-api";
+import { DOTAItems } from "~/lib/parser";
 
 const main = async () => {
-  const match = await SportApi.Custom.Match.Call({
-    id: 732265,
-  });
+  const match = await DOTAItems();
 
   console.log(match);
 };
