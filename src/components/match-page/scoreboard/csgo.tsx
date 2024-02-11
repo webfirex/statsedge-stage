@@ -248,8 +248,8 @@ export function MatchScoreboardCSGOComp({ match }: MatchScoreboardProps) {
                     R - 21
                   </Text>
                   <Divider orientation="vertical" size="sm" />
-                  <Text size={BigThenXs ? "sm" : "xs"}>
-                    {MapToShow?.mapName}
+                  <Text size={BigThenXs ? "sm" : "xs"} tt="capitalize">
+                    {MapToShow?.mapName.replace("de_", "")}
                   </Text>
                 </Flex>
               </Stack>
@@ -275,7 +275,9 @@ export function MatchScoreboardCSGOComp({ match }: MatchScoreboardProps) {
               data={[
                 // { label: "All Maps", value: "all" },
                 ...(match.maps?.csgo ?? []).map((map) => ({
-                  label: map.mapName,
+                  label: map.mapName
+                    .replace("de_", "")
+                    .replace(/^[a-z]/, (L) => L.toUpperCase()),
                   value: map.mapName.toLowerCase(),
                 })),
               ]}

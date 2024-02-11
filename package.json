@@ -17,6 +17,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.6",
     "@clerk/nextjs": "^4.29.1",
+    "@mantine/carousel": "^7.5.2",
     "@mantine/charts": "^7.4.2",
     "@mantine/core": "^7.4.2",
     "@mantine/dates": "^7.4.2",
@@ -35,6 +36,7 @@
     "aos": "^3.0.0-beta.6",
     "dayjs": "^1.11.10",
     "drizzle-orm": "^0.29.3",
+    "embla-carousel-react": "^7.1.0",
     "framer-motion": "^10.17.9",
     "immer": "^10.0.3",
     "jotai": "^2.6.1",

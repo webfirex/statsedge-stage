@@ -41,7 +41,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   });
 
   // console.log({
-  //   match: match.maps.cod,
+  //   match: match?.maps?.csgo.map((map) => map.mapName),
   // });
 
   if (!match) {

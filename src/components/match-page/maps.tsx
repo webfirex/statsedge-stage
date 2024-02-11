@@ -15,6 +15,7 @@ import { Children } from "react";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 import { MatchMapPickBanComp } from "./pick-ban";
+import { MapImages } from "~/lib/functions";
 
 interface MatchMapsProps {
   match: MatchType;
@@ -43,7 +44,8 @@ export function MatchMapCSGOComp({ match }: MatchMapsProps) {
           <>
             <Card
               style={{
-                backgroundImage: "url(/map.jpg)",
+                backgroundImage: `url(${MapImages(map.mapName)})`,
+                backgroundSize: "cover",
               }}
             >
               <Overlay
@@ -58,8 +60,8 @@ export function MatchMapCSGOComp({ match }: MatchMapsProps) {
               >
                 {match.status === "Scheduled" && (
                   <Flex align="center" justify="center">
-                    <Title order={3} ta="center">
-                      {map.mapName}
+                    <Title order={3} ta="center" tt="capitalize">
+                      {map.mapName.replace("de_", "")}
                     </Title>
                   </Flex>
                 )}
@@ -67,7 +69,9 @@ export function MatchMapCSGOComp({ match }: MatchMapsProps) {
                 {match?.status !== "Scheduled" &&
                   ["cs2", "valorant"].includes(match.sport.alias) && (
                     <Flex align="center" justify="space-between">
-                      <Title order={3}>{map.mapName}</Title>
+                      <Title order={3} tt="capitalize">
+                        {map.mapName.replace("de_", "")}
+                      </Title>
                       <Flex
                         justify="space-between"
                         align="center"
@@ -159,7 +163,8 @@ export function MatchMapCODComp({ match }: MatchMapsProps) {
           <>
             <Card
               style={{
-                backgroundImage: "url(/map.jpg)",
+                backgroundImage: `url(${MapImages(map.mapName)})`,
+                backgroundSize: "cover",
               }}
             >
               <Overlay

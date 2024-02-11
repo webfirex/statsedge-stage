@@ -347,15 +347,19 @@ export function MatchScoreboardDOTA2Comp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.one.ban.map((data) => (
-                        <Image
-                          src={`/api/dota/hero?id=${data.heroId}`}
-                          alt="champion icon"
-                          fit="contain"
-                          h={25}
-                          fallbackSrc="/place.svg"
-                        />
-                      ))
+                      match.pickBanHero?.one.ban
+                        .filter(
+                          (hero) => hero.mapNumber === SelectedMap?.mapNumber
+                        )
+                        .map((data) => (
+                          <Image
+                            src={`/api/dota/hero?id=${data.heroId}`}
+                            alt="champion icon"
+                            fit="contain"
+                            h={25}
+                            fallbackSrc="/place.svg"
+                          />
+                        ))
                     )}
                   </Group>
 
@@ -365,17 +369,23 @@ export function MatchScoreboardDOTA2Comp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.one.pick.map((data) => (
-                        <Image
-                          src={`/api/dota/hero?id=${data.heroId}`}
-                          alt="champion icon"
-                          fit="contain"
-                          h={25}
-                          fallbackSrc="/place.svg"
-                        />
-                      ))
+                      match.pickBanHero?.one.pick
+                        .filter(
+                          (hero) => hero.mapNumber === SelectedMap?.mapNumber
+                        )
+                        .map((data) => (
+                          <Image
+                            src={`/api/dota/hero?id=${data.heroId}`}
+                            alt="champion icon"
+                            fit="contain"
+                            h={25}
+                            fallbackSrc="/place.svg"
+                          />
+                        ))
                     )}
                   </Group>
+
+                  <Space />
 
                   <Group>
                     <Image
@@ -397,15 +407,19 @@ export function MatchScoreboardDOTA2Comp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.two.ban.map((data) => (
-                        <Image
-                          src={`/api/dota/hero?id=${data.heroId}`}
-                          alt="champion icon"
-                          fit="contain"
-                          h={25}
-                          fallbackSrc="/place.svg"
-                        />
-                      ))
+                      match.pickBanHero?.two.ban
+                        .filter(
+                          (hero) => hero.mapNumber === SelectedMap?.mapNumber
+                        )
+                        .map((data) => (
+                          <Image
+                            src={`/api/dota/hero?id=${data.heroId}`}
+                            alt="champion icon"
+                            fit="contain"
+                            h={25}
+                            fallbackSrc="/place.svg"
+                          />
+                        ))
                     )}
                   </Group>
 
@@ -415,15 +429,19 @@ export function MatchScoreboardDOTA2Comp({ match }: MatchScoreboardProps) {
                     </Badge>
 
                     {Children.toArray(
-                      match.pickBanHero?.two.pick.map((data) => (
-                        <Image
-                          src={`/api/dota/hero?id=${data.heroId}`}
-                          alt="champion icon"
-                          fit="contain"
-                          h={25}
-                          fallbackSrc="/place.svg"
-                        />
-                      ))
+                      match.pickBanHero?.two.pick
+                        .filter(
+                          (hero) => hero.mapNumber === SelectedMap?.mapNumber
+                        )
+                        .map((data) => (
+                          <Image
+                            src={`/api/dota/hero?id=${data.heroId}`}
+                            alt="champion icon"
+                            fit="contain"
+                            h={25}
+                            fallbackSrc="/place.svg"
+                          />
+                        ))
                     )}
                   </Group>
                 </Stack>

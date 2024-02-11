@@ -132,3 +132,46 @@ export const ArrayPagination = <T>(params: {
 export const MoneyToThousands = (params: number): string => {
   return (params / 1000).toFixed(1);
 };
+
+export const MapImages = (params: string) => {
+  switch (params) {
+    case "de_mirage":
+      return "/map/mirage.webp";
+
+    case "de_nuke":
+      return "/map/nuke.jpg";
+
+    case "de_overpass":
+      return "/map/overpass.avif";
+
+    case "de_ancient":
+      return "/map/ancient.jpg";
+
+    case "de_vertigo":
+      return "/map/vertigo.jpg";
+
+    case "de_anubis":
+      return "/map/anubis.jpg";
+
+    case "de_inferno":
+      return "/map/inferno.jpg";
+
+    case "Karachi":
+      return "/map/karachi.jpg";
+
+    case "Invasion":
+      return "/map/invasion.webp";
+
+    case "Terminal":
+      return "/map/terminal.webp";
+
+    case "Skidrow":
+      return "/map/skidrow.webp";
+
+    case "Highrise":
+      return "/map/highrise.webp";
+
+    default:
+      return "https://placehold.co/600x400?text=No%20Map%20Image%20Availabel";
+  }
+};
