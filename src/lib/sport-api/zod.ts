@@ -85,7 +85,7 @@ class MapZod {
           players: z.array(
             z.object({
               playerId: z.number(),
-              name: z.string(),
+              name: z.string().nullable(),
               kills: z.number(),
               deaths: z.number(),
               assists: z.number(),

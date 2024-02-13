@@ -107,7 +107,37 @@ export function MatchMapCSGOComp({ match }: MatchMapsProps) {
                           p="sm"
                         >
                           <Text size="sm">Stats</Text>
-                          <Text>s</Text>
+                          <Text>
+                            {Children.toArray(
+                              (map.roundScores[0]?.halfScores ?? []).map(
+                                (player, index) => (
+                                  <>
+                                    {player}
+
+                                    {index !==
+                                      (map.roundScores[0]?.halfScores ?? [])
+                                        .length -
+                                        1 && " : "}
+                                  </>
+                                )
+                              )
+                            )}{" "}
+                            |{" "}
+                            {Children.toArray(
+                              (map.roundScores[0]?.halfScores ?? []).map(
+                                (player, index) => (
+                                  <>
+                                    {player}
+
+                                    {index !==
+                                      (map.roundScores[0]?.halfScores ?? [])
+                                        .length -
+                                        1 && " : "}
+                                  </>
+                                )
+                              )
+                            )}
+                          </Text>
                         </Flex>
                         <Flex direction="column" align="center">
                           <Image

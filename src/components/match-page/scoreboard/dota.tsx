@@ -124,7 +124,7 @@ export function ScoreBoardRight(props: { players: PlayerStatsType }) {
 
   const CommonHead = Children.toArray([
     <IconLetterK size={iconXs} />,
-    <IconLetterD size={iconXs} />,
+    <IconLetterD size={iconXs} />, 
     <IconLetterA size={iconXs} />,
     <>
       <IconLetterC size={iconXs} />
