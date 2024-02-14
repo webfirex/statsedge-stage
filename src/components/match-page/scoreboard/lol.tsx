@@ -1,30 +1,23 @@
 import {
   Badge,
-  Box,
   Card,
+  Center,
   Divider,
   Flex,
   Grid,
   Group,
   Image,
   Paper,
+  ScrollArea,
   SegmentedControl,
   Space,
   Stack,
-  Table,
   Text,
   Title,
   rem,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import {
-  IconLetterA,
-  IconLetterC,
-  IconLetterD,
-  IconLetterK,
-  IconLetterS,
-  IconTrophyFilled,
-} from "@tabler/icons-react";
+import { IconTrophyFilled } from "@tabler/icons-react";
 import { Children, useMemo, useState } from "react";
 import { NumTimeFormat } from "~/lib/functions";
 import { type MatchType } from "~/lib/type";
@@ -39,120 +32,128 @@ type PlayerStatsType = Exclude<
   undefined
 >[0]["teamStats"][0]["players"];
 
-export function ScoreBoardLeft(props: {
-  teamId: number;
-  name: string;
-  bg: string;
-
-  players: PlayerStatsType;
-}) {
-  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-
+export function ScoreBoardBody(props: { players: PlayerStatsType }) {
   return (
     <>
-      <Table withRowBorders={false}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>
-              <Paper
-                py="xs"
-                px={BigThenXs ? "md" : "xs"}
-                radius="xl"
-                bg={props.bg}
-              >
-                <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
-                  <Image
-                    src={`/api/team/logo?id=${props.teamId}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={BigThenXs ? 20 : 15}
-                    fallbackSrc="/place.svg"
-                  />
-                  <Text size={BigThenXs ? "sm" : rem(10)} c="black">
-                    {props.name}
-                  </Text>
-                </Flex>
-              </Paper>
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {Children.toArray(
-            props.players.map((player) => {
-              return (
-                <Table.Tr>
-                  <Table.Td>
-                    <Text tt="capitalize" size="sm">
-                      {player.name}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
-              );
-            })
-          )}
-        </Table.Tbody>
-      </Table>
+      <Stack gap={0}>
+        {Children.toArray(
+          props.players.map((player, index) => {
+            const RowData = [
+              player.kills,
+              player.deaths,
+              player.assists,
+              player.cs,
+            ];
+
+            return (
+              <>
+                <Grid
+                  columns={12}
+                  bg={index % 2 === 0 ? "dark.5" : "transparent"}
+                  py="sm"
+                >
+                  <Grid.Col span={3}>
+                    <Group px="xs" gap="xs">
+                      <Image
+                        src={`/api/lol/hero?id=${player.championId}`}
+                        alt="champion icon"
+                        fit="contain"
+                        h={25}
+                        fallbackSrc="/place.svg"
+                      />
+
+                      <Text size="sm" tt="capitalize">
+                        {player.name}
+                      </Text>
+                    </Group>
+                  </Grid.Col>
+
+                  <Grid.Col span={5}>
+                    <Group px="xs" gap={0} justify="end">
+                      {Children.toArray(
+                        player.items.map((item) => (
+                          <Image
+                            src={`/api/lol/item?id=${item}`}
+                            alt="item icon"
+                            fit="contain"
+                            h={25}
+                            fallbackSrc="/place.svg"
+                          />
+                        ))
+                      )}
+                    </Group>
+                  </Grid.Col>
+
+                  {Children.toArray(
+                    RowData.map((element) => (
+                      <Grid.Col span="auto">
+                        <Text size="sm" ta="center">
+                          {element}
+                        </Text>
+                      </Grid.Col>
+                    ))
+                  )}
+                </Grid>
+
+                <Divider />
+              </>
+            );
+          })
+        )}
+      </Stack>
     </>
   );
 }
 
-export function ScoreBoardRight(props: { players: PlayerStatsType }) {
+export function ScoreBoardHead(props: {
+  teamId: number;
+  name: string;
+  color: string;
+}) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-  const iconXs = BigThenXs ? 18 : 12;
 
-  const rows = props.players.map((element) => {
-    const CommonRow = [
-      element.kills,
-      element.deaths,
-      element.assists,
-      element.cs,
-    ];
-
-    return (
-      <Table.Tr key={element.name}>
-        {Children.toArray(
-          CommonRow.map((element) => (
-            <Table.Td>
-              <Text size="sm" ta="center">
-                {element}
-              </Text>
-            </Table.Td>
-          ))
-        )}
-      </Table.Tr>
-    );
-  });
-
-  const CommonHead = Children.toArray([
-    <IconLetterK size={iconXs} />,
-    <IconLetterD size={iconXs} />,
-    <IconLetterA size={iconXs} />,
-    <>
-      <IconLetterC size={iconXs} />
-      <IconLetterS size={iconXs} />
-    </>,
-  ]);
-
-  const ths = (
-    <Table.Tr>
-      {Children.toArray(
-        CommonHead.map((element) => (
-          <Table.Th h={40}>
-            <Text mb="xs" ta="center">
-              {element}
-            </Text>
-          </Table.Th>
-        ))
-      )}
-    </Table.Tr>
-  );
+  const ColumnsTitle = ["K", "D", "A", "CS"];
 
   return (
-    <Table withRowBorders={false}>
-      <Table.Thead>{ths}</Table.Thead>
+    <>
+      <Grid columns={12}>
+        <Grid.Col span={8}>
+          <Group>
+            <Paper
+              py="xs"
+              px={BigThenXs ? "md" : "xs"}
+              radius="xl"
+              bg={props.color}
+            >
+              <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
+                <Image
+                  src={`/api/team/logo?id=${props.teamId}`}
+                  alt="league logo"
+                  fit="contain"
+                  h={BigThenXs ? 20 : 15}
+                  fallbackSrc="/place.svg"
+                />
+                <Text size={BigThenXs ? "sm" : rem(10)} c="black">
+                  {props.name}
+                </Text>
+              </Flex>
+            </Paper>
+          </Group>
+        </Grid.Col>
 
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+        {Children.toArray(
+          ColumnsTitle.map((element) => (
+            <Grid.Col span="auto">
+              <Center h="100%">
+                <Text ta="center" my="auto" size="sm">
+                  {element}
+                </Text>
+              </Center>
+            </Grid.Col>
+          ))
+        )}
+      </Grid>
+    </>
   );
 }
 
@@ -509,52 +510,31 @@ export function MatchScoreboardLOLComp({ match }: MatchScoreboardProps) {
               base: "column",
               md: "row",
             }}
+            gap="xl"
           >
-            <Flex justify="space-between" w="100%">
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardLeft
+            <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+              <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                <ScoreBoardHead
                   teamId={match.participants.one?.id ?? 0}
                   name={match.participants.one?.name ?? "N/A"}
-                  bg="blue.6"
-                  players={TeamOne?.players ?? []}
+                  color="yellow.6"
                 />
-              </Box>
 
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardRight players={TeamOne?.players ?? []} />
-              </Box>
-            </Flex>
+                <ScoreBoardBody players={TeamOne?.players ?? []} />
+              </Stack>
+            </ScrollArea>
 
-            <Flex justify="space-between" w="100%">
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardLeft
+            <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+              <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                <ScoreBoardHead
                   teamId={match.participants.two?.id ?? 0}
                   name={match.participants.two?.name ?? "N/A"}
-                  bg="blue.6"
-                  players={TeamTwo?.players ?? []}
+                  color="blue.6"
                 />
-              </Box>
 
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardRight players={TeamTwo?.players ?? []} />
-              </Box>
-            </Flex>
+                <ScoreBoardBody players={TeamTwo?.players ?? []} />
+              </Stack>
+            </ScrollArea>
           </Flex>
         </Card>
       </Stack>

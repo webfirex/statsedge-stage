@@ -53,28 +53,20 @@ export class CustomMatch {
     }) => {
       const stats = await FixtureStatsDOTA.Call({ id });
 
-      return params.maps.map((map) => {
-        const _Map = stats?.maps.find((s) => s.mapNumber === map.mapNumber);
+      if (!stats) {
+        return [];
+      }
 
-        if (!_Map) {
-          return map;
-        }
+      return params.maps.map((map) => {
+        const _Map = stats.maps.find((s) => s.mapNumber === map.mapNumber)!;
 
         const newTeamStats = map.teamStats.map((team) => {
-          const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId);
-
-          if (!_Team) {
-            return team;
-          }
+          const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId)!;
 
           const newPlayerStats = team.players.map((player) => {
             const _Player = _Team.players.find(
               (s) => s.playerId === player.playerId
-            );
-
-            if (!_Player) {
-              return player;
-            }
+            )!;
 
             return {
               ...player,
@@ -103,28 +95,20 @@ export class CustomMatch {
     }) => {
       const stats = await FixtureStatsLOL.Call({ id });
 
-      return params.maps.map((map) => {
-        const _Map = stats?.maps.find((s) => s.mapNumber === map.mapNumber);
+      if (!stats) {
+        return [];
+      }
 
-        if (!_Map) {
-          return map;
-        }
+      return params.maps.map((map) => {
+        const _Map = stats.maps.find((s) => s.mapNumber === map.mapNumber)!;
 
         const newTeamStats = map.teamStats.map((team) => {
-          const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId);
-
-          if (!_Team) {
-            return team;
-          }
+          const _Team = _Map.teamStats.find((s) => s.teamId === team.teamId)!;
 
           const newPlayerStats = team.players.map((player) => {
             const _Player = _Team.players.find(
               (s) => s.playerId === player.playerId
-            );
-
-            if (!_Player) {
-              return player;
-            }
+            )!;
 
             return {
               ...player,

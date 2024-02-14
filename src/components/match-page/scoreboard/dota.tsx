@@ -1,13 +1,14 @@
 import {
   Badge,
-  Box,
   Card,
+  Center,
   Divider,
   Flex,
   Grid,
   Group,
   Image,
   Paper,
+  ScrollArea,
   SegmentedControl,
   Space,
   Stack,
@@ -124,7 +125,7 @@ export function ScoreBoardRight(props: { players: PlayerStatsType }) {
 
   const CommonHead = Children.toArray([
     <IconLetterK size={iconXs} />,
-    <IconLetterD size={iconXs} />, 
+    <IconLetterD size={iconXs} />,
     <IconLetterA size={iconXs} />,
     <>
       <IconLetterC size={iconXs} />
@@ -152,6 +153,131 @@ export function ScoreBoardRight(props: { players: PlayerStatsType }) {
 
       <Table.Tbody>{rows}</Table.Tbody>
     </Table>
+  );
+}
+
+export function ScoreBoardBody(props: { players: PlayerStatsType }) {
+  return (
+    <>
+      <Stack gap={0}>
+        {Children.toArray(
+          props.players.map((player, index) => {
+            const RowData = [
+              player.kills,
+              player.deaths,
+              player.assists,
+              player.cs,
+            ];
+
+            return (
+              <>
+                <Grid
+                  columns={12}
+                  bg={index % 2 === 0 ? "dark.5" : "transparent"}
+                  py="sm"
+                >
+                  <Grid.Col span={3}>
+                    <Group px="xs" gap="xs">
+                      <Image
+                        src={`/api/dota/hero?id=${player.heroId}`}
+                        alt="champion icon"
+                        fit="contain"
+                        h={25}
+                        fallbackSrc="/place.svg"
+                      />
+
+                      <Text size="sm" tt="capitalize">
+                        {player.name}
+                      </Text>
+                    </Group>
+                  </Grid.Col>
+
+                  <Grid.Col span={5}>
+                    <Group px="xs" gap={0} justify="end">
+                      {Children.toArray(
+                        (player.items ?? []).map((item) => (
+                          <Image
+                            src={`/api/dota/item?id=${item}`}
+                            alt="item icon"
+                            fit="contain"
+                            h={25}
+                            fallbackSrc="/place.svg"
+                          />
+                        ))
+                      )}
+                    </Group>
+                  </Grid.Col>
+
+                  {Children.toArray(
+                    RowData.map((element) => (
+                      <Grid.Col span="auto">
+                        <Text size="sm" ta="center">
+                          {element}
+                        </Text>
+                      </Grid.Col>
+                    ))
+                  )}
+                </Grid>
+
+                <Divider />
+              </>
+            );
+          })
+        )}
+      </Stack>
+    </>
+  );
+}
+
+export function ScoreBoardHead(props: {
+  teamId: number;
+  name: string;
+  color: string;
+}) {
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
+
+  const ColumnsTitle = ["K", "D", "A", "CS"];
+
+  return (
+    <>
+      <Grid columns={12}>
+        <Grid.Col span={8}>
+          <Group>
+            <Paper
+              py="xs"
+              px={BigThenXs ? "md" : "xs"}
+              radius="xl"
+              bg={props.color}
+            >
+              <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
+                <Image
+                  src={`/api/team/logo?id=${props.teamId}`}
+                  alt="league logo"
+                  fit="contain"
+                  h={BigThenXs ? 20 : 15}
+                  fallbackSrc="/place.svg"
+                />
+                <Text size={BigThenXs ? "sm" : rem(10)} c="black">
+                  {props.name}
+                </Text>
+              </Flex>
+            </Paper>
+          </Group>
+        </Grid.Col>
+
+        {Children.toArray(
+          ColumnsTitle.map((element) => (
+            <Grid.Col span="auto">
+              <Center h="100%">
+                <Text ta="center" my="auto" size="sm">
+                  {element}
+                </Text>
+              </Center>
+            </Grid.Col>
+          ))
+        )}
+      </Grid>
+    </>
   );
 }
 
@@ -457,52 +583,31 @@ export function MatchScoreboardDOTA2Comp({ match }: MatchScoreboardProps) {
               base: "column",
               md: "row",
             }}
+            gap="xl"
           >
-            <Flex justify="space-between" w="100%">
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardLeft
+            <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+              <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                <ScoreBoardHead
                   teamId={match.participants.one?.id ?? 0}
                   name={match.participants.one?.name ?? "N/A"}
-                  bg="blue.6"
-                  players={TeamOne?.players ?? []}
+                  color="yellow.6"
                 />
-              </Box>
 
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardRight players={TeamOne?.players ?? []} />
-              </Box>
-            </Flex>
+                <ScoreBoardBody players={TeamOne?.players ?? []} />
+              </Stack>
+            </ScrollArea>
 
-            <Flex justify="space-between" w="100%">
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardLeft
+            <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+              <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                <ScoreBoardHead
                   teamId={match.participants.two?.id ?? 0}
                   name={match.participants.two?.name ?? "N/A"}
-                  bg="blue.6"
-                  players={TeamTwo?.players ?? []}
+                  color="blue.6"
                 />
-              </Box>
 
-              <Box
-                style={{
-                  flexShrink: 1,
-                }}
-              >
-                <ScoreBoardRight players={TeamTwo?.players ?? []} />
-              </Box>
-            </Flex>
+                <ScoreBoardBody players={TeamTwo?.players ?? []} />
+              </Stack>
+            </ScrollArea>
           </Flex>
         </Card>
       </Stack>

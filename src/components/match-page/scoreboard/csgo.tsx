@@ -7,6 +7,7 @@ import {
   Group,
   Image,
   Paper,
+  ScrollArea,
   SegmentedControl,
   Stack,
   Text,
@@ -84,9 +85,9 @@ export function ScoreBoardBody(props: {
             return (
               <>
                 <Grid
-                  columns={10}
+                  columns={12}
                   bg={index % 2 === 0 ? "dark.5" : "transparent"}
-                  p="xs"
+                  py="sm"
                 >
                   <Grid.Col span={7}>
                     <BodyTextCell align="left">{player.name}</BodyTextCell>
@@ -167,7 +168,7 @@ export function ScoreBoardHead(props: {
 
   return (
     <>
-      <Grid columns={10}>
+      <Grid columns={12}>
         <Grid.Col span={7}>
           <Group>
             <Paper
@@ -287,31 +288,33 @@ export function MatchScoreboardCSGOComp({ match }: MatchScoreboardProps) {
           {(() => {
             return (
               <>
-                <Stack gap="md">
-                  <ScoreBoardHead
-                    status={match.status}
-                    teamId={match.participants.one?.id ?? 0}
-                    name={match.participants.one?.name ?? "N/A"}
-                    color="yellow.6"
-                  />
+                <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+                  <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                    <ScoreBoardHead
+                      status={match.status}
+                      teamId={match.participants.one?.id ?? 0}
+                      name={match.participants.one?.name ?? "N/A"}
+                      color="yellow.6"
+                    />
 
-                  <ScoreBoardBody
-                    players={TeamOne?.players ?? []}
-                    status={match.status}
-                  />
+                    <ScoreBoardBody
+                      players={TeamOne?.players ?? []}
+                      status={match.status}
+                    />
 
-                  <ScoreBoardHead
-                    status={match.status}
-                    teamId={match.participants.two?.id ?? 0}
-                    name={match.participants.two?.name ?? "N/A"}
-                    color="blue.6"
-                  />
+                    <ScoreBoardHead
+                      status={match.status}
+                      teamId={match.participants.two?.id ?? 0}
+                      name={match.participants.two?.name ?? "N/A"}
+                      color="blue.6"
+                    />
 
-                  <ScoreBoardBody
-                    players={TeamTwo?.players ?? []}
-                    status={match.status}
-                  />
-                </Stack>
+                    <ScoreBoardBody
+                      players={TeamTwo?.players ?? []}
+                      status={match.status}
+                    />
+                  </Stack>
+                </ScrollArea>
               </>
             );
           })()}
