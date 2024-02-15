@@ -129,9 +129,80 @@ export class CustomMatch {
       });
     };
 
+    const AllMapsCSGO = (params: {
+      maps: Exclude<
+        Exclude<typeof FixtureDB.maps, undefined>["csgo"],
+        undefined
+      >;
+    }) => {
+      const oneTeamStats = params.maps.reduce((acc, curr) => {
+        const newTeamStats = curr.teamStats.map((team) => {
+          const teamStatss = acc.find((s) => s.teamId === team.teamId);
+
+          if (!teamStatss) {
+            return team;
+          }
+
+          return {
+            teamId: team.teamId,
+            deaths: team.deaths + teamStatss.deaths,
+            headshots: team.headshots + teamStatss.headshots,
+            kills: team.kills + teamStatss.kills,
+            assists: (team.assists ?? 0) + (teamStatss.assists ?? 0),
+            suicides: team.suicides + teamStatss.suicides,
+            entryKills: (team.entryKills ?? 0) + (teamStatss.entryKills ?? 0),
+            flash_assists:
+              (team.flash_assists ?? 0) + (teamStatss.flash_assists ?? 0),
+            startSide: team.startSide,
+            players: team.players.map((player) => {
+              const _Player = teamStatss.players.find(
+                (s) => s.name === player.name
+              );
+
+              if (!_Player) {
+                return player;
+              }
+
+              return {
+                deaths: player.deaths + _Player.deaths,
+                headshots: player.headshots + _Player.headshots,
+                kills: player.kills + _Player.kills,
+                name: player.name,
+                suicides: player.suicides + _Player.suicides,
+                adr: (player.adr ?? 0) + (_Player.adr ?? 0),
+                assists: (player.assists ?? 0) + (_Player.assists ?? 0),
+                kpr: (player.kpr ?? 0) + (_Player.kpr ?? 0),
+                clutches: player.clutches,
+                dpr: (player.dpr ?? 0) + (_Player.dpr ?? 0),
+                entryKills:
+                  (player.entryKills ?? 0) + (_Player.entryKills ?? 0),
+                flash_assists:
+                  (player.flash_assists ?? 0) + (_Player.flash_assists ?? 0),
+              } as typeof player;
+            }),
+          } as typeof team;
+        });
+
+        return newTeamStats;
+      }, [] as (typeof params.maps)[0]["teamStats"]);
+
+      return oneTeamStats;
+    };
+
+    console.log(
+      FixtureDB.maps?.csgo ? JSON.stringify(FixtureDB.maps?.csgo, null, 2) : "",
+      "AllMapsCSGO({ maps: FixtureDB.maps.csgo })",
+      JSON.stringify(FixtureDB.maps?.csgo, null, 2)
+    );
+
     return {
       ...FixtureDB,
       sport: sportInfo,
+      allMaps: {
+        csgo: FixtureDB.maps?.csgo
+          ? AllMapsCSGO({ maps: FixtureDB.maps.csgo })
+          : [],
+      },
       maps: {
         ...FixtureDB.maps,
         csgo: FixtureDB.maps?.csgo,

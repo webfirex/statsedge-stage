@@ -75,10 +75,10 @@ export function ScoreBoardBody(props: {
             ];
 
             const PastRow = [
-              player.kills,
-              player.headshots,
+              <>
+                {player.kills} ({player.headshots})
+              </>,
               player.assists ?? 0,
-              player.entryKills ?? 0,
               player.deaths,
             ];
 
@@ -89,7 +89,7 @@ export function ScoreBoardBody(props: {
                   bg={index % 2 === 0 ? "dark.5" : "transparent"}
                   py="sm"
                 >
-                  <Grid.Col span={7}>
+                  <Grid.Col span={8}>
                     <BodyTextCell align="left">{player.name}</BodyTextCell>
                   </Grid.Col>
 
@@ -150,16 +150,10 @@ export function ScoreBoardHead(props: {
 
   const PastHeader = [
     <>
-      <HeadTextCell>K</HeadTextCell>
-    </>,
-    <>
-      <HeadTextCell>HS</HeadTextCell>
+      <HeadTextCell>K (hs)</HeadTextCell>
     </>,
     <>
       <HeadTextCell>A</HeadTextCell>
-    </>,
-    <>
-      <HeadTextCell>Entry</HeadTextCell>
     </>,
     <>
       <HeadTextCell>D</HeadTextCell>
@@ -169,7 +163,7 @@ export function ScoreBoardHead(props: {
   return (
     <>
       <Grid columns={12}>
-        <Grid.Col span={7}>
+        <Grid.Col span={8}>
           <Group>
             <Paper
               py="xs"
@@ -206,7 +200,18 @@ export function ScoreBoardHead(props: {
 export function MatchScoreboardCSGOComp({ match }: MatchScoreboardProps) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const [SelectedMap, setSelectedMap] = useState(match.maps?.csgo?.[0]);
+  // match.maps?.csgo?.[0]
+  const [SelectedMap, setSelectedMap] = useState(
+    match.maps?.csgo?.[0]
+      ? {
+          status: match.maps?.csgo?.[0].status,
+          teamStats: match.maps?.csgo?.[0].teamStats,
+          mapName: match.maps?.csgo?.[0].mapName,
+          roundScores: match.maps?.csgo?.[0].roundScores,
+          mapNumber: match.maps?.csgo?.[0].mapNumber,
+        }
+      : null
+  );
 
   const [TeamOne, TeamTwo] = useMemo(() => {
     const _teamone = SelectedMap?.teamStats.find(
@@ -230,7 +235,7 @@ export function MatchScoreboardCSGOComp({ match }: MatchScoreboardProps) {
     <>
       <Card p="lg">
         <Title order={BigThenXs ? 4 : 5} tt="uppercase" mb={10}>
-          ScoreBoard
+          {match.status === "Ended" ? "Match Stats" : "Score Board"}
         </Title>
         <Stack gap="xl">
           {match.status === "Started" ? (
@@ -265,21 +270,59 @@ export function MatchScoreboardCSGOComp({ match }: MatchScoreboardProps) {
           ) : (
             <SegmentedControl
               onChange={(value) => {
+                if (value === "69") {
+                  setSelectedMap({
+                    status: "ended",
+                    teamStats: match.allMaps.csgo,
+                    mapName: "All Maps",
+                    roundScores: [
+                      {
+                        id: 0,
+                        roundsWon: 0,
+                        halfScores: [0],
+                      },
+                    ],
+                    mapNumber: 69,
+                  });
+                  return;
+                }
+
                 const map = match.maps?.csgo?.find(
                   (map) => map.mapNumber === Number(value)
                 );
 
-                setSelectedMap(map);
+                if (!map) {
+                  return;
+                }
+
+                setSelectedMap({
+                  status: map?.status,
+                  teamStats: map?.teamStats,
+                  mapName: map?.mapName,
+                  roundScores: map?.roundScores,
+                  mapNumber: map?.mapNumber,
+                });
               }}
-              data={[
-                // { label: "All Maps", value: "all" },
-                ...(match.maps?.csgo ?? []).map((map) => ({
-                  label: map.mapName
-                    .replace("de_", "")
-                    .replace(/^[a-z]/, (L) => L.toUpperCase()),
-                  value: map.mapNumber.toString(),
-                })),
-              ]}
+              data={
+                match.format.value > 1
+                  ? [
+                      { label: "All Maps", value: "69" },
+                      ...(match.maps?.csgo ?? []).map((map) => ({
+                        label: map.mapName
+                          .replace("de_", "")
+                          .replace(/^[a-z]/, (L) => L.toUpperCase()),
+                        value: map.mapNumber.toString(),
+                      })),
+                    ]
+                  : [
+                      ...(match.maps?.csgo ?? []).map((map) => ({
+                        label: map.mapName
+                          .replace("de_", "")
+                          .replace(/^[a-z]/, (L) => L.toUpperCase()),
+                        value: map.mapNumber.toString(),
+                      })),
+                    ]
+              }
               value={String(SelectedMap?.mapNumber)}
               fullWidth
             />
