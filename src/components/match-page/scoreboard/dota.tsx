@@ -12,21 +12,14 @@ import {
   SegmentedControl,
   Space,
   Stack,
-  Table,
   Text,
   Title,
   rem,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import {
-  IconLetterA,
-  IconLetterC,
-  IconLetterD,
-  IconLetterK,
-  IconLetterS,
-  IconTrophyFilled,
-} from "@tabler/icons-react";
+import { IconTrophyFilled } from "@tabler/icons-react";
 import { Children, useMemo, useState } from "react";
+import { URLText } from "~/components/url-text";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
@@ -39,123 +32,6 @@ type PlayerStatsType = Exclude<
   undefined
 >[0]["teamStats"][0]["players"];
 
-export function ScoreBoardLeft(props: {
-  teamId: number;
-  name: string;
-  bg: string;
-
-  players: PlayerStatsType;
-}) {
-  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-
-  return (
-    <>
-      <Table withRowBorders={false}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>
-              <Paper
-                py="xs"
-                px={BigThenXs ? "md" : "xs"}
-                radius="xl"
-                bg={props.bg}
-              >
-                <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
-                  <Image
-                    src={`/api/team/logo?id=${props.teamId}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={BigThenXs ? 20 : 15}
-                    fallbackSrc="/place.svg"
-                  />
-                  <Text size={BigThenXs ? "sm" : rem(10)} c="black">
-                    {props.name}
-                  </Text>
-                </Flex>
-              </Paper>
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {Children.toArray(
-            props.players.map((player) => {
-              return (
-                <Table.Tr>
-                  <Table.Td>
-                    <Text tt="capitalize" size="sm">
-                      {player.name}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
-              );
-            })
-          )}
-        </Table.Tbody>
-      </Table>
-    </>
-  );
-}
-
-export function ScoreBoardRight(props: { players: PlayerStatsType }) {
-  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-  const iconXs = BigThenXs ? 18 : 12;
-
-  const rows = props.players.map((element) => {
-    const CommonRow = [
-      element.kills,
-      element.deaths,
-      element.assists,
-      element.cs,
-    ];
-
-    return (
-      <Table.Tr key={element.name}>
-        {Children.toArray(
-          CommonRow.map((element) => (
-            <Table.Td>
-              <Text size="sm" ta="center">
-                {element}
-              </Text>
-            </Table.Td>
-          ))
-        )}
-      </Table.Tr>
-    );
-  });
-
-  const CommonHead = Children.toArray([
-    <IconLetterK size={iconXs} />,
-    <IconLetterD size={iconXs} />,
-    <IconLetterA size={iconXs} />,
-    <>
-      <IconLetterC size={iconXs} />
-      <IconLetterS size={iconXs} />
-    </>,
-  ]);
-
-  const ths = (
-    <Table.Tr>
-      {Children.toArray(
-        CommonHead.map((element) => (
-          <Table.Th h={40}>
-            <Text mb="xs" ta="center">
-              {element}
-            </Text>
-          </Table.Th>
-        ))
-      )}
-    </Table.Tr>
-  );
-
-  return (
-    <Table withRowBorders={false}>
-      <Table.Thead>{ths}</Table.Thead>
-
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
-  );
-}
-
 export function ScoreBoardBody(props: { players: PlayerStatsType }) {
   return (
     <>
@@ -163,9 +39,9 @@ export function ScoreBoardBody(props: { players: PlayerStatsType }) {
         {Children.toArray(
           props.players.map((player, index) => {
             const RowData = [
-              player.kills,
-              player.deaths,
-              player.assists,
+              <>
+                {player.kills} / {player.deaths} / {player.assists}
+              </>,
               player.cs,
             ];
 
@@ -174,10 +50,10 @@ export function ScoreBoardBody(props: { players: PlayerStatsType }) {
                 <Grid
                   columns={12}
                   bg={index % 2 === 0 ? "dark.5" : "transparent"}
-                  py="sm"
+                  p="sm"
                 >
                   <Grid.Col span={3}>
-                    <Group px="xs" gap="xs">
+                    <Group gap="xs">
                       <Image
                         src={`/api/dota/hero?id=${player.heroId}`}
                         alt="champion icon"
@@ -186,9 +62,22 @@ export function ScoreBoardBody(props: { players: PlayerStatsType }) {
                         fallbackSrc="/place.svg"
                       />
 
-                      <Text size="sm" tt="capitalize">
-                        {player.name}
-                      </Text>
+                      <Stack gap={0}>
+                        <Text
+                          size="sm"
+                          tt="capitalize"
+                          maw={150}
+                          truncate="end"
+                        >
+                          {player.name}
+                        </Text>
+
+                        <Text size="xs" tt="capitalize" c="dimmed">
+                          <URLText
+                            url={`/api/dota/hero-info?id=${player.heroId}`}
+                          />
+                        </Text>
+                      </Stack>
                     </Group>
                   </Grid.Col>
 
@@ -236,11 +125,11 @@ export function ScoreBoardHead(props: {
 }) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const ColumnsTitle = ["K", "D", "A", "CS"];
+  const ColumnsTitle = ["K / D / A", "CS"];
 
   return (
     <>
-      <Grid columns={12}>
+      <Grid columns={12} px="xs">
         <Grid.Col span={8}>
           <Group>
             <Paper

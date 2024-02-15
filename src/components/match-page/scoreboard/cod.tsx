@@ -1,13 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box,
   Card,
+  Center,
+  Divider,
   Flex,
+  Grid,
+  Group,
   Image,
   Paper,
+  ScrollArea,
   SegmentedControl,
   Stack,
-  Table,
   Text,
   Title,
   rem,
@@ -26,119 +29,117 @@ type PlayerStatsType = Exclude<
   undefined
 >[0]["teamStats"][0]["players"];
 
-export function ScoreBoardLeft(props: {
-  teamId: number;
-  name: string;
-  bg: string;
-
-  players: PlayerStatsType;
-}) {
-  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-
+export function ScoreBoardBody(props: { players: PlayerStatsType }) {
   return (
     <>
-      <Table withRowBorders={false}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>
-              <Paper
-                py="xs"
-                px={BigThenXs ? "md" : "xs"}
-                radius="xl"
-                bg={props.bg}
-              >
-                <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
-                  <Image
-                    src={`/api/team/logo?id=${props.teamId}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={BigThenXs ? 20 : 15}
-                    fallbackSrc="/place.svg"
-                  />
-                  <Text size={BigThenXs ? "sm" : rem(10)} c="black">
-                    {props.name}
-                  </Text>
-                </Flex>
-              </Paper>
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {Children.toArray(
-            props.players.map((player) => {
-              return (
-                <Table.Tr>
-                  <Table.Td>{player.name}</Table.Td>
-                </Table.Tr>
-              );
-            })
-          )}
-        </Table.Tbody>
-      </Table>
+      <Stack gap={0}>
+        {Children.toArray(
+          props.players.map((player, index) => {
+            const RowData = [
+              player.kills,
+              player.deaths,
+              Math.round((player.kills / player.deaths) * 100) / 100,
+              player.combatStats.damageDealt,
+            ];
+
+            return (
+              <>
+                <Grid
+                  columns={12}
+                  bg={index % 2 === 0 ? "dark.5" : "transparent"}
+                  p="sm"
+                >
+                  <Grid.Col span={8}>
+                    <Text size="sm" tt="capitalize">
+                      {player.name}
+                    </Text>
+                  </Grid.Col>
+
+                  {Children.toArray(
+                    RowData.map((element) => (
+                      <Grid.Col span="auto">
+                        <Text size="sm" ta="center">
+                          {element}
+                        </Text>
+                      </Grid.Col>
+                    ))
+                  )}
+                </Grid>
+
+                <Divider />
+              </>
+            );
+          })
+        )}
+      </Stack>
     </>
   );
 }
 
-export function ScoreBoardRight(props: { players: PlayerStatsType }) {
-  const rows = props.players.map((element) => {
-    const CommonRow = [
-      element.kills,
-      element.deaths,
-      element.kills / element.deaths,
-      element.combatStats.damageTaken,
-    ];
+export function ScoreBoardHead(props: {
+  teamId: number;
+  name: string;
+  color: string;
+}) {
+  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-    return (
-      <Table.Tr key={element.name}>
-        {Children.toArray(
-          CommonRow.map((element) => (
-            <Table.Td>
-              <Text size="sm" ta="center">
-                {element}
-              </Text>
-            </Table.Td>
-          ))
-        )}
-      </Table.Tr>
-    );
-  });
-
-  const CommonHead = Children.toArray([
-    <Text>K</Text>,
-    <Text>D</Text>,
-    <>
-      <Text>K/D</Text>
-    </>,
-    <Text>Damage</Text>,
-  ]);
-
-  const ths = (
-    <Table.Tr>
-      {Children.toArray(
-        CommonHead.map((element) => (
-          <Table.Th h={40}>
-            <Text mb="xs" ta="center">
-              {element}
-            </Text>
-          </Table.Th>
-        ))
-      )}
-    </Table.Tr>
-  );
+  const ColumnsTitle = ["K", "D", "K/D", "Damage"];
 
   return (
-    <Table withRowBorders={false}>
-      <Table.Thead>{ths}</Table.Thead>
+    <>
+      <Grid columns={12} px="sm">
+        <Grid.Col span={8}>
+          <Group>
+            <Paper
+              py="xs"
+              px={BigThenXs ? "md" : "xs"}
+              radius="xl"
+              bg={props.color}
+            >
+              <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
+                <Image
+                  src={`/api/team/logo?id=${props.teamId}`}
+                  alt="league logo"
+                  fit="contain"
+                  h={BigThenXs ? 20 : 15}
+                  fallbackSrc="/place.svg"
+                />
+                <Text size={BigThenXs ? "sm" : rem(10)} c="black">
+                  {props.name}
+                </Text>
+              </Flex>
+            </Paper>
+          </Group>
+        </Grid.Col>
 
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+        {Children.toArray(
+          ColumnsTitle.map((element) => (
+            <Grid.Col span="auto">
+              <Center h="100%">
+                <Text ta="center" my="auto" size="sm">
+                  {element}
+                </Text>
+              </Center>
+            </Grid.Col>
+          ))
+        )}
+      </Grid>
+    </>
   );
 }
 
 export function MatchScoreboardCODComp({ match }: MatchScoreboardProps) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const [SelectedMap, setSelectedMap] = useState(match.maps?.cod?.[0]);
+  const [SelectedMap, setSelectedMap] = useState(
+    match.maps?.cod?.[0]
+      ? {
+          status: match.maps?.cod?.[0].status,
+          teamStats: match.maps?.cod?.[0].teamStats,
+          mapNumber: match.maps?.cod?.[0].mapNumber,
+        }
+      : null
+  );
 
   const [TeamOne, TeamTwo] = useMemo(() => {
     const _teamone = SelectedMap?.teamStats.find(
@@ -161,18 +162,45 @@ export function MatchScoreboardCODComp({ match }: MatchScoreboardProps) {
         <Stack gap="xl">
           <SegmentedControl
             onChange={(value) => {
+              if (value === "69") {
+                setSelectedMap({
+                  status: "ended",
+                  mapNumber: 69,
+                  teamStats: match.allMaps.cod,
+                });
+                return;
+              }
+
               const map = match.maps?.cod?.find(
                 (map) => map.mapNumber === Number(value)
               );
 
-              setSelectedMap(map);
+              if (!map) {
+                return;
+              }
+
+              setSelectedMap({
+                status: map?.status,
+                teamStats: map?.teamStats,
+                mapNumber: map?.mapNumber,
+              });
             }}
-            data={[
-              ...(match.maps?.cod ?? []).map((map) => ({
-                label: `Match ${map.mapNumber}`,
-                value: String(map.mapNumber),
-              })),
-            ]}
+            data={
+              match.format.value > 1
+                ? [
+                    { label: "All Maps", value: "69" },
+                    ...(match.maps?.cod ?? []).map((map) => ({
+                      label: `Match ${map.mapNumber}`,
+                      value: String(map.mapNumber),
+                    })),
+                  ]
+                : [
+                    ...(match.maps?.cod ?? []).map((map) => ({
+                      label: `Match ${map.mapNumber}`,
+                      value: String(map.mapNumber),
+                    })),
+                  ]
+            }
             value={String(SelectedMap?.mapNumber)}
             fullWidth
           />
@@ -182,55 +210,33 @@ export function MatchScoreboardCODComp({ match }: MatchScoreboardProps) {
               <>
                 <Stack gap="md">
                   {TeamOne ? (
-                    <Flex justify="space-between">
-                      <Box
-                        style={{
-                          flexShrink: 1,
-                        }}
-                      >
-                        <ScoreBoardLeft
+                    <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+                      <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                        <ScoreBoardHead
                           teamId={match.participants.one?.id ?? 0}
                           name={match.participants.one?.name ?? "N/A"}
-                          bg="yellow.6"
-                          players={TeamOne?.players ?? []}
+                          color="yellow.6"
                         />
-                      </Box>
 
-                      <Box
-                        style={{
-                          flexShrink: 1,
-                        }}
-                      >
-                        <ScoreBoardRight players={TeamOne?.players ?? []} />
-                      </Box>
-                    </Flex>
+                        <ScoreBoardBody players={TeamOne?.players ?? []} />
+                      </Stack>
+                    </ScrollArea>
                   ) : (
                     <Text ta="center">No Stats For Team One</Text>
                   )}
 
                   {TeamTwo ? (
-                    <Flex justify="space-between">
-                      <Box
-                        style={{
-                          flexShrink: 1,
-                        }}
-                      >
-                        <ScoreBoardLeft
+                    <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+                      <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                        <ScoreBoardHead
                           teamId={match.participants.two?.id ?? 0}
                           name={match.participants.two?.name ?? "N/A"}
-                          bg="blue.6"
-                          players={TeamTwo?.players ?? []}
+                          color="blue.6"
                         />
-                      </Box>
 
-                      <Box
-                        style={{
-                          flexShrink: 1,
-                        }}
-                      >
-                        <ScoreBoardRight players={TeamTwo?.players ?? []} />
-                      </Box>
-                    </Flex>
+                        <ScoreBoardBody players={TeamTwo?.players ?? []} />
+                      </Stack>
+                    </ScrollArea>
                   ) : (
                     <>
                       <Text ta="center">No Stats For Team Two</Text>

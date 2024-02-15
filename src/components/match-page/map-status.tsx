@@ -3,6 +3,7 @@ import {
   Card,
   Center,
   Divider,
+  Flex,
   Grid,
   Group,
   Image,
@@ -13,6 +14,7 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Children } from "react";
+import { MapImages } from "~/lib/functions";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
@@ -118,75 +120,149 @@ export function MatchMapStatusComp({ match }: MatchMapStatusProps) {
                 }
 
                 return Children.toArray(
-                  match.pickBanMap.map((map, index) => (
-                    <Grid key={index} columns={10}>
-                      <Grid.Col span={{ base: 3, sm: 5 }} m="auto" h="100%">
-                        <Card
-                          h="100%"
-                          style={{
-                            backgroundImage: SmallThenSm
-                              ? "none"
-                              : "url(/map.jpg)",
-                          }}
-                        >
-                          <Overlay
-                            style={{
-                              zIndex: 1,
-                            }}
-                          />
-                          <div
-                            style={{
-                              zIndex: 2,
-                            }}
-                          >
-                            <Title order={SmallThenSm ? 5 : 1} ta="center">
-                              {map.mapName}
-                            </Title>
-                          </div>
-                        </Card>
-                      </Grid.Col>
+                  match.pickBanMap
+                    .sort((a, b) => a.order - b.order)
+                    .map((map, index) => {
+                      const mapOneStats = match.mapStats?.one?.maps.find(
+                        (m) => m.mapName === `de_${map.mapName.toLowerCase()}`
+                      );
 
-                      <Grid.Col span={{ base: 7, sm: 5 }} m="auto">
-                        <Card>
-                          <Group justify="space-between">
-                            <Group gap={0}>
-                              <Badge
-                                size="xs"
-                                visibleFrom="sm"
-                                color="green"
+                      const mapTwoStats = match.mapStats?.two?.maps.find(
+                        (m) => m.mapName === `de_${map.mapName.toLowerCase()}`
+                      );
+
+                      return (
+                        <Grid key={index} columns={10}>
+                          <Grid.Col span={{ base: 3, sm: 5 }} m="auto" h="100%">
+                            <Card
+                              h="100%"
+                              style={{
+                                backgroundImage: SmallThenSm
+                                  ? "none"
+                                  : `url(${MapImages(
+                                      `de_${map.mapName.toLowerCase()}`
+                                    )})`,
+
+                                backgroundSize: "cover",
+                              }}
+                            >
+                              <Overlay
                                 style={{
-                                  transform: "rotate(90deg)",
+                                  zIndex: 1,
+                                }}
+                              />
+                              <div
+                                style={{
+                                  zIndex: 2,
                                 }}
                               >
-                                Pick
-                              </Badge>
-                              <Stack gap={5}>
-                                <Group gap="sm" align="center">
-                                  <Title order={SmallThenSm ? 5 : 3}>
-                                    100%&nbsp;
-                                  </Title>
-                                  <Badge color="green" c="white" size="xs">
-                                    Pick
-                                  </Badge>
-                                </Group>
-                                <Text size="xs" c="dimmed">
-                                  11 maps
-                                </Text>
-                              </Stack>
-                            </Group>
+                                <Title order={SmallThenSm ? 5 : 1} ta="center">
+                                  {map.mapName}
+                                </Title>
+                              </div>
+                            </Card>
+                          </Grid.Col>
 
-                            <Stack gap={5}>
-                              <Title order={SmallThenSm ? 5 : 3}>50%</Title>
+                          <Grid.Col span={{ base: 7, sm: 5 }} m="auto">
+                            <Card>
+                              <Group justify="space-between">
+                                <Flex align="center">
+                                  {(map.teamId ?? 0) ===
+                                    match.participants.one?.id &&
+                                    (map.pickOrBan === "pick" ? (
+                                      <Badge
+                                        size="xs"
+                                        visibleFrom="sm"
+                                        color="green"
+                                        style={{
+                                          transform: "rotate(90deg)",
+                                        }}
+                                      >
+                                        Pick
+                                      </Badge>
+                                    ) : (
+                                      map.pickOrBan === "ban" && (
+                                        <Badge
+                                          size="xs"
+                                          visibleFrom="sm"
+                                          color="gray"
+                                          style={{
+                                            transform: "rotate(90deg)",
+                                          }}
+                                        >
+                                          Ban
+                                        </Badge>
+                                      )
+                                    ))}
+                                  <Stack gap={5}>
+                                    <Title order={SmallThenSm ? 5 : 3}>
+                                      {mapOneStats
+                                        ? Math.round(
+                                            ((mapOneStats?.won ?? 0) /
+                                              (mapOneStats?.played ?? 0)) *
+                                              100
+                                          )
+                                        : 0}
+                                      %
+                                    </Title>
 
-                              <Text size="xs" c="dimmed">
-                                4 maps
-                              </Text>
-                            </Stack>
-                          </Group>
-                        </Card>
-                      </Grid.Col>
-                    </Grid>
-                  ))
+                                    <Text size="xs" c="dimmed">
+                                      {mapOneStats?.played ?? 0} maps
+                                    </Text>
+                                  </Stack>
+                                </Flex>
+
+                                <Flex align="center">
+                                  {(map.teamId ?? 0) ===
+                                    match.participants.two?.id &&
+                                    (map.pickOrBan === "pick" ? (
+                                      <Badge
+                                        size="xs"
+                                        visibleFrom="sm"
+                                        color="green"
+                                        style={{
+                                          transform: "rotate(90deg)",
+                                        }}
+                                      >
+                                        Pick
+                                      </Badge>
+                                    ) : (
+                                      map.pickOrBan === "ban" && (
+                                        <Badge
+                                          size="xs"
+                                          visibleFrom="sm"
+                                          color="gray"
+                                          style={{
+                                            transform: "rotate(90deg)",
+                                          }}
+                                        >
+                                          Ban
+                                        </Badge>
+                                      )
+                                    ))}
+                                  <Stack gap={5}>
+                                    <Title order={SmallThenSm ? 5 : 3}>
+                                      {mapTwoStats
+                                        ? Math.round(
+                                            ((mapTwoStats?.won ?? 0) /
+                                              (mapTwoStats?.played ?? 0)) *
+                                              100
+                                          )
+                                        : 0}
+                                      %
+                                    </Title>
+
+                                    <Text size="xs" c="dimmed">
+                                      {mapTwoStats?.played ?? 0} maps
+                                    </Text>
+                                  </Stack>
+                                </Flex>
+                              </Group>
+                            </Card>
+                          </Grid.Col>
+                        </Grid>
+                      );
+                    })
                 );
               })()}
             </Stack>

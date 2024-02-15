@@ -12,6 +12,7 @@ import { FixtureStatsDOTA } from "../fixture/stats-dota";
 import { PickBanMaps } from "../pickban/maps";
 import { PickBanHeroes } from "../pickban/heroes";
 import { FixtureStatsLOL } from "../fixture/stats-lol";
+import { TeamStats } from "../team/stats";
 
 type HalfFixture = Exclude<
   UnwrapPromise<ReturnType<typeof TeamForm.Call>>,
@@ -189,18 +190,113 @@ export class CustomMatch {
       return oneTeamStats;
     };
 
-    console.log(
-      FixtureDB.maps?.csgo ? JSON.stringify(FixtureDB.maps?.csgo, null, 2) : "",
-      "AllMapsCSGO({ maps: FixtureDB.maps.csgo })",
-      JSON.stringify(FixtureDB.maps?.csgo, null, 2)
-    );
+    const AllMapsCOD = (params: {
+      maps: Exclude<
+        Exclude<typeof FixtureDB.maps, undefined>["cod"],
+        undefined
+      >;
+    }) => {
+      const oneTeamStats = params.maps.reduce((acc, curr) => {
+        const newTeamStats = curr.teamStats.map((team) => {
+          const teamStatss = acc.find((s) => s.teamId === team.teamId);
+
+          if (!teamStatss) {
+            return team;
+          }
+
+          return {
+            teamId: team.teamId,
+            players: team.players.map((player) => {
+              const _Player = teamStatss.players.find(
+                (s) => s.name === player.name
+              );
+
+              if (!_Player) {
+                return player;
+              }
+
+              return {
+                playerId: player.playerId,
+                name: player.name,
+                kills: player.kills + _Player.kills,
+                assists: player.assists + _Player.assists,
+                deaths: player.deaths + _Player.deaths,
+                score: (player.score ?? 0) + (_Player.score ?? 0),
+                timeAlive: (player.timeAlive ?? 0) + (_Player.timeAlive ?? 0),
+                distanceTraveled:
+                  (player.distanceTraveled ?? 0) +
+                  (_Player.distanceTraveled ?? 0),
+                movementPercentage:
+                  (player.movementPercentage ?? 0) +
+                  (_Player.movementPercentage ?? 0),
+                averageSpeed:
+                  (player.averageSpeed ?? 0) + (_Player.averageSpeed ?? 0),
+                objectives: {
+                  bombsDefused:
+                    (player.objectives.bombsDefused ?? 0) +
+                    (_Player.objectives.bombsDefused ?? 0),
+                  bombsPlanted:
+                    (player.objectives.bombsPlanted ?? 0) +
+                    (_Player.objectives.bombsPlanted ?? 0),
+                  contestedHillTime:
+                    (player.objectives.contestedHillTime ?? 0) +
+                    (_Player.objectives.contestedHillTime ?? 0),
+                  hillTime:
+                    (player.objectives.hillTime ?? 0) +
+                    (_Player.objectives.hillTime ?? 0),
+                  objectivesCaptured:
+                    (player.objectives.objectivesCaptured ?? 0) +
+                    (_Player.objectives.objectivesCaptured ?? 0),
+                  objectiveTiersContributed:
+                    (player.objectives.objectiveTiersContributed ?? 0) +
+                    (_Player.objectives.objectiveTiersContributed ?? 0),
+                  sneakDefuses:
+                    (player.objectives.sneakDefuses ?? 0) +
+                    (_Player.objectives.sneakDefuses ?? 0),
+                },
+
+                combatStats: {
+                  damageDealt:
+                    (player.combatStats.damageDealt ?? 0) +
+                    (_Player.combatStats.damageDealt ?? 0),
+                  damageTaken:
+                    (player.combatStats.damageTaken ?? 0) +
+                    (_Player.combatStats.damageTaken ?? 0),
+                },
+                specialKills: {},
+              } as typeof player;
+            }),
+          };
+        });
+
+        return newTeamStats;
+      }, [] as (typeof params.maps)[0]["teamStats"]);
+
+      return oneTeamStats;
+    };
+
+    // console.log(JSON.stringify(FixtureDB.maps?.cod, null, 2));
 
     return {
       ...FixtureDB,
       sport: sportInfo,
+      mapStats: {
+        one:
+          FixtureDB.maps?.csgo && FixtureDB.participants.one?.id
+            ? await TeamStats.Call({ id: FixtureDB.participants.one.id })
+            : null,
+        two:
+          FixtureDB.maps?.csgo && FixtureDB.participants.two?.id
+            ? await TeamStats.Call({ id: FixtureDB.participants.two.id })
+            : null,
+      },
       allMaps: {
         csgo: FixtureDB.maps?.csgo
           ? AllMapsCSGO({ maps: FixtureDB.maps.csgo })
+          : [],
+
+        cod: FixtureDB.maps?.cod
+          ? AllMapsCOD({ maps: FixtureDB.maps.cod })
           : [],
       },
       maps: {
@@ -291,6 +387,8 @@ export class CustomMatch {
     if (!fixture) {
       return null;
     }
+
+    console.log(JSON.stringify(fixture.mapStats, null, 2));
 
     if (!fixture.participants.one && !fixture.participants.two) {
       return null;

@@ -171,6 +171,9 @@ export const MapImages = (params: string) => {
     case "Highrise":
       return "/map/highrise.webp";
 
+    case "Sub Base":
+      return "/map/subbase.jpg";
+
     default:
       return "https://placehold.co/600x400?text=No%20Map%20Image%20Availabel";
   }

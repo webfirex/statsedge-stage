@@ -19,6 +19,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { IconTrophyFilled } from "@tabler/icons-react";
 import { Children, useMemo, useState } from "react";
+import { URLText } from "~/components/url-text";
 import { NumTimeFormat } from "~/lib/functions";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
@@ -62,9 +63,22 @@ export function ScoreBoardBody(props: { players: PlayerStatsType }) {
                         fallbackSrc="/place.svg"
                       />
 
-                      <Text size="sm" tt="capitalize">
-                        {player.name}
-                      </Text>
+                      <Stack gap={0}>
+                        <Text
+                          size="sm"
+                          tt="capitalize"
+                          maw={150}
+                          truncate="end"
+                        >
+                          {player.name}
+                        </Text>
+
+                        <Text size="xs" tt="capitalize" c="dimmed">
+                          <URLText
+                            url={`/api/lol/hero-info?id=${player.championId}`}
+                          />
+                        </Text>
+                      </Stack>
                     </Group>
                   </Grid.Col>
 

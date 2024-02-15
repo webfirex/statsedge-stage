@@ -17,7 +17,9 @@ export default authMiddleware({
     "/tools",
     "/api/dota/hero",
     "/api/dota/item",
+    "/api/dota/hero-info",
     "/api/lol/hero",
+    "/api/lol/hero-info",
     "/api/lol/item",
   ],
 });

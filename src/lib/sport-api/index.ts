@@ -12,6 +12,7 @@ import { PlayerStats } from "./player/stats";
 import { TeamForm } from "./team/form";
 import { TeamGet } from "./team/get";
 import { TeamLogo } from "./team/logo";
+import { TeamStats } from "./team/stats";
 
 class Fixtures {
   public static List = FixtureList;
@@ -32,6 +33,7 @@ class Team {
   public static Logo = TeamLogo;
   public static Get = TeamGet;
   public static Form = TeamForm;
+  public static Stats = TeamStats;
 }
 
 class Participant {
