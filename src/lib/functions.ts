@@ -174,6 +174,12 @@ export const MapImages = (params: string) => {
     case "Sub Base":
       return "/map/subbase.jpg";
 
+    case "Split":
+      return "/map/split.webp";
+
+    case "Breeze":
+      return "/map/breeze.webp";
+
     default:
       return "https://placehold.co/600x400?text=No%20Map%20Image%20Availabel";
   }

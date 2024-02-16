@@ -37,7 +37,9 @@ export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
                 fallbackSrc="/place.svg"
               />
 
-              <Text maw={300} truncate="end">{participant.name ?? "Unknown"}</Text>
+              <Text maw={300} truncate="end">
+                {participant.name ?? "Unknown"}
+              </Text>
             </Group>
           </Link>
 
@@ -48,30 +50,30 @@ export function MatchHistoryCard({ participant }: MatchHistoryCardProps) {
 
             return Children.toArray(
               participant.recent_matches.fixtures.map((fixture) => (
-                <Link
-                  href={`/team/${fixture.opponentId}`}
-                  style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                  }}
-                >
-                  <Group justify="space-between">
-                    <Text maw={225} truncate="end">
-                      {fixture.opponentName ?? "Unknown"}
-                    </Text>
+                <Group justify="space-between">
+                  <Text
+                    maw={225}
+                    truncate="end"
+                    component={Link}
+                    href={`/team/${fixture.opponentId}`}
+                  >
+                    {fixture.opponentName ?? "Unknown"}
+                  </Text>
 
-                    <Badge
-                      color={
-                        fixture.score > fixture.opponentScore ? "green" : "red"
-                      }
-                      variant="light"
-                      c="white"
-                    >
-                      BO{fixture.detail.format.value} {fixture.score}-
-                      {fixture.opponentScore}
-                    </Badge>
-                  </Group>
-                </Link>
+                  <Badge
+                    color={
+                      fixture.score > fixture.opponentScore ? "green" : "red"
+                    }
+                    variant="light"
+                    c="white"
+                    component={Link}
+                    style={{ cursor: "pointer" }}
+                    href={`/matches/${fixture.fixtureId}`}
+                  >
+                    BO{fixture.detail.format.value} {fixture.score}-
+                    {fixture.opponentScore}
+                  </Badge>
+                </Group>
               ))
             );
           })()}

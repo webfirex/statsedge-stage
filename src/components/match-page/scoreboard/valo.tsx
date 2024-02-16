@@ -1,32 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box,
   Card,
+  Center,
   Divider,
   Flex,
+  Grid,
+  Group,
   Image,
   Paper,
+  ScrollArea,
   SegmentedControl,
   Stack,
-  Table,
   Text,
   Title,
   rem,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconLetterS } from "@tabler/icons-react";
-import {
-  IconBomb,
-  IconCross,
-  IconCurrencyDollar,
-  IconLetterA,
-  IconLetterD,
-  IconLetterF,
-  IconLetterH,
-  IconLetterK,
-  IconLetterR,
-  IconShieldFilled,
-} from "@tabler/icons-react";
-import { Children, useEffect, useState } from "react";
+import { Children, useMemo, useState } from "react";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
@@ -35,203 +25,152 @@ interface MatchScoreboardProps {
 }
 
 type PlayerStatsType = Exclude<
-  Exclude<MatchType["maps"], undefined>["csgo"],
+  Exclude<MatchType["maps"], undefined>["valo"],
   undefined
 >[0]["teamStats"][0]["players"];
 
-export function ScoreBoardLeft(props: {
-  teamId: number;
-  name: string;
-  bg: string;
-
-  players: PlayerStatsType;
-
-  status: MatchType["status"];
-}) {
-  const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-
+export function ScoreBoardBody(props: { players: PlayerStatsType }) {
   return (
     <>
-      <Table withRowBorders={false}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>
-              <Paper
-                py="xs"
-                px={BigThenXs ? "md" : "xs"}
-                radius="xl"
-                bg={props.bg}
-              >
-                <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
-                  <Image
-                    src={`/api/team/logo?id=${props.teamId}`}
-                    alt="league logo"
-                    fit="contain"
-                    h={BigThenXs ? 20 : 15}
-                    fallbackSrc="/place.svg"
-                  />
-                  <Text size={BigThenXs ? "sm" : rem(10)} c="black">
-                    {props.name}
-                  </Text>
-                </Flex>
-              </Paper>
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {Children.toArray(
-            props.players.map((player) => {
-              return (
-                <Table.Tr>
-                  <Table.Td>{player.name}</Table.Td>
-                </Table.Tr>
-              );
-            })
-          )}
-        </Table.Tbody>
-      </Table>
+      <Stack gap={0}>
+        {Children.toArray(
+          props.players.map((player, index) => {
+            const RowData = [
+              <>
+                {Children.toArray(
+                  player.agents.map((agent) => (
+                    <Image
+                      src={`/api/valo/agent?name=${agent}`}
+                      alt="agent icon"
+                      fit="contain"
+                      h={20}
+                      fallbackSrc="/place.svg"
+                    />
+                  ))
+                )}
+              </>,
+              // <>
+              //   {player.totalStats.kills} / {player.totalStats.deaths} /{" "}
+              //   {player.totalStats.assists}
+              // </>,
+              player.totalStats.kills,
+              player.totalStats.deaths,
+              player.totalStats.assists,
+              <>{player.totalStats.headshotPercentage}%</>,
+              <>{player.totalStats.firstKills}</>,
+              <>{player.totalStats.firstDeaths}</>,
+            ];
+
+            return (
+              <>
+                <Grid
+                  columns={12}
+                  bg={index % 2 === 0 ? "dark.5" : "transparent"}
+                  p="sm"
+                >
+                  <Grid.Col span={7}>
+                    <Text size="sm" tt="capitalize">
+                      {player.name}
+                    </Text>
+                  </Grid.Col>
+
+                  {Children.toArray(
+                    RowData.map((element) => (
+                      <Grid.Col span="auto">
+                        <Text size="sm" ta="center">
+                          {element}
+                        </Text>
+                      </Grid.Col>
+                    ))
+                  )}
+                </Grid>
+
+                <Divider />
+              </>
+            );
+          })
+        )}
+      </Stack>
     </>
   );
 }
 
-export function ScoreBoardRight(props: {
-  players: PlayerStatsType;
-  status: MatchType["status"];
+export function ScoreBoardHead(props: {
+  teamId: number;
+  name: string;
+  color: string;
 }) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
-  const iconXs = BigThenXs ? 18 : 12;
 
-  const rows = props.players.map((element) => {
-    const StartedRow = [
-      0,
-      0,
-      0,
-      element.kills,
-      element.assists,
-      element.deaths,
-      element.adr,
-    ];
-
-    const CommonRow = [
-      element.kills,
-      element.headshots,
-      element.assists ?? 0,
-      element.entryKills ?? 0,
-      element.deaths,
-    ];
-
-    return (
-      <Table.Tr key={element.name}>
-        {(() => {
-          if (props.status === "Started") {
-            return Children.toArray(
-              StartedRow.map((element) => (
-                <Table.Td>
-                  <Text ta="center">{element}</Text>
-                </Table.Td>
-              ))
-            );
-          }
-
-          return Children.toArray(
-            CommonRow.map((element) => (
-              <Table.Td>
-                <Text size="sm" ta="center">
-                  {element}
-                </Text>
-              </Table.Td>
-            ))
-          );
-        })()}
-      </Table.Tr>
-    );
-  });
-
-  const StartedHead = Children.toArray([
-    <IconCurrencyDollar size={iconXs} />,
-    <IconCross size={iconXs} />,
-    <IconShieldFilled size={iconXs} />,
-    <IconLetterK size={iconXs} />,
-    <IconLetterA size={iconXs} />,
-    <IconLetterD size={iconXs} />,
-    <>
-      <IconLetterA size={iconXs} />
-      <IconLetterD size={iconXs} />
-      <IconLetterR size={iconXs} />
-    </>,
-  ]);
-
-  const CommonHead = Children.toArray([
-    <IconLetterK size={iconXs} />,
-    <>
-      <IconLetterH size={iconXs} />
-      <IconLetterS size={iconXs} />
-    </>,
-    <IconLetterA size={iconXs} />,
-    <IconLetterF size={iconXs} />,
-    <IconLetterD size={iconXs} />,
-  ]);
-
-  const ths = (
-    <Table.Tr>
-      {(() => {
-        if (props.status === "Started") {
-          return Children.toArray(
-            StartedHead.map((element) => (
-              <Table.Th>
-                <Text mb="xs" ta="center">
-                  {element}
-                </Text>
-              </Table.Th>
-            ))
-          );
-        }
-
-        return Children.toArray(
-          CommonHead.map((element) => (
-            <Table.Th h={40}>
-              <Text mb="xs" ta="center">
-                {element}
-              </Text>
-            </Table.Th>
-          ))
-        );
-      })()}
-    </Table.Tr>
-  );
+  const ColumnsTitle = ["Agent", "K", "D", "A", "HS%", "FK", "FD"];
 
   return (
-    <Table withRowBorders={false}>
-      <Table.Thead>{ths}</Table.Thead>
+    <>
+      <Grid columns={12} px="sm">
+        <Grid.Col span={7}>
+          <Group>
+            <Paper
+              py="xs"
+              px={BigThenXs ? "md" : "xs"}
+              radius="xl"
+              bg={props.color}
+            >
+              <Flex align="center" gap={BigThenXs ? "xs" : rem(5)}>
+                <Image
+                  src={`/api/team/logo?id=${props.teamId}`}
+                  alt="league logo"
+                  fit="contain"
+                  h={BigThenXs ? 20 : 15}
+                  fallbackSrc="/place.svg"
+                />
+                <Text size={BigThenXs ? "sm" : rem(10)} c="black">
+                  {props.name}
+                </Text>
+              </Flex>
+            </Paper>
+          </Group>
+        </Grid.Col>
 
-      <Table.Tbody>{rows}</Table.Tbody>
-    </Table>
+        {Children.toArray(
+          ColumnsTitle.map((element) => (
+            <Grid.Col span="auto">
+              <Center h="100%">
+                <Text ta="center" my="auto" size="sm">
+                  {element}
+                </Text>
+              </Center>
+            </Grid.Col>
+          ))
+        )}
+      </Grid>
+    </>
   );
 }
 
 export function MatchScoreboardVALOComp({ match }: MatchScoreboardProps) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const [MapToShow, setMapToShow] = useState(
-    match.maps?.csgo?.[match.maps?.csgo.length - 1]
-  );
-
   const [SelectedMap, setSelectedMap] = useState(
-    match.maps?.csgo?.[0]?.mapName.toLowerCase()
+    match.maps?.valo?.[0]
+      ? {
+          status: match.maps?.valo?.[0].status,
+          teamStats: match.maps?.valo?.[0].teamStats,
+          mapNumber: match.maps?.valo?.[0].mapNumber,
+        }
+      : null
   );
 
-  useEffect(() => {
-    if (match.status === "Started") {
-      setMapToShow(match.maps?.csgo?.[match.maps.csgo.length - 1]);
-    } else {
-      const FindMap = match.maps?.csgo?.find(
-        (map) => map.mapName.toLowerCase() === SelectedMap
-      );
+  const [TeamOne, TeamTwo] = useMemo(() => {
+    const _teamone = SelectedMap?.teamStats.find(
+      (team) => team.teamId === match.participants.one?.id
+    );
 
-      setMapToShow(FindMap);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [SelectedMap, match.status]);
+    const _teamtwo = SelectedMap?.teamStats.find(
+      (team) => team.teamId === match.participants.two?.id
+    );
+
+    return [_teamone, _teamtwo];
+  }, [SelectedMap]);
 
   return (
     <>
@@ -240,107 +179,88 @@ export function MatchScoreboardVALOComp({ match }: MatchScoreboardProps) {
           ScoreBoard
         </Title>
         <Stack gap="xl">
-          {match.status === "Started" ? (
-            <Flex align="center" justify="space-between">
-              <Stack>
-                <Flex align="center" gap="xs">
-                  <Text c="dimmed" size={BigThenXs ? "sm" : "xs"}>
-                    R - 21
-                  </Text>
-                  <Divider orientation="vertical" size="sm" />
-                  <Text size={BigThenXs ? "sm" : "xs"}>
-                    {MapToShow?.mapName}
-                  </Text>
-                </Flex>
-              </Stack>
+          <SegmentedControl
+            onChange={(value) => {
+              if (value === "69") {
+                setSelectedMap({
+                  status: "ended",
+                  mapNumber: 69,
+                  teamStats: match.allMaps.valorant,
+                });
+                return;
+              }
 
-              <Flex align="center" gap={rem(5)}>
-                <Title order={BigThenXs ? 4 : 5}>
-                  {MapToShow?.roundScores[0]?.roundsWon ?? 0}
-                </Title>
-                <Title order={BigThenXs ? 4 : 5}>:</Title>
-                <Title order={BigThenXs ? 4 : 5}>
-                  {MapToShow?.roundScores[1]?.roundsWon ?? 0}
-                </Title>
-              </Flex>
+              const map = match.maps?.valo?.find(
+                (map) => map.mapNumber === Number(value)
+              );
 
-              <Flex align="center" gap={rem(5)}>
-                <Text size={BigThenXs ? "sm" : "xs"}>1:39</Text>
-                <IconBomb size={BigThenXs ? 20 : 16} />
-              </Flex>
-            </Flex>
-          ) : (
-            <SegmentedControl
-              onChange={(value) => setSelectedMap(value)}
-              data={[
-                // { label: "All Maps", value: "all" },
-                ...(match.maps?.csgo ?? []).map((map) => ({
-                  label: map.mapName,
-                  value: map.mapName.toLowerCase(),
-                })),
-              ]}
-              value={SelectedMap}
-              fullWidth
-            />
-          )}
+              if (!map) {
+                return;
+              }
+
+              setSelectedMap({
+                status: map?.status,
+                teamStats: map?.teamStats,
+                mapNumber: map?.mapNumber,
+              });
+            }}
+            data={
+              match.format.value > 1
+                ? [
+                    { label: "All Maps", value: "69" },
+                    ...(match.maps?.valo ?? []).map((map) => ({
+                      label: `Match ${map.mapNumber}`,
+                      value: String(map.mapNumber),
+                    })),
+                  ]
+                : [
+                    ...(match.maps?.valo ?? []).map((map) => ({
+                      label: `Match ${map.mapNumber}`,
+                      value: String(map.mapNumber),
+                    })),
+                  ]
+            }
+            value={String(SelectedMap?.mapNumber)}
+            fullWidth
+          />
 
           {(() => {
             return (
               <>
                 <Stack gap="md">
-                  <Flex justify="space-between">
-                    <Box
-                      style={{
-                        flexShrink: 1,
-                      }}
-                    >
-                      <ScoreBoardLeft
-                        teamId={match.participants.one?.id ?? 0}
-                        name={match.participants.one?.name ?? "N/A"}
-                        bg="yellow.6"
-                        players={MapToShow?.teamStats[0]?.players ?? []}
-                        status={match.status}
-                      />
-                    </Box>
+                  {TeamOne ? (
+                    <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+                      <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                        <ScoreBoardHead
+                          teamId={match.participants.one?.id ?? 0}
+                          name={match.participants.one?.name ?? "N/A"}
+                          color="yellow.6"
+                        />
 
-                    <Box
-                      style={{
-                        flexShrink: 1,
-                      }}
-                    >
-                      <ScoreBoardRight
-                        players={MapToShow?.teamStats[0]?.players ?? []}
-                        status={match.status}
-                      />
-                    </Box>
-                  </Flex>
+                        <ScoreBoardBody players={TeamOne?.players} />
+                      </Stack>
+                    </ScrollArea>
+                  ) : (
+                    <Text ta="center">No Stats For Team One</Text>
+                  )}
 
-                  <Flex justify="space-between">
-                    <Box
-                      style={{
-                        flexShrink: 1,
-                      }}
-                    >
-                      <ScoreBoardLeft
-                        teamId={match.participants.two?.id ?? 0}
-                        name={match.participants.two?.name ?? "N/A"}
-                        bg="blue.6"
-                        players={MapToShow?.teamStats[1]?.players ?? []}
-                        status={match.status}
-                      />
-                    </Box>
+                  {TeamTwo ? (
+                    <ScrollArea type="never" w={BigThenXs ? "100%" : 400}>
+                      <Stack gap="md" w={BigThenXs ? "100%" : 650}>
+                        <ScoreBoardHead
+                          teamId={match.participants.two?.id ?? 0}
+                          name={match.participants.two?.name ?? "N/A"}
+                          color="blue.6"
+                        />
 
-                    <Box
-                      style={{
-                        flexShrink: 1,
-                      }}
-                    >
-                      <ScoreBoardRight
-                        players={MapToShow?.teamStats[1]?.players ?? []}
-                        status={match.status}
-                      />
-                    </Box>
-                  </Flex>
+                        <ScoreBoardBody players={TeamTwo?.players ?? []} />
+                      </Stack>
+                    </ScrollArea>
+                  ) : (
+                    <>
+                      <Text ta="center">No Stats For Team Two</Text>
+                    </>
+                  )}
                 </Stack>
               </>
             );

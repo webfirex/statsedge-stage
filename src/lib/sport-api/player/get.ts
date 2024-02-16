@@ -37,6 +37,16 @@ export class PlayerGet {
     if (!rawRes.ok) {
       // 404
       if (rawRes.status === 404) {
+        SportApiLogger.warn({
+          err: {
+            status: rawRes.status,
+            statusText: rawRes.statusText,
+          },
+          url: url.toString(),
+          input: params,
+          route: this.Route,
+        });
+
         return null;
       }
 
@@ -45,11 +55,12 @@ export class PlayerGet {
           status: rawRes.status,
           statusText: rawRes.statusText,
         },
+        url: url.toString(),
         input: params,
         route: this.Route,
       });
 
-      throw new Error("Error while fetching player");
+      throw new Error(`${this.Route}: Error while fetching player`);
     }
 
     const rawData: unknown = await rawRes.json();
@@ -59,12 +70,12 @@ export class PlayerGet {
     if (!validatedRes.success) {
       SportApiLogger.error({
         err: validatedRes.error,
-        rawRes,
+        json: rawData,
         input: params,
         route: this.Route,
       });
 
-      throw new Error("Error while validating player");
+      throw new Error(`${this.Route}: Error while parsing player`);
     }
 
     return validatedRes.data;

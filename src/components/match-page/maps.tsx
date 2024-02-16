@@ -36,7 +36,7 @@ export function MatchMapCSGOComp({ match }: MatchMapsProps) {
     <SimpleGrid
       cols={{
         base: match.sport.alias === "codmwiii" ? 3 : 1,
-        md: match.sport.alias === "codmwiii" ? 4 : 1,
+        md: match.sport.alias === "codmwiii" ? 5 : 1,
       }}
     >
       {Children.toArray(
@@ -84,7 +84,7 @@ export function MatchMapCSGOComp({ match }: MatchMapsProps) {
                         >
                           <Image
                             src={`/api/team/logo?id=${map.roundScores[0]?.id}`}
-                            alt="league logo"
+                            alt="Team logo"
                             fit="contain"
                             h={30}
                             fallbackSrc="/place.svg"
@@ -278,13 +278,162 @@ export function MatchMapCODComp({ match }: MatchMapsProps) {
   );
 }
 
+export function MatchMapVALOComp({ match }: MatchMapsProps) {
+  const SmallThenSm = useMediaQuery(`(max-width: ${BREAKPOINTS.SM})`);
+
+  if (!match?.maps?.valo) {
+    return (
+      <Center>
+        <Text>No VALO maps found</Text>
+      </Center>
+    );
+  }
+
+  return (
+    <SimpleGrid
+      cols={{
+        base: match.sport.alias === "codmwiii" ? 3 : 1,
+        md: match.sport.alias === "codmwiii" ? 5 : 1,
+      }}
+    >
+      {Children.toArray(
+        match.maps.valo.map((map) => (
+          <>
+            <Card
+              style={{
+                backgroundImage: `url(${MapImages(map.mapName)})`,
+                backgroundSize: "cover",
+              }}
+            >
+              <Overlay
+                style={{
+                  zIndex: 1,
+                }}
+              />
+              <div
+                style={{
+                  zIndex: 2,
+                }}
+              >
+                {match.status === "Scheduled" && (
+                  <Flex align="center" justify="center">
+                    <Title order={3} ta="center" tt="capitalize">
+                      {map.mapName.replace("de_", "")}
+                    </Title>
+                  </Flex>
+                )}
+
+                {match?.status !== "Scheduled" &&
+                  ["cs2", "valorant"].includes(match.sport.alias) && (
+                    <Flex align="center" justify="space-between">
+                      <Title order={3} tt="capitalize">
+                        {map.mapName.replace("de_", "")}
+                      </Title>
+                      <Flex
+                        justify="space-between"
+                        align="center"
+                        gap={SmallThenSm ? "sm" : "xl"}
+                      >
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Image
+                            src={`/api/team/logo?id=${map.roundScores[0]?.id}`}
+                            alt="Team logo"
+                            fit="contain"
+                            h={30}
+                            fallbackSrc="/place.svg"
+                          />
+                          <Text
+                            c={
+                              (map.roundScores[0]?.roundsWon ?? 0) >
+                              (map.roundScores[1]?.roundsWon ?? 0)
+                                ? "green"
+                                : "red"
+                            }
+                          >
+                            {map.roundScores[0]?.roundsWon ?? 0}
+                          </Text>
+                        </Flex>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          bg="black"
+                          p="sm"
+                        >
+                          <Text size="sm">Stats</Text>
+                          <Text>
+                            {Children.toArray(
+                              (map.roundScores[0]?.halfScores ?? []).map(
+                                (player, index) => (
+                                  <>
+                                    {player}
+
+                                    {index !==
+                                      (map.roundScores[0]?.halfScores ?? [])
+                                        .length -
+                                        1 && " : "}
+                                  </>
+                                )
+                              )
+                            )}{" "}
+                            |{" "}
+                            {Children.toArray(
+                              (map.roundScores[0]?.halfScores ?? []).map(
+                                (player, index) => (
+                                  <>
+                                    {player}
+
+                                    {index !==
+                                      (map.roundScores[0]?.halfScores ?? [])
+                                        .length -
+                                        1 && " : "}
+                                  </>
+                                )
+                              )
+                            )}
+                          </Text>
+                        </Flex>
+                        <Flex direction="column" align="center">
+                          <Image
+                            src={`/api/team/logo?id=${map.roundScores[1]?.id}`}
+                            alt="league logo"
+                            fit="contain"
+                            h={30}
+                            fallbackSrc="/place.svg"
+                          />
+                          <Text
+                            c={
+                              (map.roundScores[1]?.roundsWon ?? 0) >
+                              (map.roundScores[0]?.roundsWon ?? 0)
+                                ? "green"
+                                : "red"
+                            }
+                          >
+                            {map.roundScores[1]?.roundsWon ?? 0}
+                          </Text>
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  )}
+              </div>
+            </Card>
+          </>
+        ))
+      )}
+    </SimpleGrid>
+  );
+}
+
 export function MatchMapsComp({ match }: MatchMapsProps) {
   return (
     <>
       <SimpleGrid
         cols={{
           base: 1,
-          md: match.status === "Scheduled" ? 2 : 1,
+          md: match.status === "Scheduled" ? 2 : match.pickBanMap ? 1 : 2,
         }}
       >
         <Card p="lg">
@@ -299,7 +448,9 @@ export function MatchMapsComp({ match }: MatchMapsProps) {
                     ? 1
                     : match.sport.alias === "codmwiii"
                     ? 1
-                    : 2,
+                    : match.pickBanMap
+                    ? 2
+                    : 1,
               }}
               spacing="xl"
             >
@@ -316,9 +467,17 @@ export function MatchMapsComp({ match }: MatchMapsProps) {
                   }
 
                   if (["cs2", "valorant"].includes(match.sport.alias)) {
+                    if (match.sport.alias === "cs2") {
+                      return (
+                        <>
+                          <MatchMapCSGOComp match={match} />
+                        </>
+                      );
+                    }
+
                     return (
                       <>
-                        <MatchMapCSGOComp match={match} />
+                        <MatchMapVALOComp match={match} />
                       </>
                     );
                   }
@@ -328,9 +487,8 @@ export function MatchMapsComp({ match }: MatchMapsProps) {
               </Stack>
 
               {match.status !== "Scheduled" &&
-                ["cs2", "valorant"].includes(match.sport.alias) && (
-                  <MatchMapPickBanComp match={match} />
-                )}
+                ["cs2", "valorant"].includes(match.sport.alias) &&
+                match.pickBanMap && <MatchMapPickBanComp match={match} />}
             </SimpleGrid>
           </Stack>
         </Card>

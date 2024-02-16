@@ -67,9 +67,67 @@ class MapZod {
     ),
   });
 
+  private static VALOStats = z.object({
+    adr: z.number(),
+    kast: z.number(),
+    kills: z.number(),
+    deaths: z.number(),
+    rating: z.number(),
+    assists: z.number(),
+    firstKills: z.number(),
+    firstDeaths: z.number(),
+    avgCombatScore: z.number(),
+    headshotPercentage: z.number(),
+  });
+
   public static VALORANT = z.object({
     status: this.$Status,
     mapNumber: z.number(),
+    winnerId: z.number().nullable(),
+    mapName: z.string(),
+    mapDataStatus: z.enum(["live", "verified"]),
+    roundScores: z.array(
+      z.object({
+        id: z.number(),
+        roundsWon: z.number(),
+        halfScores: z.array(z.number()).optional(),
+      })
+    ),
+    teamStats: z.array(
+      z.object({
+        teamId: z.number(),
+        startSide: z.enum(["attack", "defend", "Unknown"]),
+        players: z.array(
+          z.object({
+            name: z.string(),
+            agents: z.array(z.string()),
+            plants: z.number(),
+            defuses: z.number(),
+            playerId: z.number(),
+            econRating: z.number(),
+            totalStats: this.VALOStats,
+            attackStats: this.VALOStats,
+            defendStats: this.VALOStats,
+            multikills: z
+              .array(
+                z.object({
+                  type: z.string(),
+                  round: z.number(),
+                })
+              )
+              .optional(),
+            clutches: z
+              .array(
+                z.object({
+                  round: z.number(),
+                  type: z.enum(["1v1", "1v2", "1v3", "1v4", "1v5"]),
+                })
+              )
+              .optional(),
+          })
+        ),
+      })
+    ),
   });
 
   public static DOTA2 = z
@@ -294,10 +352,167 @@ class MapZod {
       })
     ),
   });
+
+  public static RL = z.object({});
+}
+
+class EventBaseZod {
+  public static Auth = z.object({
+    type: z.enum(["auth"]),
+  });
+
+  public static Alive = z.object({
+    type: z.enum(["pong"]),
+  });
+
+  public static PayloadBase = z.object({
+    snapshotNumber: z.number(),
+    fixtureId: z.number(),
+    timestamp: z.number(),
+  });
+
+  public static EventBase = z.object({
+    sortIndex: z.number(),
+    type: z.enum(["occurrence"]),
+  });
+
+  public static FixtureStarted = this.EventBase.extend({
+    type: z.enum(["fixture_started"]),
+    payload: this.PayloadBase.extend({
+      participants: z.array(
+        z.object({
+          id: z.number(),
+        })
+      ),
+    }),
+  });
+
+  public static FixtureEnded = this.EventBase.extend({
+    type: z.enum(["fixture_ended"]),
+    payload: this.PayloadBase.extend({
+      winnerId: z.number().nullable(),
+      tie: z.boolean(),
+      participants: z.array(
+        z.object({
+          id: z.number(),
+          score: z.number(),
+          name: z.string(),
+        })
+      ),
+    }),
+  });
+
+  public static ScoreChange = this.EventBase.extend({
+    type: z.enum(["score_change"]),
+    payload: this.PayloadBase.extend({
+      participants: z.array(
+        z.object({
+          id: z.number(),
+          score: z.number(),
+        })
+      ),
+    }),
+  });
+}
+
+class EventCSGOZod {
+  public static MapStarted = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["map_started"]),
+      mapName: z.string(),
+      mapNumber: z.number(),
+      participants: z.array(
+        z.object({
+          id: z.number(),
+        })
+      ),
+    }),
+  });
+
+  public static MapEnded = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["map_ended"]),
+      mapNumber: z.number(),
+      winnerId: z.number().nullable(),
+      tie: z.boolean(),
+      halfNumber: z.number(),
+      roundNumber: z.number(),
+      participants: z.array(
+        z.object({
+          id: z.number(),
+          score: z.number(),
+          roundsWon: z.number(),
+        })
+      ),
+    }),
+  });
+
+  public static MapVoided = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["map_voided"]),
+      mapNumber: z.number(),
+      halfNumber: z.number(),
+      roundNumber: z.number(),
+    }),
+  });
+
+  public static RoundStarted = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["round_started"]),
+      mapNumber: z.number(),
+      halfNumber: z.number(),
+      roundNumber: z.number(),
+    }),
+  });
+
+  public static RoundEnded = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["round_ended"]),
+      mapNumber: z.number(),
+      halfNumber: z.number(),
+      roundNumber: z.number(),
+      winnerId: z.number().nullable(),
+      winCondition: z.string(),
+      participants: z.array(
+        z.object({
+          id: z.number(),
+          roundsWon: z.number(),
+        })
+      ),
+    }),
+  });
+
+  public static RoundVoided = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["round_voided"]),
+      mapNumber: z.number(),
+      halfNumber: z.number(),
+      roundNumber: z.number(),
+    }),
+  });
+
+  public static HalfStarted = EventBaseZod.EventBase.extend({
+    payload: EventBaseZod.PayloadBase.extend({
+      name: z.enum(["half_started"]),
+      mapNumber: z.number(),
+      halfNumber: z.number(),
+    }),
+  });
+
+  public static All = z.union([
+    EventBaseZod.Auth,
+    EventBaseZod.Alive,
+    EventBaseZod.FixtureStarted,
+    EventBaseZod.FixtureEnded,
+    EventBaseZod.ScoreChange,
+  ]);
 }
 
 export class SportApiZod {
   public static Map = MapZod;
+  public static Event = {
+    CSGO: EventCSGOZod,
+  };
 
   // ====================
 

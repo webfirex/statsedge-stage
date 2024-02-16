@@ -22,6 +22,7 @@ import { MatchScoreboardCSGOComp } from "~/components/match-page/scoreboard/csgo
 import { MatchScoreboardLOLComp } from "~/components/match-page/scoreboard/lol";
 import { MatchScoreboardDOTA2Comp } from "~/components/match-page/scoreboard/dota";
 import { MatchScoreboardCODComp } from "~/components/match-page/scoreboard/cod";
+import { MatchScoreboardVALOComp } from "~/components/match-page/scoreboard/valo";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -39,8 +40,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const match = await SportApi.Custom.Match.Call({
     id: parsedId.data,
   });
-
-  // console.log(JSON.stringify(match, null, 2));
 
   if (!match) {
     return { notFound: true };
@@ -62,11 +61,77 @@ export default function AppTournamentManagePage({
     },
     {
       initialData: match,
-      refetchInterval: 10000, // 10 seconds
+      refetchInterval: 1000 * 60 * 5, // 5 min in ms
       enabled: ["Scheduled", "Started"].includes(match.status),
-      staleTime: 15000, // 15 seconds
+      staleTime: 1000 * 60 * 5,
     }
   );
+
+  /**
+   * Consuming too much resources
+   *
+   * On hold for now
+   *
+   * Solution: Refetch every 10 seconds, caching time of api
+   * becomes 10 second while the match is live and gets back to 5 min
+   * when the match is over
+   */
+  // const [messageHistory, handleMessageHistory] = useListState([]);
+
+  // const { sendJsonMessage, lastMessage } = useWebSocket(
+  //   `wss://api.gamescorekeeper.com/v2/live/${match.id}`,
+  //   {
+  //     shouldReconnect: () => true,
+  //     heartbeat: {
+  //       interval: 30000, // 30 seconds
+  //       message: "ping",
+  //       returnMessage: "pong",
+  //       timeout: 10000, // 10 seconds
+  //     },
+  //   }
+  // );
+
+  // useEffect(() => {
+  //   if (lastMessage !== null) {
+  //     const eventJson = JSON.parse(lastMessage.data as string) as {
+  //       type: string;
+  //     };
+
+  //     console.log(lastMessage.data);
+
+  //     if (eventJson.type === "auth") {
+  //       sendJsonMessage({
+  //         token:
+  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJza3lsZXJjYW1wZXIiLCJpc3MiOiJHYW1lU2NvcmVrZWVwZXIiLCJqdGkiOi0zMzA5MDQ4MTMzMzUyOTY5Njk3LCJjdXN0b21lciI6dHJ1ZX0.9SkaL3AeufKMI_AAH_1PtYEYAy8FQ46EJjHKsTvDTRo",
+  //       });
+  //     }
+
+  // const parsedMessage = SportApiZod.Event.All.safeParse(
+  //   JSON.parse(lastMessage.data as string)
+  // );
+
+  // if (!parsedMessage.success) {
+  //   console.log("Failed to parse message");
+  //   console.log({
+  //     err: parsedMessage.error,
+  //     message: lastMessage.data,
+  //   });
+  //   return;
+  // }
+
+  // const event = parsedMessage.data;
+
+  // if (event.type === "auth") {
+  //   sendJsonMessage({
+  //     token:
+  //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJza3lsZXJjYW1wZXIiLCJpc3MiOiJHYW1lU2NvcmVrZWVwZXIiLCJqdGkiOi0zMzA5MDQ4MTMzMzUyOTY5Njk3LCJjdXN0b21lciI6dHJ1ZX0.9SkaL3AeufKMI_AAH_1PtYEYAy8FQ46EJjHKsTvDTRo",
+  //   });
+  //   return;
+  // }
+
+  // console.log(event);
+  //   }
+  // }, [lastMessage]);
 
   if (GetApi.isLoading) {
     return (
@@ -210,7 +275,7 @@ export default function AppTournamentManagePage({
                           }
 
                           if (GetApi.data.sport.alias === "valorant") {
-                            return <Text p="xl">No Scoreboard Data</Text>;
+                            return <MatchScoreboardVALOComp match={GetApi.data} />;
                           }
 
                           return <Text p="xl">Unsupported Game</Text>;

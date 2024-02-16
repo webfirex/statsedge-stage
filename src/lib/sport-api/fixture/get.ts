@@ -146,6 +146,26 @@ export class FixtureGet {
           };
         }
 
+        if (data.sport.alias === "valorant" && data.maps) {
+          const safeParse = z.array(SportApiZod.Map.VALORANT).safeParse(data.maps);
+
+          if (!safeParse.success) {
+            return ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Failed to parse maps for Valorant`,
+              path: ["maps"],
+              params: { error: safeParse.error },
+            });
+          }
+
+          return {
+            ...data,
+            maps: {
+              valorant: safeParse.data,
+            },
+          };
+        }
+
         return {
           ...data,
           maps: undefined,

@@ -21,6 +21,7 @@ export default authMiddleware({
     "/api/lol/hero",
     "/api/lol/hero-info",
     "/api/lol/item",
+    "/404",
   ],
 });
 

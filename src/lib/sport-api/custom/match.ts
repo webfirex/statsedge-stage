@@ -275,6 +275,68 @@ export class CustomMatch {
       return oneTeamStats;
     };
 
+    const AllMapsValo = (params: {
+      maps: Exclude<
+        Exclude<typeof FixtureDB.maps, undefined>["valorant"],
+        undefined
+      >;
+    }) => {
+      const oneTeamStats = params.maps.reduce((acc, curr) => {
+        const newTeamStats = curr.teamStats.map((team) => {
+          const teamStatss = acc.find((s) => s.teamId === team.teamId);
+
+          if (!teamStatss) {
+            return team;
+          }
+
+          return {
+            teamId: team.teamId,
+            players: team.players.map((player) => {
+              const _Player = teamStatss.players.find(
+                (s) => s.name === player.name
+              );
+
+              if (!_Player) {
+                return player;
+              }
+
+              return {
+                playerId: player.playerId,
+                name: player.name,
+                agents: player.agents,
+                econRating: player.econRating + _Player.econRating,
+                defuses: player.defuses + _Player.defuses,
+                plants: player.plants + _Player.plants,
+                clutches: [],
+                multikills: [],
+                totalStats: {
+                  kills: player.totalStats.kills + _Player.totalStats.kills,
+                  deaths: player.totalStats.deaths + _Player.totalStats.deaths,
+                  assists:
+                    player.totalStats.assists + _Player.totalStats.assists,
+                  headshotPercentage:
+                    (player.totalStats.headshotPercentage ?? 0) +
+                    (_Player.totalStats.headshotPercentage ?? 0),
+                  firstKills:
+                    player.totalStats.firstKills +
+                    _Player.totalStats.firstKills,
+                  firstDeaths:
+                    player.totalStats.firstDeaths +
+                    _Player.totalStats.firstDeaths,
+                },
+                defendStats: {},
+                attackStats: {},
+              };
+            }),
+          };
+        }) as (typeof curr)["teamStats"];
+
+        return newTeamStats;
+      }, [] as (typeof params.maps)[0]["teamStats"]);
+
+      return oneTeamStats;
+    };
+
     // console.log(JSON.stringify(FixtureDB.maps?.cod, null, 2));
 
     return {
@@ -298,11 +360,16 @@ export class CustomMatch {
         cod: FixtureDB.maps?.cod
           ? AllMapsCOD({ maps: FixtureDB.maps.cod })
           : [],
+
+        valorant: FixtureDB.maps?.valorant
+          ? AllMapsValo({ maps: FixtureDB.maps.valorant })
+          : [],
       },
       maps: {
         ...FixtureDB.maps,
         csgo: FixtureDB.maps?.csgo,
         cod: FixtureDB.maps?.cod,
+        valo: FixtureDB.maps?.valorant,
         dota2:
           FixtureDB.sport.alias === "dota2"
             ? await MergeDOTAStatsInMap({
