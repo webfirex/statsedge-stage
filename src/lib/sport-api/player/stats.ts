@@ -43,6 +43,8 @@ export class PlayerStats {
   ): Promise<z.infer<typeof this.Zod.Response>> => {
     const url = SportApiCore.URL(`${this.Path}/${params.id}`);
 
+    console.log(url.toString());
+
     const rawRes = await SportApiCore.Request({
       url: url.toString(),
       method: "GET",

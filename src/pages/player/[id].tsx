@@ -26,7 +26,6 @@ import { Achievements } from "~/components/player-page/achievements";
 import { RoleRow } from "~/components/player-page/role-row";
 import MainFilters from "~/components/player-page/main-filter";
 import { BarChart, LineChart } from "@mantine/charts";
-import { data } from "~/pages/api/charts/vbar";
 import { performance } from "../api/charts/perform-chart";
 import OverallStats from "~/components/player-page/overall-stats";
 import MatchStats from "~/components/player-page/match-stats";
@@ -87,7 +86,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 export default function Player({
   info,
-  // stats,
+  stats,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [value, setValue] = useState(50);
 
@@ -166,8 +165,33 @@ export default function Player({
                     <BarChart
                       display={BigThenMd ? "block" : "none"}
                       h={300}
-                      // maw={500}
-                      data={data}
+                      maw={500}
+                      data={[
+                        {
+                          key: "Rating 2.0",
+                          Points: stats?.meta.gsk_rating ?? 0,
+                        },
+                        {
+                          key: "DPR",
+                          Points: stats?.averagePerRound.deaths ?? 0,
+                        },
+                        {
+                          key: "KAST",
+                          Points: stats?.averagePerRound.kast ?? 0,
+                        },
+                        {
+                          key: "Impact",
+                          Points: 0,
+                        },
+                        {
+                          key: "ADR",
+                          Points: stats?.averagePerRound.adr ?? 0,
+                        },
+                        {
+                          key: "KPR",
+                          Points: stats?.averagePerRound.kills ?? 0,
+                        },
+                      ]}
                       dataKey="key"
                       type="stacked"
                       orientation="vertical"
@@ -181,7 +205,7 @@ export default function Player({
                           color: "white",
                         },
                       ]}
-                      series={[{ name: "Laptops", color: "blue.6" }]}
+                      series={[{ name: "Points", color: "blue.6" }]}
                     />
                   )}
                 </Grid.Col>
@@ -352,9 +376,7 @@ export default function Player({
                       <Flex justify={"space-between"} align={"center"}>
                         <Box display={"flex"} style={{ gap: "15px" }}>
                           <Image
-                            src={
-                              "/place.svg"
-                            }
+                            src={"/place.svg"}
                             alt="league logo"
                             fit="contain"
                             h={BigThenXs ? 20 : 15}
@@ -383,9 +405,7 @@ export default function Player({
                       <Flex justify={"space-between"} align={"center"}>
                         <Box display={"flex"} style={{ gap: "15px" }}>
                           <Image
-                            src={
-                              "/place.svg"
-                            }
+                            src={"/place.svg"}
                             alt="league logo"
                             fit="contain"
                             h={BigThenXs ? 20 : 15}
