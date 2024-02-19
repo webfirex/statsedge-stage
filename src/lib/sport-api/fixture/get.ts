@@ -147,7 +147,9 @@ export class FixtureGet {
         }
 
         if (data.sport.alias === "valorant" && data.maps) {
-          const safeParse = z.array(SportApiZod.Map.VALORANT).safeParse(data.maps);
+          const safeParse = z
+            .array(SportApiZod.Map.VALORANT)
+            .safeParse(data.maps);
 
           if (!safeParse.success) {
             return ctx.addIssue({
@@ -198,7 +200,9 @@ export class FixtureGet {
         route: this.Route,
       });
 
-      throw new Error("Error while fetching fixture");
+      throw new Error(
+        `${this.Route} failed with status ${rawRes.status} ${rawRes.statusText}`
+      );
     }
 
     const rawData: unknown = await rawRes.json();
@@ -213,7 +217,7 @@ export class FixtureGet {
         route: this.Route,
       });
 
-      throw new Error("Error while validating response");
+      throw new Error(`${this.Route} failed to validate response`);
     }
 
     return validatedRes.data;

@@ -180,6 +180,33 @@ export const MapImages = (params: string) => {
     case "Breeze":
       return "/map/breeze.webp";
 
+    case "Ascent":
+      return "/map/Ascent.png";
+
+    case "Bind":
+      return "/map/Bind.png";
+
+    case "Haven":
+      return "/map/Haven.png";
+
+    case "Icebox":
+      return "/map/Icebox.png";
+
+    case "Split":
+      return "/map/Split.png";
+
+    case "Sunset":
+      return "/map/Sunset.png";
+
+    case "Pearl":
+      return "/map/Pearl.png";
+
+    case "Lotus":
+      return "/map/Lotus.png";
+
+    case "Fracture":
+      return "/map/Fracture.png";
+
     default:
       return "https://placehold.co/600x400?text=No%20Map%20Image%20Availabel";
   }

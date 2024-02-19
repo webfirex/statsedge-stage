@@ -29,36 +29,22 @@ type PlayerStatsType = Exclude<
   undefined
 >[0]["teamStats"][0]["players"];
 
-export function ScoreBoardBody(props: { players: PlayerStatsType }) {
+export function ScoreBoardBody(props: {
+  players: PlayerStatsType;
+  selectedMapNumber: number;
+}) {
   return (
     <>
       <Stack gap={0}>
         {Children.toArray(
           props.players.map((player, index) => {
             const RowData = [
-              <>
-                {Children.toArray(
-                  player.agents.map((agent) => (
-                    <Image
-                      src={`/api/valo/agent?name=${agent}`}
-                      alt="agent icon"
-                      fit="contain"
-                      h={20}
-                      fallbackSrc="/place.svg"
-                    />
-                  ))
-                )}
-              </>,
-              // <>
-              //   {player.totalStats.kills} / {player.totalStats.deaths} /{" "}
-              //   {player.totalStats.assists}
-              // </>,
               player.totalStats.kills,
               player.totalStats.deaths,
               player.totalStats.assists,
               <>{player.totalStats.headshotPercentage}%</>,
-              <>{player.totalStats.firstKills}</>,
-              <>{player.totalStats.firstDeaths}</>,
+              player.totalStats.firstKills,
+              player.totalStats.firstDeaths,
             ];
 
             return (
@@ -69,9 +55,24 @@ export function ScoreBoardBody(props: { players: PlayerStatsType }) {
                   p="sm"
                 >
                   <Grid.Col span={7}>
-                    <Text size="sm" tt="capitalize">
-                      {player.name}
-                    </Text>
+                    <Group>
+                      {props.selectedMapNumber !== 69 &&
+                        Children.toArray(
+                          player.agents.map((agent) => (
+                            <Image
+                              src={`/valo/${agent}.png`}
+                              alt="agent icon"
+                              fit="contain"
+                              h={20}
+                              fallbackSrc="/place.svg"
+                            />
+                          ))
+                        )}
+
+                      <Text size="sm" tt="capitalize">
+                        {player.name}
+                      </Text>
+                    </Group>
                   </Grid.Col>
 
                   {Children.toArray(
@@ -102,7 +103,7 @@ export function ScoreBoardHead(props: {
 }) {
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const ColumnsTitle = ["Agent", "K", "D", "A", "HS%", "FK", "FD"];
+  const ColumnsTitle = ["K", "D", "A", "HS%", "FK", "FD"];
 
   return (
     <>
@@ -237,7 +238,10 @@ export function MatchScoreboardVALOComp({ match }: MatchScoreboardProps) {
                           color="yellow.6"
                         />
 
-                        <ScoreBoardBody players={TeamOne?.players} />
+                        <ScoreBoardBody
+                          players={TeamOne?.players}
+                          selectedMapNumber={SelectedMap?.mapNumber ?? 0}
+                        />
                       </Stack>
                     </ScrollArea>
                   ) : (
@@ -253,7 +257,10 @@ export function MatchScoreboardVALOComp({ match }: MatchScoreboardProps) {
                           color="blue.6"
                         />
 
-                        <ScoreBoardBody players={TeamTwo?.players ?? []} />
+                        <ScoreBoardBody
+                          players={TeamTwo?.players}
+                          selectedMapNumber={SelectedMap?.mapNumber ?? 0}
+                        />
                       </Stack>
                     </ScrollArea>
                   ) : (
