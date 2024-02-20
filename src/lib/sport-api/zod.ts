@@ -192,7 +192,7 @@ class MapZod {
       duration: z.number().nullable(),
       teamStats: z.array(
         z.object({
-          side: z.enum(["blue", "red"]),
+          side: z.enum(["blue", "red"]).optional(),
           teamId: z.number(),
           towersDestroyed: z.number(),
           inhibitorsDestroyed: z.number(),

@@ -1,28 +1,147 @@
-import { Center, Container, Grid, Stack, Text } from "@mantine/core";
+import dynamic from "next/dynamic";
+
+import { Center, Container, Grid, Skeleton, Stack, Text } from "@mantine/core";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
 import { z } from "zod";
-import { FadeUpAni } from "~/components/animation/fade-up";
 import { LayoutComp } from "~/components/layout";
-import { MatchSportSelector } from "~/components/match-page/sport-selector";
-import { PathDisplay } from "~/components/pathdisplay";
 import { SportApi } from "~/lib/sport-api";
 import { api } from "~/utils/api";
 import { MatchHeroComp } from "~/components/match-page/hero";
-import { MatchBelowHeroComp } from "~/components/match-page/below-hero";
-import { MatchStreamComp } from "~/components/match-page/stream-card";
-import { MatchHeadToHeadComp } from "~/components/match-page/head-to-head";
-import { MatchMapStatusComp } from "~/components/match-page/map-status";
-import { MatchLineupComp } from "~/components/match-page/lineups";
-import { MatchHistoryComp } from "~/components/match-page/match-history";
-import { MatchMapsComp } from "~/components/match-page/maps";
-import { MatchScoreboardCSGOComp } from "~/components/match-page/scoreboard/csgo";
-import { MatchScoreboardLOLComp } from "~/components/match-page/scoreboard/lol";
-import { MatchScoreboardDOTA2Comp } from "~/components/match-page/scoreboard/dota";
-import { MatchScoreboardCODComp } from "~/components/match-page/scoreboard/cod";
-import { MatchScoreboardVALOComp } from "~/components/match-page/scoreboard/valo";
+import { FadeUpAni } from "~/components/animation/fade-up";
+import { MatchSportSelector } from "~/components/match-page/sport-selector";
+import { PathDisplay } from "~/components/pathdisplay";
+
+const MatchMapStatusComp = dynamic(
+  () =>
+    import("~/components/match-page/map-status").then(
+      (mod) => mod.MatchMapStatusComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchHistoryComp = dynamic(
+  () =>
+    import("~/components/match-page/match-history").then(
+      (mod) => mod.MatchHistoryComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchLineupComp = dynamic(
+  () =>
+    import("~/components/match-page/lineups").then(
+      (mod) => mod.MatchLineupComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchScoreboardLOLComp = dynamic(
+  () =>
+    import("~/components/match-page/scoreboard/lol").then(
+      (mod) => mod.MatchScoreboardLOLComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchMapsComp = dynamic(
+  () => import("~/components/match-page/maps").then((mod) => mod.MatchMapsComp),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchStreamComp = dynamic(
+  () =>
+    import("~/components/match-page/stream-card").then(
+      (mod) => mod.MatchStreamComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchHeadToHeadComp = dynamic(
+  () =>
+    import("~/components/match-page/head-to-head").then(
+      (mod) => mod.MatchHeadToHeadComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchBelowHeroComp = dynamic(
+  () =>
+    import("~/components/match-page/below-hero").then(
+      (mod) => mod.MatchBelowHeroComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchScoreboardVALOComp = dynamic(
+  () =>
+    import("~/components/match-page/scoreboard/valo").then(
+      (mod) => mod.MatchScoreboardVALOComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchScoreboardDOTA2Comp = dynamic(
+  () =>
+    import("~/components/match-page/scoreboard/dota").then(
+      (mod) => mod.MatchScoreboardDOTA2Comp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchScoreboardCODComp = dynamic(
+  () =>
+    import("~/components/match-page/scoreboard/cod").then(
+      (mod) => mod.MatchScoreboardCODComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
+
+const MatchScoreboardCSGOComp = dynamic(
+  () =>
+    import("~/components/match-page/scoreboard/csgo").then(
+      (mod) => mod.MatchScoreboardCSGOComp
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={500} width="100%" radius="md" />,
+  }
+);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -275,7 +394,9 @@ export default function AppTournamentManagePage({
                           }
 
                           if (GetApi.data.sport.alias === "valorant") {
-                            return <MatchScoreboardVALOComp match={GetApi.data} />;
+                            return (
+                              <MatchScoreboardVALOComp match={GetApi.data} />
+                            );
                           }
 
                           return <Text p="xl">Unsupported Game</Text>;
