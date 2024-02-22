@@ -24,7 +24,6 @@ import {
 } from "@tabler/icons-react";
 import { type MatchType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
-import MatchStats from "../player-page/match-stats";
 
 interface MatchScoreboardProps {
   match: MatchType;
@@ -378,9 +377,9 @@ export function MatchScoreboardComp({ match }: MatchScoreboardProps) {
             </Flex>
           </Flex>
 
-          {["lol", "dota2", "valorant"].includes(match.sport.alias) && (
+          {/* {["lol", "dota2", "valorant"].includes(match.sport.alias) && (
             <MatchStats sport={match.sport.alias} />
-          )}
+          )} */}
 
           <Stack gap="md">
             <ScoreBoardHead

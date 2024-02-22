@@ -1,9 +1,10 @@
 import { Box, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { type PlayerStatsTestType } from "~/lib/type";
 import { BREAKPOINTS } from "~/styles/globals";
 
 interface RoleRowProps {
-  age?: number;
+  player: PlayerStatsTestType;
 }
 
 export function RoleRow(props: RoleRowProps) {
@@ -22,9 +23,9 @@ export function RoleRow(props: RoleRowProps) {
           gap: BigThenMd ? "50px" : "0",
         }}
       >
-        <Text>ROLE: SNIPER</Text>
+        {props.player.role && <Text>ROLE: {props.player.role}</Text>}
         <Text>Top 20 (#5)</Text>
-        {props.age && <Text>{props.age} yrs</Text>}
+        {props.player.age && <Text>{props.player.age} yrs</Text>}
       </Box>
     </>
   );

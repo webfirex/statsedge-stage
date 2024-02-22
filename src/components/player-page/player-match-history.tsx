@@ -1,58 +1,57 @@
 import { BREAKPOINTS } from "~/styles/globals";
 import { useMediaQuery } from "@mantine/hooks";
-import { elements } from "~/pages/api/charts/match-history";
 import { Flex, Table, Image, Card, Title, Text, Select } from "@mantine/core";
+import { type PlayerStatsTestType } from "~/lib/type";
+import { Children } from "react";
 
-export function PlayerMatchHistory() {
+export function PlayerMatchHistory(props: {
+  matches: PlayerStatsTestType["last_games"];
+}) {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const rows = elements.map((element) => (
-    <Table.Tr key={element.date}>
-      <Table.Td>{element.date}</Table.Td>
-      <Table.Td display={BigThenMd ? "block" : "none"}>
-        <Flex>
-          <Image
-            src={
-              "/place.svg"
-            }
-            alt="league logo"
-            fit="contain"
-            h={BigThenXs ? 20 : 15}
-          />
-          {element.team}
-        </Flex>
-      </Table.Td>
-      <Table.Td>
-        <Flex display={BigThenMd ? "flex" : "none"}>
-          <Image
-            src={
-              "/place.svg"
-            }
-            alt="league logo"
-            fit="contain"
-            h={BigThenXs ? 20 : 15}
-          />
-          {element.opponent}
-        </Flex>
-        <Flex display={BigThenMd ? "none" : "flex"}>
-          <Image
-            src={
-              "/place.svg"
-            }
-            alt="league logo"
-            fit="contain"
-            h={BigThenXs ? 20 : 15}
-          />
-        </Flex>
-      </Table.Td>
-      <Table.Td>{element.map}</Table.Td>
-      <Table.Td>{element.kills}</Table.Td>
-      <Table.Td>{element.headshots}</Table.Td>
-      <Table.Td>{element.kills}</Table.Td>
-      <Table.Td>{element.assists}</Table.Td>
-    </Table.Tr>
-  ));
+  const rows = Children.toArray(
+    props.matches.map((element) => (
+      <Table.Tr>
+        <Table.Td>21.06.2021</Table.Td>
+        <Table.Td display={BigThenMd ? "block" : "none"}>
+          <Flex>
+            <Image
+              src={"/place.svg"}
+              alt="league logo"
+              fit="contain"
+              h={BigThenXs ? 20 : 15}
+            />
+            {element.team.name}
+          </Flex>
+        </Table.Td>
+        <Table.Td>
+          <Flex display={BigThenMd ? "flex" : "none"}>
+            <Image
+              src={"/place.svg"}
+              alt="league logo"
+              fit="contain"
+              h={BigThenXs ? 20 : 15}
+            />
+            {element.opponent.name}
+          </Flex>
+          <Flex display={BigThenMd ? "none" : "flex"}>
+            <Image
+              src={"/place.svg"}
+              alt="league logo"
+              fit="contain"
+              h={BigThenXs ? 20 : 15}
+            />
+          </Flex>
+        </Table.Td>
+        <Table.Td>MAp</Table.Td>
+        <Table.Td>{element.kills}</Table.Td>
+        <Table.Td>{element.total_heal}</Table.Td>
+        <Table.Td>{element.kills}</Table.Td>
+        <Table.Td>{element.assists}</Table.Td>
+      </Table.Tr>
+    ))
+  );
 
   return (
     <Card display={"flex"} flex={"column"} style={{ gap: "20px" }}>

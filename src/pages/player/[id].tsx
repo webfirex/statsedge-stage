@@ -25,7 +25,7 @@ import { PlayerDetails } from "~/components/player-page/player-details";
 import { Achievements } from "~/components/player-page/achievements";
 import { RoleRow } from "~/components/player-page/role-row";
 import MainFilters from "~/components/player-page/main-filter";
-import { BarChart, LineChart } from "@mantine/charts";
+import { LineChart } from "@mantine/charts";
 import { performance } from "../api/charts/perform-chart";
 import OverallStats from "~/components/player-page/overall-stats";
 import MatchStats from "~/components/player-page/match-stats";
@@ -36,8 +36,8 @@ import {
   type GetServerSidePropsContext,
 } from "next";
 import { z } from "zod";
-import { SportApi } from "~/lib/sport-api";
 import { PlayerMatchHistory } from "~/components/player-page/player-match-history";
+import { PlayerStatsTest } from "~/lib/sport-api/player/stats-test";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -52,18 +52,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { notFound: true };
   }
 
-  const PlayerInfoPromise = SportApi.Player.Get.Call({
+  const PlayerInfo = await PlayerStatsTest.Call({
     id: parsedId.data,
   });
-
-  const PlayerStatsPromise = SportApi.Player.Stats.Call({
-    id: parsedId.data,
-  });
-
-  const [PlayerInfo, PlayerStats] = await Promise.all([
-    PlayerInfoPromise,
-    PlayerStatsPromise,
-  ]);
 
   if (!PlayerInfo) {
     return { notFound: true };
@@ -74,26 +65,23 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     "public, s-maxage=30, stale-while-revalidate=30"
   );
 
-  console.log({ PlayerInfo, PlayerStats });
-
   return {
     props: {
-      info: PlayerInfo,
-      stats: PlayerStats,
+      ...PlayerInfo,
+      sport: "lol",
     },
   };
 }
 
-export default function Player({
-  info,
-  stats,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Player(
+  player: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [value, setValue] = useState(50);
 
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
-  const sport = SportInfo(info?.sport ?? "");
+  const sport = SportInfo(player.sport);
 
   if (!sport) {
     return (
@@ -138,7 +126,7 @@ export default function Player({
             <FadeUpAni>
               <Grid columns={10}>
                 <Grid.Col span={{ base: 10, md: 4 }}>
-                  <PlayerImg />
+                  <PlayerImg src={player.image_url ?? ""} />
                 </Grid.Col>
                 <Grid.Col span={{ base: 10, md: 6 }}>
                   <Box
@@ -149,64 +137,66 @@ export default function Player({
                     }}
                   >
                     <PlayerDetails
-                      name={`${info?.firstName} ${info?.lastName}`}
-                      nickname={info?.nickname ?? "Unknown"}
+                      name={`${player.first_name} ${player.last_name}`}
+                      nickname={player.slug ?? "No nickname"}
                       logo={sport.logo}
                       sport={sport.alias}
-                      country={info?.countryISO?.toLowerCase()}
+                      country={player.nationality?.toLowerCase() ?? "unknown"}
+                      team_name={player.current_team?.name ?? "No team"}
                     />
 
                     <Achievements />
                   </Box>
 
-                  <RoleRow age={info?.age ?? undefined} />
+                  <RoleRow player={player} />
 
                   {sport.alias != "rl" && sport.alias != "dota2" && (
-                    <BarChart
-                      display={BigThenMd ? "block" : "none"}
-                      h={300}
-                      maw={500}
-                      data={[
-                        {
-                          key: "Rating 2.0",
-                          Points: stats?.meta.gsk_rating ?? 0,
-                        },
-                        {
-                          key: "DPR",
-                          Points: stats?.averagePerRound.deaths ?? 0,
-                        },
-                        {
-                          key: "KAST",
-                          Points: stats?.averagePerRound.kast ?? 0,
-                        },
-                        {
-                          key: "Impact",
-                          Points: 0,
-                        },
-                        {
-                          key: "ADR",
-                          Points: stats?.averagePerRound.adr ?? 0,
-                        },
-                        {
-                          key: "KPR",
-                          Points: stats?.averagePerRound.kills ?? 0,
-                        },
-                      ]}
-                      dataKey="key"
-                      type="stacked"
-                      orientation="vertical"
-                      yAxisProps={{ width: 80 }}
-                      mt={"lg"}
-                      gridAxis="none"
-                      withTooltip={false}
-                      referenceLines={[
-                        {
-                          x: 100,
-                          color: "white",
-                        },
-                      ]}
-                      series={[{ name: "Points", color: "blue.6" }]}
-                    />
+                    <></>
+                    // <BarChart
+                    //   display={BigThenMd ? "block" : "none"}
+                    //   h={300}
+                    //   maw={500}
+                    //   // data={[
+                    //   //   {
+                    //   //     key: "Rating 2.0",
+                    //   //     Points: stats?.meta.gsk_rating ?? 0,
+                    //   //   },
+                    //   //   {
+                    //   //     key: "DPR",
+                    //   //     Points: stats?.averagePerRound.deaths ?? 0,
+                    //   //   },
+                    //   //   {
+                    //   //     key: "KAST",
+                    //   //     Points: stats?.averagePerRound.kast ?? 0,
+                    //   //   },
+                    //   //   {
+                    //   //     key: "Impact",
+                    //   //     Points: 0,
+                    //   //   },
+                    //   //   {
+                    //   //     key: "ADR",
+                    //   //     Points: stats?.averagePerRound.adr ?? 0,
+                    //   //   },
+                    //   //   {
+                    //   //     key: "KPR",
+                    //   //     Points: stats?.averagePerRound.kills ?? 0,
+                    //   //   },
+                    //   // ]}
+                    //   dataKey="key"
+                    //   type="stacked"
+                    //   orientation="vertical"
+                    //   yAxisProps={{ width: 80 }}
+                    //   mt={"lg"}
+                    //   gridAxis="none"
+                    //   withTooltip={false}
+                    //   referenceLines={[
+                    //     {
+                    //       x: 100,
+                    //       color: "white",
+                    //     },
+                    //   ]}
+                    //   series={[{ name: "Points", color: "blue.6" }]}
+                    // />
                   )}
                 </Grid.Col>
               </Grid>
@@ -443,7 +433,7 @@ export default function Player({
               <Grid.Col span={{ base: 10, md: 5 }}>
                 {sport.alias != "rl" && sport.alias != "codmwiii" && (
                   <FadeUpAni>
-                    <OverallStats />
+                    <OverallStats player={player} />
                   </FadeUpAni>
                 )}
                 {sport.alias != "lol" &&
@@ -469,7 +459,7 @@ export default function Player({
               </Grid.Col>
               <Grid.Col span={{ base: 10, md: 5 }}>
                 <FadeUpAni>
-                  <MatchStats sport={sport.alias} />
+                  <MatchStats sport={sport.alias} matches={player} />
                 </FadeUpAni>
 
                 {sport.alias != "lol" &&
@@ -496,7 +486,7 @@ export default function Player({
             </Grid>
 
             <FadeUpAni>
-              <PlayerMatchHistory />
+              <PlayerMatchHistory matches={player.last_games} />
             </FadeUpAni>
           </Stack>
         </Container>

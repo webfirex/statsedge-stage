@@ -1,9 +1,12 @@
-import { SportApi } from "~/lib/sport-api";
+
+import { PlayerStatsTest } from "~/lib/sport-api/player/stats-test";
 
 const main = async () => {
-  const match = await SportApi.PickBan.Maps.Call({ id: 732486 });
+  const match = await PlayerStatsTest.Call({
+    id: 1,
+  });
 
-  console.log(JSON.stringify(match, null, 2));
+  console.log(match);
 };
 
 void main().then(() => {

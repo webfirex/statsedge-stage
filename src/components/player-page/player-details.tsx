@@ -9,6 +9,7 @@ interface PlayerDetailsProps {
   sport: string;
   logo: string;
   country?: string;
+  team_name?: string;
 }
 
 export function PlayerDetails(props: PlayerDetailsProps) {
@@ -51,14 +52,12 @@ export function PlayerDetails(props: PlayerDetailsProps) {
                 style={{ borderRadius: "10px" }}
               >
                 <Image
-                  src={
-                    "/place.svg"
-                  }
+                  src={"/place.svg"}
                   alt="league logo"
                   fit="contain"
                   h={BigThenXs ? 20 : 15}
                 />
-                <Text fz={"xs"}>Team Name</Text>
+                <Text fz={"xs"}>{props.team_name ?? "No team"}</Text>
               </Box>
             </Box>
           </Grid.Col>

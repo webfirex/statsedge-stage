@@ -21,10 +21,10 @@ export function MatchCard(props: MatchCardProps) {
     return (
       <>
         <Card
-         withBorder
+          withBorder
+          bg=""
          style={{ borderColor: '#0b0b0b' }}
           radius={'1'}
-          bg=""
           px={5}
           py="xs"
           component={Link}
