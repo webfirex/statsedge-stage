@@ -83,7 +83,7 @@ export default function MatchStats(props: MatchStatsProps) {
         </Box> */}
 
         {Children.toArray(
-          props.matches.last_games.map((element) => (
+          props.matches.last_games?.map((element) => (
             <>
               <Box
                 mt={"sm"}

@@ -210,8 +210,12 @@ export default function App() {
                       {Children.toArray(
                         data.data.fixtures.map((match) => (
                           <>
-                            <Stack gap={BigThenMd ? '' : '0'}>
-                              <Title order={5} mb={BigThenMd ? '' : '30px'} tt="uppercase">
+                            <Stack gap={BigThenMd ? "" : "0"}>
+                              <Title
+                                order={5}
+                                tt="uppercase"
+                                mb={BigThenMd ? "" : "30px"}
+                              >
                                 {NumTimeFormat(
                                   match.day,
                                   "Monday, 8th January 2021"

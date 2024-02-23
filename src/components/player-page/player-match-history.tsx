@@ -4,14 +4,12 @@ import { Flex, Table, Image, Card, Title, Text, Select } from "@mantine/core";
 import { type PlayerStatsTestType } from "~/lib/type";
 import { Children } from "react";
 
-export function PlayerMatchHistory(props: {
-  matches: PlayerStatsTestType["last_games"];
-}) {
+export function PlayerMatchHistory(props: { player: PlayerStatsTestType }) {
   const BigThenMd = useMediaQuery(`(min-width: ${BREAKPOINTS.MD})`);
   const BigThenXs = useMediaQuery(`(min-width: ${BREAKPOINTS.XS})`);
 
   const rows = Children.toArray(
-    props.matches.map((element) => (
+    props.player.history_matches.map((element) => (
       <Table.Tr>
         <Table.Td>21.06.2021</Table.Td>
         <Table.Td display={BigThenMd ? "block" : "none"}>
@@ -22,7 +20,7 @@ export function PlayerMatchHistory(props: {
               fit="contain"
               h={BigThenXs ? 20 : 15}
             />
-            {element.team.name}
+            {props.player.current_team?.name ?? "N/A"}
           </Flex>
         </Table.Td>
         <Table.Td>
@@ -33,7 +31,12 @@ export function PlayerMatchHistory(props: {
               fit="contain"
               h={BigThenXs ? 20 : 15}
             />
-            {element.opponent.name}
+            {
+              element?.opponents.find(
+                (opponent) =>
+                  opponent.opponent.id !== props.player.current_team?.id
+              )?.opponent.name
+            }
           </Flex>
           <Flex display={BigThenMd ? "none" : "flex"}>
             <Image
@@ -45,10 +48,10 @@ export function PlayerMatchHistory(props: {
           </Flex>
         </Table.Td>
         <Table.Td>MAp</Table.Td>
-        <Table.Td>{element.kills}</Table.Td>
-        <Table.Td>{element.total_heal}</Table.Td>
-        <Table.Td>{element.kills}</Table.Td>
-        <Table.Td>{element.assists}</Table.Td>
+        <Table.Td>{element?.final.assists}</Table.Td>
+        <Table.Td>{element?.final.deaths}</Table.Td>
+        <Table.Td>{element?.final.kills}</Table.Td>
+        <Table.Td>{element?.final.kd}</Table.Td>
       </Table.Tr>
     ))
   );
@@ -100,10 +103,10 @@ export function PlayerMatchHistory(props: {
               </Table.Th>
               <Table.Th color="#005BBF">Opponent</Table.Th>
               <Table.Th color="#005BBF">Map</Table.Th>
-              <Table.Th color="#005BBF">Kills</Table.Th>
-              <Table.Th color="#005BBF">Headshots</Table.Th>
               <Table.Th color="#005BBF">Assists</Table.Th>
               <Table.Th color="#005BBF">Deaths</Table.Th>
+              <Table.Th color="#005BBF">Kills</Table.Th>
+              <Table.Th color="#005BBF">K/D</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

@@ -22,9 +22,9 @@ export function MatchCard(props: MatchCardProps) {
       <>
         <Card
           withBorder
-          bg=""
-         style={{ borderColor: '#0b0b0b' }}
+          style={{ borderColor: '#0b0b0b' }}
           radius={'1'}
+          bg=""
           px={5}
           py="xs"
           component={Link}
@@ -41,6 +41,7 @@ export function MatchCard(props: MatchCardProps) {
                 flexGrow: 0,
               }}
               my="auto"
+              display={BigThenMd ? '' : 'none'}
             />
 
             <Box
@@ -52,7 +53,6 @@ export function MatchCard(props: MatchCardProps) {
                 flexGrow: 0,
               }}
               my="auto"
-              display={BigThenMd ? '' : 'none'}
             >
               <Text size={rem(10)}>BO3</Text>
             </Box>

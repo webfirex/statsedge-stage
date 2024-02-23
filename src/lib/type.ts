@@ -1,7 +1,7 @@
 import { type RouterOutputs } from "~/utils/api";
 import { type SportApi } from "./sport-api";
 import { type UnwrapPromise } from "next/dist/lib/coalesced-function";
-import { type PlayerStatsTest } from "./sport-api/player/stats-test";
+import { type PlayerInfoTest } from "./sport-api/player/combine-test";
 
 export type MatchType = Exclude<RouterOutputs["fixture"]["get"], null>;
 
@@ -11,6 +11,6 @@ export type PlayerStatsType = Exclude<
 >;
 
 export type PlayerStatsTestType = Exclude<
-  UnwrapPromise<ReturnType<typeof PlayerStatsTest.Call>>,
+  UnwrapPromise<ReturnType<typeof PlayerInfoTest>>,
   null
 >;

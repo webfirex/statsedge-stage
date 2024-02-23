@@ -37,7 +37,7 @@ import {
 } from "next";
 import { z } from "zod";
 import { PlayerMatchHistory } from "~/components/player-page/player-match-history";
-import { PlayerStatsTest } from "~/lib/sport-api/player/stats-test";
+import { PlayerInfoTest } from "~/lib/sport-api/player/combine-test";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
@@ -52,13 +52,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { notFound: true };
   }
 
-  const PlayerInfo = await PlayerStatsTest.Call({
-    id: parsedId.data,
-  });
-
-  if (!PlayerInfo) {
-    return { notFound: true };
-  }
+  const PlayerInfo = await PlayerInfoTest({ id: parsedId.data });
 
   context.res.setHeader(
     "Cache-Control",
@@ -486,7 +480,7 @@ export default function Player(
             </Grid>
 
             <FadeUpAni>
-              <PlayerMatchHistory matches={player.last_games} />
+              <PlayerMatchHistory player={player} />
             </FadeUpAni>
           </Stack>
         </Container>

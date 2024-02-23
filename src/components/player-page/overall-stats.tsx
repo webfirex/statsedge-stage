@@ -11,7 +11,7 @@ export default function OverallStats(props: { player: PlayerStatsTestType }) {
       <Flex justify={"space-between"} mt={"10px"}>
         <Text fz={"xs"}>Buddy Hield</Text>
         <Text fz={"xs"}>
-          Based on {props.player.total_stats.games_count} games
+          Based on {props.player.total_stats?.games_count} games
         </Text>
       </Flex>
 
@@ -45,7 +45,7 @@ export default function OverallStats(props: { player: PlayerStatsTestType }) {
 
       <Stack mt={"40px"} p={"10px"}>
         {Children.toArray(
-          Object.entries(props.player.total_stats.averages).map(
+          Object.entries(props.player.total_stats?.averages ?? []).map(
             ([key, value]) => {
               return (
                 <Flex
